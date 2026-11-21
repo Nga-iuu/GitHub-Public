@@ -1620,7 +1620,7 @@
             <div class="link-pill accent">
               <span class="lp-lbl">TikTok LIVE</span>
               <span id="qlOverlay" class="lp-val">Đang tải...</span>
-              <button class="btn btn-xs btn-primary" onclick="copyText(links.overlay_url, 'Đã copy link TikTok LIVE Overlay!')">
+              <button class="btn btn-xs btn-primary" onclick="copyOverlayUrl()">
                 <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 Copy
               </button>
@@ -1636,7 +1636,7 @@
             <div class="link-pill">
               <span class="lp-lbl">SePay Webhook</span>
               <span id="qlSepay" class="lp-val">Đang tải...</span>
-              <button class="btn btn-xs" onclick="copyText(links.sepay_webhook, 'Đã copy link SePay Webhook!')">
+              <button class="btn btn-xs" onclick="copySepayUrl()">
                 <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                 Copy
               </button>
@@ -2562,7 +2562,7 @@
       try {
         return new URL("./", location.href).href;
       } catch {
-        return "https://nga-iuu.github.io/GitHub-Public/";
+        return "https://nga-iuu.github.io/donate/";
       }
     }
 
@@ -2578,7 +2578,7 @@
 
     let workerUrl = normalizeWorkerUrl(localStorage.getItem("donate_admin_url") || DEFAULT_WORKER_URL || "");
     let adminPw = sessionStorage.getItem("donate_admin_pw") || "";
-    let links = {};
+    let workerLinks = {};
     let allDonations = [];
     let currentTopDonors = [];
     let selectedBadgeIcon = "heart";
@@ -2627,8 +2627,16 @@
     }
 
     function openOverlayTab() {
-      if (!links.overlay_url) return toast("Chưa có link Overlay từ Worker!");
-      window.open(links.overlay_url, "_blank", "noopener");
+      if (!workerLinks.overlay_url) return toast("Chưa có link Overlay từ Worker!");
+      window.open(workerLinks.overlay_url, "_blank", "noopener");
+    }
+
+    function copyOverlayUrl() {
+      copyText(workerLinks.overlay_url, "Đã copy link TikTok LIVE Overlay!");
+    }
+
+    function copySepayUrl() {
+      copyText(workerLinks.sepay_webhook, "Đã copy link SePay Webhook!");
     }
 
     /* Navigation Tabs */
@@ -2738,11 +2746,11 @@
       const donateUrl = getDonatePageUrl();
       const tickerUrl = getTickerUrl();
       document.getElementById("qlDonate").textContent = donateUrl;
-      document.getElementById("qlOverlay").textContent = links.overlay_url || "(chưa có)";
-      document.getElementById("qlSepay").textContent = links.sepay_webhook || "(chưa có)";
+      document.getElementById("qlOverlay").textContent = workerLinks.overlay_url || "(chưa có)";
+      document.getElementById("qlSepay").textContent = workerLinks.sepay_webhook || "(chưa có)";
       document.getElementById("sysDonateUrl").value = donateUrl;
-      document.getElementById("sysOverlayUrl").value = links.overlay_url || "";
-      document.getElementById("sysSepayUrl").value = links.sepay_webhook || "";
+      document.getElementById("sysOverlayUrl").value = workerLinks.overlay_url || "";
+      document.getElementById("sysSepayUrl").value = workerLinks.sepay_webhook || "";
       document.getElementById("sysTickerUrl").value = tickerUrl;
     }
 
@@ -2755,7 +2763,7 @@
           return { ok: false, error: d.error || `Lỗi máy chủ (HTTP ${r.status}) — kiểm tra lại Link Worker hoặc Mật khẩu Admin.` };
         }
         setConnStatus(true);
-        links = d.links || {};
+        workerLinks = d.links || {};
         syncQuickLinks();
 
         if (hydrate) {
