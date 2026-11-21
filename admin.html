@@ -3644,7 +3644,7 @@
         nm.textContent = s.donor_name || "Ẩn danh";
         const cnt = document.createElement("div");
         cnt.className = "top-count";
-        const countVal = s.count ?? s.donations_count ?? s.turns ?? 0;
+        const countVal = s.count ?? s.cnt ?? s.donations_count ?? s.turns ?? 0;
         cnt.textContent = countVal ? `${countVal} lượt ủng hộ` : "Nhà tài trợ";
         info.appendChild(nm);
         info.appendChild(cnt);
