@@ -1854,7 +1854,7 @@
                 </div>
 
                 <div class="field">
-                  <label>Ảnh bìa (Dán link ảnh hoặc tải ảnh nhẹ &lt; 450KB)</label>
+                  <label>Ảnh bìa (Dán link ảnh hoặc tải ảnh &lt; 5MB — tự tối ưu khi lưu)</label>
                   <div class="row-center">
                     <input id="p_coverImage" type="text" placeholder="https://... hoặc bấm Tải ảnh" oninput="syncPagePreview()">
                     <input id="coverFile" type="file" accept="image/*" style="display:none" onchange="uploadCoverFile(this)">
@@ -2077,7 +2077,7 @@
                 <div class="custom-badge-bar">
                   <div class="custom-badge-info">
                     <img id="customBadgeThumb" class="custom-badge-thumb" alt="Custom badge">
-                    <span id="customBadgeLabel">Chưa chọn Ảnh / GIF riêng (hỗ trợ PNG/JPG/WebP/GIF/SVG &lt; 300KB)</span>
+                    <span id="customBadgeLabel">Chưa chọn Ảnh / GIF riêng (hỗ trợ PNG/JPG/WebP/GIF/SVG tối đa 5MB)</span>
                   </div>
                   <div class="row-auto">
                     <input id="badgeFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" style="display:none" onchange="uploadBadgeFile(this)">
@@ -3079,21 +3079,77 @@
       toast("Đã áp dụng bộ màu mẫu — bấm Lưu để cập nhật trang thật!");
     }
 
-    function uploadCoverFile(input) {
+    const MAX_UPLOAD_BYTES = 5 * 1024 * 1024; // 5MB
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(new Error("read_failed"));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function optimizeImageFile(file, { maxW = 1200, maxH = 700, maxChars = 380000, preserveAlpha = true } = {}) {
+      const rawUrl = await readFileAsDataUrl(file);
+      const isAnimatedOrVector = /image\/(gif|svg\+xml)/i.test(file.type || "") || /\.(gif|svg)$/i.test(file.name || "");
+      if (isAnimatedOrVector || rawUrl.length <= maxChars) {
+        return { dataUrl: rawUrl, compressed: false };
+      }
+
+      const img = await new Promise((resolve, reject) => {
+        const i = new Image();
+        i.onload = () => resolve(i);
+        i.onerror = () => reject(new Error("img_decode_failed"));
+        i.src = rawUrl;
+      });
+
+      let w = img.naturalWidth || img.width || maxW;
+      let h = img.naturalHeight || img.height || maxH;
+      const scale = Math.min(1, maxW / w, maxH / h);
+      w = Math.max(1, Math.round(w * scale));
+      h = Math.max(1, Math.round(h * scale));
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!preserveAlpha) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, w, h);
+      }
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const mimes = preserveAlpha ? ["image/webp", "image/png"] : ["image/webp", "image/jpeg"];
+      let best = rawUrl;
+      for (const mime of mimes) {
+        for (const q of [0.88, 0.78, 0.68, 0.56]) {
+          const out = canvas.toDataURL(mime, q);
+          if (out.length < best.length) best = out;
+          if (out.length <= maxChars) return { dataUrl: out, compressed: true };
+        }
+      }
+      return { dataUrl: best, compressed: best.length < rawUrl.length };
+    }
+
+    async function uploadCoverFile(input) {
       const f = input.files && input.files[0];
       if (!f) return;
-      if (f.size > 450 * 1024) {
-        toast("Ảnh bìa nên nhỏ hơn 450KB để trang tải thật nhanh!");
+      if (f.size > MAX_UPLOAD_BYTES) {
+        toast("Ảnh bìa vượt quá 5MB! Hãy chọn ảnh nhỏ hơn 5MB.");
         input.value = "";
         return;
       }
-      const reader = new FileReader();
-      reader.onload = () => {
-        document.getElementById("p_coverImage").value = reader.result;
+      try {
+        const { dataUrl, compressed } = await optimizeImageFile(f, { maxW: 1200, maxH: 700, maxChars: 380000, preserveAlpha: false });
+        document.getElementById("p_coverImage").value = dataUrl;
         syncPagePreview();
-        toast("Đã tải ảnh bìa — bấm Lưu để cập nhật!");
-      };
-      reader.readAsDataURL(f);
+        toast(compressed
+          ? "Đã tải & tự tối ưu dung lượng ảnh bìa — bấm Lưu để cập nhật!"
+          : "Đã tải ảnh bìa — bấm Lưu để cập nhật!");
+      } catch {
+        toast("Không đọc được file ảnh này!");
+      }
       input.value = "";
     }
 
@@ -3217,27 +3273,34 @@
       } else {
         thumb.style.display = "none";
         thumb.removeAttribute("src");
-        lbl.textContent = "Chưa chọn Ảnh / GIF riêng (hỗ trợ PNG/JPG/WebP/GIF/SVG < 300KB)";
+        lbl.textContent = "Chưa chọn Ảnh / GIF riêng (hỗ trợ PNG/JPG/WebP/GIF/SVG tối đa 5MB)";
         clr.style.display = "none";
       }
     }
 
-    function uploadBadgeFile(input) {
+    async function uploadBadgeFile(input) {
       const f = input.files && input.files[0];
       if (!f) return;
-      if (f.size > 300 * 1024) {
-        toast("Ảnh / GIF nên nhỏ hơn 300KB để tải nhanh trên Overlay!");
+      if (f.size > MAX_UPLOAD_BYTES) {
+        toast("Ảnh / GIF vượt quá 5MB! Hãy chọn file nhỏ hơn 5MB.");
         input.value = "";
         return;
       }
-      const reader = new FileReader();
-      reader.onload = () => {
-        selectedBadgeIcon = "img:" + reader.result;
+      try {
+        const { dataUrl, compressed } = await optimizeImageFile(f, { maxW: 256, maxH: 256, maxChars: 380000, preserveAlpha: true });
+        selectedBadgeIcon = "img:" + dataUrl;
         syncBadgePickerUI();
         syncOvPreview();
-        toast("Đã chọn Ảnh / GIF riêng — bấm Lưu để áp dụng!");
-      };
-      reader.readAsDataURL(f);
+        if (dataUrl.length > 440000) {
+          toast("Đã tải GIF (khá nặng — nếu Worker báo giới hạn D1 hãy nén GIF < 350KB)!");
+        } else {
+          toast(compressed
+            ? "Đã tải & tự tối ưu Ảnh biểu tượng — bấm Lưu để áp dụng!"
+            : "Đã chọn Ảnh / GIF riêng — bấm Lưu để áp dụng!");
+        }
+      } catch {
+        toast("Không đọc được file ảnh / GIF này!");
+      }
       input.value = "";
     }
 
