@@ -467,7 +467,7 @@
 
   <script>
     // Có thể điền sẵn link Worker của bạn ở đây (hoặc nhập trực tiếp ở màn hình đăng nhập)
-    const DEFAULT_WORKER_URL = "donate-sepay.tduy5781.workers.dev"; // VD: "https://donate-sepay-api.ten-cua-ban.workers.dev"
+    const DEFAULT_WORKER_URL = "https://donate-sepay.tduy5781.workers.dev"; // VD: "https://donate-sepay-api.ten-cua-ban.workers.dev"
   </script>
 
   <!-- MÀN HÌNH ĐĂNG NHẬP -->
@@ -796,7 +796,13 @@
       HDB: "HDBank", CAKE: "CAKE by VPBank", TIMO: "Timo by BVBank",
     };
 
-    let workerUrl = localStorage.getItem("donate_admin_url") || DEFAULT_WORKER_URL || "";
+    function normalizeWorkerUrl(url) {
+      const raw = (url || "").trim().replace(/\/+$/, "");
+      if (!raw) return "";
+      return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+    }
+
+    let workerUrl = normalizeWorkerUrl(localStorage.getItem("donate_admin_url") || DEFAULT_WORKER_URL || "");
     let adminPw = sessionStorage.getItem("donate_admin_pw") || "";
     let links = {};
     let toastTimer = null;
@@ -808,7 +814,7 @@
     }
     function copyText(v, msg) {
       if (!v) return toast("Chưa có link!");
-      navigator.clipboard.writeText(v).then(() => toast(msg));
+      navigator.clipboard.writeText(v).then(() => toast(msg)).catch(() => toast("Không sao chép được!"));
     }
 
     document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -822,23 +828,24 @@
 
     async function api(path, opts = {}) {
       const headers = { "X-Admin-Password": adminPw, ...(opts.headers || {}) };
-      return fetch(workerUrl.replace(/\/+$/, "") + path, { ...opts, headers, cache: "no-store" });
+      return fetch(normalizeWorkerUrl(workerUrl) + path, { ...opts, headers, cache: "no-store" });
     }
 
     async function doLogin() {
       const err = document.getElementById("loginErr");
       err.style.display = "none";
-      workerUrl = document.getElementById("inWorkerUrl").value.trim().replace(/\/+$/, "");
+      workerUrl = normalizeWorkerUrl(document.getElementById("inWorkerUrl").value);
+      document.getElementById("inWorkerUrl").value = workerUrl;
       adminPw = document.getElementById("inAdminPw").value;
       if (!workerUrl || !adminPw) { err.textContent = "Hãy nhập đủ Link Worker và Mật khẩu Admin."; err.style.display = "block"; return; }
-      const ok = await bootstrap(true);
-      if (ok) {
+      const res = await bootstrap(true);
+      if (res.ok) {
         localStorage.setItem("donate_admin_url", workerUrl);
         sessionStorage.setItem("donate_admin_pw", adminPw);
         document.getElementById("loginScreen").style.display = "none";
         document.getElementById("appShell").style.display = "block";
       } else {
-        err.textContent = "Không đăng nhập được — kiểm tra lại Link Worker hoặc Mật khẩu Admin.";
+        err.textContent = res.error || "Không đăng nhập được — kiểm tra lại Link Worker hoặc Mật khẩu Admin.";
         err.style.display = "block";
       }
     }
@@ -854,14 +861,16 @@
     async function bootstrap(hydrate = true) {
       try {
         const r = await api("/api/admin/bootstrap");
-        if (!r.ok) return false;
-        const d = await r.json();
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          return { ok: false, error: d.error || `Lỗi máy chủ (HTTP ${r.status}) — kiểm tra lại Link Worker hoặc Mật khẩu Admin.` };
+        }
         links = d.links || {};
 
         if (hydrate) {
           const p = d.page_config || {};
           setV("p_streamerName", p.streamerName); setV("p_subtitle", p.subtitle); setV("p_coverImage", p.coverImage);
-          setV("p_themeBg", p.themeBg); setV("p_themeAccent", p.themeAccent); setV("p_themeButtonDark", p.themeButtonDark); setV("p_themeText", p.themeText);
+          setV("p_themeBg", p.themeBg || "#f6c7d7"); setV("p_themeAccent", p.themeAccent || "#e06d9f"); setV("p_themeButtonDark", p.themeButtonDark || "#0c1428"); setV("p_themeText", p.themeText || "#0f172a");
           setV("p_bankCode", p.bankCode); setV("p_bankAccount", p.bankAccount); setV("p_bankAccountName", p.bankAccountName);
           setV("p_tiktokUrl", p.tiktokUrl); setV("p_facebookUrl", p.facebookUrl); setV("p_youtubeUrl", p.youtubeUrl);
           setV("p_amounts", Array.isArray(p.amounts) ? p.amounts.join(", ") : "");
@@ -870,26 +879,29 @@
           syncPagePreview();
 
           const o = d.overlay_config || {};
-          setV("o_bg_color_1", o.bg_color_1); setV("o_bg_color_2", o.bg_color_2); setV("o_border_color", o.border_color);
-          setV("o_text_color", o.text_color); setV("o_amount_color", o.amount_color); setV("o_msg_color", o.msg_color);
+          setV("o_bg_color_1", o.bg_color_1 || "#1e1b4b"); setV("o_bg_color_2", o.bg_color_2 || "#312e81"); setV("o_border_color", o.border_color || "#a855f7");
+          setV("o_text_color", o.text_color || "#ffffff"); setV("o_amount_color", o.amount_color || "#fde047"); setV("o_msg_color", o.msg_color || "#e2e8f0");
           setV("o_title_size", o.title_size); setV("o_msg_size", o.msg_size); setV("o_border_radius", o.border_radius);
           setV("o_badge_icon", o.badge_icon); setV("o_position", o.position); setV("o_animation", o.animation);
           setV("o_title_template", o.title_template); setV("o_tts_template", o.tts_template);
           setV("o_alert_sound", o.alert_sound); setV("o_tts_volume", o.tts_volume); setV("o_tts_rate", o.tts_rate);
           setV("o_min_tts_amount", o.min_tts_amount);
-          setV("o_bad_words", Array.isArray(o.bad_words) ? o.bad_words.join(", ") : "");
+          setV("o_bad_words", Array.isArray(o.bad_words) ? o.bad_words.join(", ") : (o.bad_words || ""));
           setC("o_tts_enabled", o.tts_enabled); setC("o_border_glow", o.border_glow);
           syncOvPreview();
         }
 
-        document.getElementById("sTodayTotal").textContent = Number(d.stats.today_total || 0).toLocaleString("vi-VN") + "đ";
-        document.getElementById("sTodayCount").textContent = d.stats.today_count || 0;
-        document.getElementById("sAllTotal").textContent = Number(d.stats.all_total || 0).toLocaleString("vi-VN") + "đ";
-        document.getElementById("sAllCount").textContent = d.stats.all_count || 0;
+        const stats = d.stats || {};
+        document.getElementById("sTodayTotal").textContent = Number(stats.today_total || 0).toLocaleString("vi-VN") + "đ";
+        document.getElementById("sTodayCount").textContent = stats.today_count || 0;
+        document.getElementById("sAllTotal").textContent = Number(stats.all_total || 0).toLocaleString("vi-VN") + "đ";
+        document.getElementById("sAllCount").textContent = stats.all_count || 0;
         renderCtrl(d.control);
         renderFeed(d.donations || []);
-        return true;
-      } catch { return false; }
+        return { ok: true };
+      } catch {
+        return { ok: false, error: "Không kết nối được tới Worker — kiểm tra lại Link Worker (phải có https://) hoặc kết nối mạng." };
+      }
     }
 
     function autoBankName() { }
@@ -915,8 +927,9 @@
       frame.style.background = bg;
       frame.style.color = tx;
       const cover = document.getElementById("ppCover");
-      cover.style.display = cv ? "block" : "none";
-      cover.style.backgroundImage = cv ? `url('${cv}')` : "none";
+      const safeCv = /^(https?:\/\/|data:image\/)/i.test(cv) ? cv : "";
+      cover.style.display = safeCv ? "block" : "none";
+      cover.style.backgroundImage = safeCv ? `url(${JSON.stringify(safeCv)})` : "none";
       document.getElementById("ppName").textContent = document.getElementById("p_streamerName").value || "Tên Kênh";
       document.getElementById("ppSub").textContent = document.getElementById("p_subtitle").value;
       document.getElementById("ppPill").style.background = ac;
@@ -960,9 +973,13 @@
         footerText: document.getElementById("p_footerText").value.trim(),
         showTopSupporters: document.getElementById("p_showTopSupporters").checked,
       };
-      const r = await api("/api/admin/page-config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      const d = await r.json().catch(() => ({}));
-      toast(r.ok ? "Đã lưu! Trang Donate index.html đã cập nhật ngay." : (d.error || "Lỗi lưu cấu hình"));
+      try {
+        const r = await api("/api/admin/page-config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const d = await r.json().catch(() => ({}));
+        toast(r.ok ? "Đã lưu! Trang Donate index.html đã cập nhật ngay." : (d.error || "Lỗi lưu cấu hình"));
+      } catch {
+        toast("Không kết nối được tới Worker!");
+      }
     }
 
     function syncOvPreview() {
@@ -1020,14 +1037,19 @@
         tts_enabled: document.getElementById("o_tts_enabled").checked,
         border_glow: document.getElementById("o_border_glow").checked,
       };
-      const r = await api("/api/admin/overlay-config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      toast(r.ok ? "Đã lưu & áp dụng lên TikTok LIVE Overlay!" : "Lỗi khi lưu");
+      try {
+        const r = await api("/api/admin/overlay-config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const d = await r.json().catch(() => ({}));
+        toast(r.ok ? "Đã lưu & áp dụng lên TikTok LIVE Overlay!" : (d.error || "Lỗi khi lưu"));
+      } catch {
+        toast("Không kết nối được tới Worker!");
+      }
     }
 
     function previewTts() {
       const tpl = document.getElementById("o_tts_template").value || "{name} đã donate {amount} đồng. {message}";
       const q = tpl.replaceAll("{name}", "Thái VIP").replaceAll("{amount}", "50000").replaceAll("{message}", "Chúc anh live thật vui vẻ!");
-      const a = new Audio(`${workerUrl}/api/admin/tts-preview?pw=${encodeURIComponent(adminPw)}&q=${encodeURIComponent(q)}&_t=${Date.now()}`);
+      const a = new Audio(`${normalizeWorkerUrl(workerUrl)}/api/admin/tts-preview?pw=${encodeURIComponent(adminPw)}&q=${encodeURIComponent(q)}&_t=${Date.now()}`);
       a.volume = Math.max(0, Math.min(1, Number(document.getElementById("o_tts_volume").value || 1)));
       a.playbackRate = Math.max(0.75, Math.min(1.5, Number(document.getElementById("o_tts_rate").value || 1)));
       a.play().catch(() => toast("Không phát được âm thanh thử"));
@@ -1040,8 +1062,14 @@
     }
 
     async function sendCtrl(action) {
-      const r = await api("/api/admin/control", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action }) });
-      if (r.ok) { renderCtrl((await r.json()).control); toast("Đã gửi lệnh điều khiển!"); }
+      try {
+        const r = await api("/api/admin/control", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action }) });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok) { renderCtrl(d.control); toast("Đã gửi lệnh điều khiển!"); }
+        else toast(d.error || "Lỗi gửi lệnh điều khiển!");
+      } catch {
+        toast("Không kết nối được tới Worker!");
+      }
     }
 
     async function sendTest() {
@@ -1051,8 +1079,14 @@
         message: document.getElementById("tMsg").value,
         save_to_db: document.getElementById("tSave").checked,
       };
-      const r = await api("/api/admin/test-donate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      if (r.ok) { toast("Đã bắn donate tiếng Việt có dấu lên TikTok LIVE!"); if (body.save_to_db) bootstrap(false); }
+      try {
+        const r = await api("/api/admin/test-donate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok) { toast("Đã bắn donate tiếng Việt có dấu lên TikTok LIVE!"); if (body.save_to_db) bootstrap(false); }
+        else toast(d.error || "Lỗi bắn donate test!");
+      } catch {
+        toast("Không kết nối được tới Worker!");
+      }
     }
 
     function renderFeed(items) {
@@ -1072,9 +1106,21 @@
 
         const acts = document.createElement("div"); acts.className = "row-auto";
         const b1 = document.createElement("button"); b1.className = "btn btn-sm"; b1.textContent = "Phát lại";
-        b1.onclick = async () => { await api(`/api/admin/donations/${it.id}/replay`, { method: "POST" }); toast("Đã phát lại!"); };
+        b1.onclick = async () => {
+          try {
+            const r = await api(`/api/admin/donations/${it.id}/replay`, { method: "POST" });
+            toast(r.ok ? "Đã phát lại!" : "Lỗi khi phát lại!");
+          } catch { toast("Không kết nối được tới Worker!"); }
+        };
         const b2 = document.createElement("button"); b2.className = "btn btn-sm btn-danger"; b2.textContent = "Xóa";
-        b2.onclick = async () => { await api(`/api/admin/donations/${it.id}`, { method: "DELETE" }); toast("Đã xóa!"); bootstrap(false); };
+        b2.onclick = async () => {
+          if (!confirm(`Xóa giao dịch của "${it.donor_name}"?`)) return;
+          try {
+            const r = await api(`/api/admin/donations/${it.id}`, { method: "DELETE" });
+            if (r.ok) { toast("Đã xóa!"); bootstrap(false); }
+            else toast("Lỗi khi xóa giao dịch!");
+          } catch { toast("Không kết nối được tới Worker!"); }
+        };
         acts.appendChild(b1); acts.appendChild(b2);
         row.appendChild(info); row.appendChild(acts);
         box.appendChild(row);
@@ -1082,7 +1128,7 @@
     }
 
     function exportCsv() {
-      window.open(`${workerUrl}/api/admin/donations/export?pw=${encodeURIComponent(adminPw)}`, "_blank");
+      window.open(`${normalizeWorkerUrl(workerUrl)}/api/admin/donations/export?pw=${encodeURIComponent(adminPw)}`, "_blank");
     }
 
     (function initLogin() {

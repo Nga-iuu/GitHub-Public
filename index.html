@@ -557,7 +557,7 @@
     //  Sau khi dán, mọi thứ (tên kênh, ảnh bìa, màu sắc, STK, mức tiền...)
     //  đều chỉnh trực tiếp trên trang admin.html — không bao giờ phải sửa code nữa!
     // =========================================================================
-    const WORKER_URL = "donate-sepay.tduy5781.workers.dev"; // VD: "https://donate-sepay-api.ten-cua-ban.workers.dev"
+    const WORKER_URL = "https://donate-sepay.tduy5781.workers.dev"; // VD: "https://donate-sepay-api.ten-cua-ban.workers.dev"
 
     // Cấu hình dự phòng (hiển thị khi chưa kết nối Worker)
     let CONFIG = {
@@ -705,9 +705,16 @@
     let pollTimer = null;
     let toastTimer = null;
 
+    function normalizeWorkerUrl(url) {
+      const raw = (url || "").trim().replace(/\/+$/, "");
+      if (!raw) return "";
+      return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+    }
     function apiBase() {
+      const configured = normalizeWorkerUrl(WORKER_URL);
+      if (configured) return configured;
       const qp = new URLSearchParams(location.search).get("api");
-      return (qp || WORKER_URL || "").trim().replace(/\/+$/, "");
+      return normalizeWorkerUrl(qp);
     }
     function showToast(msg) {
       const el = document.getElementById("toast");
@@ -717,7 +724,28 @@
       toastTimer = setTimeout(() => el.classList.remove("show"), 2000);
     }
     function copyVal(text) {
-      navigator.clipboard.writeText(text || "").then(() => showToast("Đã sao chép!")).catch(() => { });
+      const val = String(text || "");
+      const fallbackCopy = () => {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = val;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          const ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          showToast(ok ? "Đã sao chép!" : "Không sao chép được, hãy bôi đen copy thủ công.");
+        } catch {
+          showToast("Không sao chép được, hãy bôi đen copy thủ công.");
+        }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).then(() => showToast("Đã sao chép!")).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
     }
     function formatVnd(n) { return Number(n || 0).toLocaleString("vi-VN") + "đ"; }
     function toAsciiBankText(str) {
@@ -748,8 +776,10 @@
       updateCharCount();
 
       const cover = document.getElementById("heroCover");
-      if (CONFIG.coverImage) {
-        cover.style.backgroundImage = `url('${CONFIG.coverImage}')`;
+      const rawCover = (CONFIG.coverImage || "").trim();
+      const safeCover = /^(https?:\/\/|data:image\/)/i.test(rawCover) ? rawCover : "";
+      if (safeCover) {
+        cover.style.backgroundImage = `url(${JSON.stringify(safeCover)})`;
         document.querySelector(".hero").style.paddingTop = "96px";
       } else {
         cover.style.backgroundImage = "none";
@@ -757,16 +787,23 @@
       }
 
       const socials = document.getElementById("socials");
-      socials.innerHTML = "";
-      if (CONFIG.tiktokUrl) {
-        socials.innerHTML += `<a href="${CONFIG.tiktokUrl}" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07Z"/></svg></a>`;
-      }
-      if (CONFIG.facebookUrl) {
-        socials.innerHTML += `<a href="${CONFIG.facebookUrl}" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5Z"/></svg></a>`;
-      }
-      if (CONFIG.youtubeUrl) {
-        socials.innerHTML += `<a href="${CONFIG.youtubeUrl}" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg></a>`;
-      }
+      socials.textContent = "";
+      const socialItems = [
+        { url: CONFIG.tiktokUrl, label: "TikTok", path: "M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07Z" },
+        { url: CONFIG.facebookUrl, label: "Facebook", path: "M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5Z" },
+        { url: CONFIG.youtubeUrl, label: "YouTube", path: "M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z" },
+      ];
+      socialItems.forEach(item => {
+        const href = (item.url || "").trim();
+        if (!/^https?:\/\//i.test(href)) return;
+        const a = document.createElement("a");
+        a.href = href;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.setAttribute("aria-label", item.label);
+        a.innerHTML = `<svg viewBox="0 0 24 24"><path d="${item.path}"/></svg>`;
+        socials.appendChild(a);
+      });
 
       const grid = document.getElementById("amtGrid");
       grid.innerHTML = "";
@@ -853,7 +890,13 @@
         const fallbackUrl = `https://qr.sepay.vn/img?acc=${acc}&bank=${bank}&amount=${amount}&des=${info}`;
 
         const img = document.getElementById("qrImg");
-        img.onerror = () => { if (img.src !== fallbackUrl) img.src = fallbackUrl; };
+        const dlLink = document.getElementById("downloadLink");
+        img.onerror = () => {
+          if (img.src !== fallbackUrl) {
+            img.src = fallbackUrl;
+            dlLink.href = fallbackUrl;
+          }
+        };
         img.src = primaryUrl;
 
         document.getElementById("vBank").textContent = CONFIG.bankName || CONFIG.bankCode;
@@ -861,12 +904,13 @@
         document.getElementById("vAcc").textContent = CONFIG.bankAccount;
         document.getElementById("vAmt").textContent = formatVnd(amount);
         document.getElementById("vContent").textContent = transferContent;
-        document.getElementById("downloadLink").href = primaryUrl;
+        dlLink.href = primaryUrl;
 
         const prevBox = document.getElementById("previewVnBox");
         const waitBanner = document.getElementById("waitingBanner");
         if (orderCode) {
           prevBox.style.display = "block";
+          waitBanner.innerHTML = '<div class="spinner"></div><span>Quét mã QR để chuyển — tự xác nhận sau vài giây</span>';
           waitBanner.style.display = "flex";
           document.getElementById("prevVnWho").textContent = `${displayName} đã ủng hộ ${formatVnd(amount)}`;
           document.getElementById("prevVnMsg").textContent = displayMsg || "(Không có lời nhắn)";
@@ -889,8 +933,17 @@
 
     function startStatusPolling(base, code) {
       clearTimeout(pollTimer);
+      const startedAt = Date.now();
+      const MAX_POLL_MS = 20 * 60 * 1000;
       const tick = async () => {
         if (!currentOrder || currentOrder.code !== code) return;
+        if (Date.now() - startedAt > MAX_POLL_MS) {
+          const waitBanner = document.getElementById("waitingBanner");
+          if (waitBanner) {
+            waitBanner.innerHTML = '<span>Đã hết thời gian chờ tự động — hãy bấm "Quay lại sửa" để tạo mã mới nếu chưa chuyển.</span>';
+          }
+          return;
+        }
         try {
           const r = await fetch(`${base}/api/donate/status/${encodeURIComponent(code)}?_t=${Date.now()}`, { cache: "no-store" });
           if (r.ok) {
@@ -900,6 +953,13 @@
               document.getElementById("okMsg").textContent = currentOrder.message || "(Không có lời nhắn)";
               showStep("successView");
               loadTopSupporters();
+              return;
+            }
+            if (d.status === "expired") {
+              const waitBanner = document.getElementById("waitingBanner");
+              if (waitBanner) {
+                waitBanner.innerHTML = '<span>Mã QR đã hết hạn — vui lòng quay lại tạo mã mới.</span>';
+              }
               return;
             }
           }
