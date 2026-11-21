@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ủng hộ Livestream</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='64' y2='64' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%23f472b6'/%3E%3Cstop offset='1' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 50s-17-10.4-21-20.8C8 21.2 13.2 13 21.4 13c4.6 0 8.2 2.5 10.6 5.9 2.4-3.4 6-5.9 10.6-5.9 8.2 0 13.4 8.2 10.4 16.2C49 39.6 32 50 32 50Z' fill='%23fff'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f6c7d7;
+      --surface: rgba(255, 255, 255, 0.28);
+      --surface-strong: rgba(255, 255, 255, 0.48);
+      --border: rgba(15, 23, 42, 0.16);
+      --border-focus: #0f172a;
+      --ink: #0f172a;
+      --muted: #4b3b47;
+      --accent: #e06d9f;
+      --btn-dark: #0c1428;
+      --btn-dark-hover: #18233f;
+      --green: #059669;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 44px;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      padding: 96px 20px 14px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-cover {
+      position: absolute;
+      inset: 0 0 18px 0;
+      background-size: cover;
+      background-position: center 25%;
+      opacity: 0.75;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 100%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 100%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      color: var(--ink);
+      text-shadow: 0 2px 14px rgba(255, 255, 255, 0.55);
+    }
+
+    .hero .subtitle {
+      margin: 6px 0 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .socials {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .socials a {
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      transition: transform .15s, background .15s;
+      text-decoration: none;
+    }
+
+    .socials a:hover {
+      background: rgba(15, 23, 42, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .socials svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      padding: 0 18px;
+    }
+
+    .mode-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 6px 0 18px;
+    }
+
+    .mode-pill {
+      padding: 8px 22px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .field label .sub-hint {
+      font-weight: 500;
+      color: var(--muted);
+      font-size: 11.5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s, background .15s;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(75, 59, 71, 0.72);
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--border-focus);
+      background: var(--surface-strong);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 78px;
+    }
+
+    .char-count {
+      text-align: right;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .amt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .amt-pill {
+      padding: 10px 6px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .14s;
+      text-align: center;
+    }
+
+    .amt-pill:hover {
+      background: var(--surface-strong);
+    }
+
+    .amt-pill.active {
+      background: var(--accent);
+      border-color: var(--ink);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);
+    }
+
+    .btn-main {
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 999px;
+      background: var(--btn-dark);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .15s, transform .12s;
+      margin-top: 4px;
+    }
+
+    .btn-main:hover {
+      background: var(--btn-dark-hover);
+    }
+
+    .btn-main:active {
+      transform: translateY(1px);
+    }
+
+    .btn-main:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .btn-soft {
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-soft:hover {
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .notes {
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .notes p {
+      margin: 5px 0;
+    }
+
+    .err-box {
+      display: none;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(220, 38, 38, 0.12);
+      border: 1px solid rgba(220, 38, 38, 0.35);
+      color: #7f1d1d;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    #qrView,
+    #successView {
+      display: none;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.08);
+      color: var(--ink);
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(15, 23, 42, 0.2);
+      border-top-color: var(--ink);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .qr-img-wrap {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .qr-img-wrap img {
+      width: 280px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 8px;
+    }
+
+    .qr-meta {
+      background: rgba(255, 255, 255, 0.64);
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      border-radius: 12px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+    }
+
+    .qr-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      font-size: 13px;
+    }
+
+    .qr-row:last-child {
+      border-bottom: none;
+    }
+
+    .qr-row .k {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .qr-row .v {
+      font-weight: 700;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .code-strong {
+      font-family: Consolas, monospace;
+      font-size: 15px;
+      color: #9d174d;
+      letter-spacing: 0.5px;
+    }
+
+    .copy-mini {
+      margin-left: 6px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .copy-mini:hover {
+      background: var(--btn-dark);
+      color: #fff;
+    }
+
+    .preview-vn {
+      background: rgba(15, 23, 42, 0.06);
+      border: 1px dashed rgba(15, 23, 42, 0.22);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+
+    .preview-vn .lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .preview-vn .who {
+      font-weight: 800;
+    }
+
+    .preview-vn .txt {
+      margin-top: 3px;
+      color: var(--ink);
+      word-break: break-word;
+    }
+
+    .qr-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .qr-actions>* {
+      flex: 1;
+    }
+
+    .ok-circle {
+      width: 68px;
+      height: 68px;
+      margin: 6px auto 12px;
+      border-radius: 50%;
+      background: rgba(5, 150, 105, 0.14);
+      border: 2px solid var(--green);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+    }
+
+    .ok-circle svg {
+      width: 34px;
+      height: 34px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .top-box {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--surface);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .top-box h3 {
+      margin: 0 0 10px;
+      font-size: 13.5px;
+      font-weight: 800;
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+      font-size: 13px;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 600;
+    }
+
+    .rank-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11.5px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+
+    .top-amt {
+      font-weight: 800;
+    }
+
+    footer {
+      margin-top: 22px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translate(-50%, 14px);
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: var(--btn-dark);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .2s;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <script>
+    // =========================================================================
+    //  CHỈ CẦN DÁN ĐÚNG 1 DÒNG LINK WORKER CỦA BẠN VÀO ĐÂY!
+    //  Sau khi dán, mọi thứ (tên kênh, ảnh bìa, màu sắc, STK, mức tiền...)
+    //  đều chỉnh trực tiếp trên trang admin.html — không bao giờ phải sửa code nữa!
+    // =========================================================================
+    const WORKER_URL = "donate-sepay.tduy5781.workers.dev"; // VD: "https://donate-sepay-api.ten-cua-ban.workers.dev"
+
+    // Cấu hình dự phòng (hiển thị khi chưa kết nối Worker)
+    let CONFIG = {
+      streamerName: "Tên Kênh Của Bạn",
+      subtitle: "Góp gạo nuôi mình ở đây nhé",
+      coverImage: "",
+      themeBg: "#f6c7d7",
+      themeAccent: "#e06d9f",
+      themeButtonDark: "#0c1428",
+      themeText: "#0f172a",
+      tiktokUrl: "",
+      facebookUrl: "",
+      youtubeUrl: "",
+      bankCode: "MB",
+      bankName: "MB Bank",
+      bankAccount: "0123456789",
+      bankAccountName: "NGUYEN VAN A",
+      keyword: "DONATE",
+      minAmount: 1000,
+      maxMessageLength: 150,
+      amounts: [10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000, 5000000],
+      showTopSupporters: true,
+      topTitle: "Top ủng hộ tháng này",
+      footerText: "Cảm ơn bạn đã đồng hành cùng livestream!",
+    };
+  </script>
+
+  <header class="hero">
+    <div id="heroCover" class="hero-cover"></div>
+    <div class="hero-inner">
+      <h1 id="streamerName"></h1>
+      <p id="subtitle" class="subtitle"></p>
+      <div id="socials" class="socials"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="mode-tabs">
+      <span class="mode-pill">CHUYỂN KHOẢN QR NGÂN HÀNG</span>
+    </div>
+
+    <section id="formView">
+      <div id="errBox" class="err-box"></div>
+
+      <div class="field">
+        <label for="donorName">
+          <span>Tên của bạn</span>
+          <span class="sub-hint" id="vnHintName">Hỗ trợ tiếng Việt có dấu</span>
+        </label>
+        <input id="donorName" type="text" maxlength="35" placeholder="Để trống nếu muốn ẩn danh">
+      </div>
+
+      <div class="field">
+        <label for="amountInput"><span id="lblAmount">Số tiền (tối thiểu 1.000đ)</span></label>
+        <div class="amt-grid" id="amtGrid"></div>
+        <input id="amountInput" type="number" min="1000" step="1000" value="50000" placeholder="Hoặc nhập số tiền khác">
+      </div>
+
+      <div class="field">
+        <label for="messageInput">
+          <span>Lời nhắn</span>
+          <span class="sub-hint">Hiện trực tiếp lên live &amp; đọc to</span>
+        </label>
+        <textarea id="messageInput" maxlength="150"
+          placeholder="Nhập lời nhắn tiếng Việt có dấu để hiển thị và đọc chuẩn trên livestream..."
+          oninput="updateCharCount()"></textarea>
+        <div class="char-count" id="charCount">0/150</div>
+      </div>
+
+      <button id="btnSubmit" type="button" class="btn-main" onclick="generateQR()">Tạo mã QR chuyển khoản</button>
+
+      <div class="notes">
+        <p>Lời nhắn của bạn sẽ hiển thị trên live sau khoảng 5–10 giây khi chuyển khoản thành công.</p>
+        <p>Trước khi chuyển khoản, vui lòng kiểm tra lại đúng tên chủ tài khoản và số tài khoản trong khung QR.</p>
+      </div>
+    </section>
+
+    <section id="qrView">
+      <div class="panel">
+        <div id="waitingBanner" class="status-pill" style="display:none;">
+          <div class="spinner"></div>
+          <span>Quét mã QR để chuyển — tự xác nhận sau vài giây</span>
+        </div>
+        <div class="qr-img-wrap"><img id="qrImg" alt="Mã VietQR"></div>
+        <div class="qr-meta">
+          <div class="qr-row"><span class="k">Ngân hàng</span><span class="v" id="vBank"></span></div>
+          <div class="qr-row"><span class="k">Chủ tài khoản</span><span class="v" id="vHolder"></span></div>
+          <div class="qr-row">
+            <span class="k">Số tài khoản</span>
+            <span class="v"><span id="vAcc"></span><button type="button" class="copy-mini"
+                onclick="copyVal(CONFIG.bankAccount)">Sao chép</button></span>
+          </div>
+          <div class="qr-row"><span class="k">Số tiền</span><span class="v" id="vAmt"></span></div>
+          <div class="qr-row">
+            <span class="k">Nội dung CK (giữ nguyên)</span>
+            <span class="v"><span id="vContent" class="code-strong"></span><button type="button" class="copy-mini"
+                onclick="copyVal(lastTransferContent)">Sao chép</button></span>
+          </div>
+        </div>
+
+        <div id="previewVnBox" class="preview-vn" style="display:none;">
+          <div class="lbl">Nội dung tiếng Việt sẽ hiện &amp; đọc trên live</div>
+          <div class="who" id="prevVnWho"></div>
+          <div class="txt" id="prevVnMsg"></div>
+        </div>
+
+        <div class="qr-actions">
+          <button type="button" class="btn-soft" onclick="backToForm()">Quay lại sửa</button>
+          <a id="downloadLink" class="btn-main"
+            style="margin:0;text-align:center;text-decoration:none;font-size:13.5px;padding:11px 14px;" target="_blank"
+            rel="noopener">Mở / Lưu ảnh QR</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="successView">
+      <div class="panel" style="text-align:center;">
+        <div class="ok-circle"><svg viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </svg></div>
+        <h2 style="margin:0 0 6px;font-size:20px;">Cảm ơn bạn đã ủng hộ!</h2>
+        <p style="margin:0 0 14px;color:var(--muted);font-size:13.5px;">Lời nhắn tiếng Việt có dấu của bạn đã được xác
+          nhận và đang hiển thị lên livestream.</p>
+        <div class="preview-vn" style="text-align:left;">
+          <div class="who" id="okWho"></div>
+          <div class="txt" id="okMsg"></div>
+        </div>
+        <button type="button" class="btn-main" onclick="backToForm()">Ủng hộ thêm</button>
+      </div>
+    </section>
+
+    <section id="topBox" class="top-box" style="display:none;">
+      <h3 id="topTitle"></h3>
+      <div id="topList"></div>
+    </section>
+
+    <footer id="footerText"></footer>
+  </main>
+
+  <div id="toast"></div>
+
+  <script>
+    let lastTransferContent = "";
+    let currentOrder = null;
+    let pollTimer = null;
+    let toastTimer = null;
+
+    function apiBase() {
+      const qp = new URLSearchParams(location.search).get("api");
+      return (qp || WORKER_URL || "").trim().replace(/\/+$/, "");
+    }
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove("show"), 2000);
+    }
+    function copyVal(text) {
+      navigator.clipboard.writeText(text || "").then(() => showToast("Đã sao chép!")).catch(() => { });
+    }
+    function formatVnd(n) { return Number(n || 0).toLocaleString("vi-VN") + "đ"; }
+    function toAsciiBankText(str) {
+      return (str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D")
+        .replace(/[^a-zA-Z0-9\s.,!?-]/g, " ").replace(/\s+/g, " ").trim();
+    }
+    function updateCharCount() {
+      const max = CONFIG.maxMessageLength || 150;
+      document.getElementById("charCount").textContent = `${document.getElementById("messageInput").value.length}/${max}`;
+    }
+    function showStep(id) {
+      ["formView", "qrView", "successView"].forEach(v => document.getElementById(v).style.display = v === id ? "block" : "none");
+    }
+
+    function applyConfigToPage() {
+      document.documentElement.style.setProperty("--bg", CONFIG.themeBg || "#f6c7d7");
+      document.documentElement.style.setProperty("--accent", CONFIG.themeAccent || "#e06d9f");
+      document.documentElement.style.setProperty("--btn-dark", CONFIG.themeButtonDark || "#0c1428");
+      document.documentElement.style.setProperty("--ink", CONFIG.themeText || "#0f172a");
+
+      document.title = `Ủng hộ ${CONFIG.streamerName}`;
+      document.getElementById("streamerName").textContent = CONFIG.streamerName || "Ủng hộ Livestream";
+      document.getElementById("subtitle").textContent = CONFIG.subtitle || "";
+      document.getElementById("footerText").textContent = CONFIG.footerText || "";
+      document.getElementById("lblAmount").textContent = `Số tiền (tối thiểu ${formatVnd(CONFIG.minAmount || 1000)})`;
+      document.getElementById("amountInput").min = CONFIG.minAmount || 1000;
+      document.getElementById("messageInput").maxLength = CONFIG.maxMessageLength || 150;
+      updateCharCount();
+
+      const cover = document.getElementById("heroCover");
+      if (CONFIG.coverImage) {
+        cover.style.backgroundImage = `url('${CONFIG.coverImage}')`;
+        document.querySelector(".hero").style.paddingTop = "96px";
+      } else {
+        cover.style.backgroundImage = "none";
+        document.querySelector(".hero").style.paddingTop = "34px";
+      }
+
+      const socials = document.getElementById("socials");
+      socials.innerHTML = "";
+      if (CONFIG.tiktokUrl) {
+        socials.innerHTML += `<a href="${CONFIG.tiktokUrl}" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07Z"/></svg></a>`;
+      }
+      if (CONFIG.facebookUrl) {
+        socials.innerHTML += `<a href="${CONFIG.facebookUrl}" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5Z"/></svg></a>`;
+      }
+      if (CONFIG.youtubeUrl) {
+        socials.innerHTML += `<a href="${CONFIG.youtubeUrl}" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg></a>`;
+      }
+
+      const grid = document.getElementById("amtGrid");
+      grid.innerHTML = "";
+      const amts = Array.isArray(CONFIG.amounts) && CONFIG.amounts.length ? CONFIG.amounts : [10000, 20000, 50000, 100000, 200000, 500000];
+      const curVal = Number(document.getElementById("amountInput").value || 50000);
+      amts.forEach(a => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "amt-pill" + (Number(a) === curVal ? " active" : "");
+        btn.dataset.amt = String(a);
+        btn.textContent = formatVnd(a);
+        btn.onclick = () => {
+          document.querySelectorAll(".amt-pill").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          document.getElementById("amountInput").value = a;
+        };
+        grid.appendChild(btn);
+      });
+
+      if (!apiBase()) {
+        document.getElementById("vnHintName").textContent = "Tự chuyển không dấu khi tạo QR";
+      } else {
+        document.getElementById("vnHintName").textContent = "Hỗ trợ tiếng Việt có dấu 100%";
+      }
+    }
+
+    async function generateQR() {
+      const errBox = document.getElementById("errBox");
+      errBox.style.display = "none";
+
+      const amount = Math.floor(Number(document.getElementById("amountInput").value || 0));
+      const minAmt = Number(CONFIG.minAmount || 1000);
+      if (!Number.isFinite(amount) || amount < minAmt) {
+        errBox.textContent = `Vui lòng nhập số tiền từ ${formatVnd(minAmt)} trở lên.`;
+        errBox.style.display = "block";
+        return;
+      }
+
+      const rawDonor = document.getElementById("donorName").value.trim() || "Ẩn danh";
+      const rawMsg = document.getElementById("messageInput").value.trim();
+      const btn = document.getElementById("btnSubmit");
+      btn.disabled = true;
+      btn.textContent = "Đang tạo mã QR...";
+
+      try {
+        let transferContent = "";
+        let orderCode = null;
+        let displayName = rawDonor;
+        let displayMsg = rawMsg;
+
+        const base = apiBase();
+        if (base) {
+          const r = await fetch(`${base}/api/donate/create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ donor_name: rawDonor, amount, message: rawMsg }),
+          });
+          const d = await r.json().catch(() => ({}));
+          if (!r.ok || !d.code) {
+            errBox.textContent = d.error || "Không tạo được mã QR từ máy chủ, vui lòng thử lại.";
+            errBox.style.display = "block";
+            return;
+          }
+          orderCode = d.code;
+          transferContent = d.code;
+          displayName = d.donor_name || rawDonor;
+          displayMsg = d.message ?? rawMsg;
+          currentOrder = { code: orderCode, donor_name: displayName, amount, message: displayMsg };
+        } else {
+          const safeName = toAsciiBankText(rawDonor).replace(/[^a-zA-Z0-9]/g, "").slice(0, 24) || "AnDanh";
+          const safeMsg = toAsciiBankText(rawMsg).slice(0, CONFIG.maxMessageLength || 150);
+          const kw = (CONFIG.keyword || "DONATE").trim().toUpperCase();
+          transferContent = [kw, safeName, safeMsg].filter(Boolean).join(" ").slice(0, 140);
+          currentOrder = null;
+        }
+
+        lastTransferContent = transferContent;
+        const bank = encodeURIComponent(CONFIG.bankCode);
+        const acc = encodeURIComponent(CONFIG.bankAccount);
+        const accName = encodeURIComponent(CONFIG.bankAccountName || "");
+        const info = encodeURIComponent(transferContent);
+
+        const primaryUrl = `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${amount}&addInfo=${info}&accountName=${accName}`;
+        const fallbackUrl = `https://qr.sepay.vn/img?acc=${acc}&bank=${bank}&amount=${amount}&des=${info}`;
+
+        const img = document.getElementById("qrImg");
+        img.onerror = () => { if (img.src !== fallbackUrl) img.src = fallbackUrl; };
+        img.src = primaryUrl;
+
+        document.getElementById("vBank").textContent = CONFIG.bankName || CONFIG.bankCode;
+        document.getElementById("vHolder").textContent = CONFIG.bankAccountName || "";
+        document.getElementById("vAcc").textContent = CONFIG.bankAccount;
+        document.getElementById("vAmt").textContent = formatVnd(amount);
+        document.getElementById("vContent").textContent = transferContent;
+        document.getElementById("downloadLink").href = primaryUrl;
+
+        const prevBox = document.getElementById("previewVnBox");
+        const waitBanner = document.getElementById("waitingBanner");
+        if (orderCode) {
+          prevBox.style.display = "block";
+          waitBanner.style.display = "flex";
+          document.getElementById("prevVnWho").textContent = `${displayName} đã ủng hộ ${formatVnd(amount)}`;
+          document.getElementById("prevVnMsg").textContent = displayMsg || "(Không có lời nhắn)";
+          startStatusPolling(base, orderCode);
+        } else {
+          prevBox.style.display = "none";
+          waitBanner.style.display = "none";
+        }
+
+        showStep("qrView");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (e) {
+        errBox.textContent = "Không kết nối được máy chủ Worker.";
+        errBox.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Tạo mã QR chuyển khoản";
+      }
+    }
+
+    function startStatusPolling(base, code) {
+      clearTimeout(pollTimer);
+      const tick = async () => {
+        if (!currentOrder || currentOrder.code !== code) return;
+        try {
+          const r = await fetch(`${base}/api/donate/status/${encodeURIComponent(code)}?_t=${Date.now()}`, { cache: "no-store" });
+          if (r.ok) {
+            const d = await r.json();
+            if (d.status === "paid") {
+              document.getElementById("okWho").textContent = `${currentOrder.donor_name} đã ủng hộ ${formatVnd(d.paid_amount || currentOrder.amount)}`;
+              document.getElementById("okMsg").textContent = currentOrder.message || "(Không có lời nhắn)";
+              showStep("successView");
+              loadTopSupporters();
+              return;
+            }
+          }
+        } catch (e) { }
+        pollTimer = setTimeout(tick, 2500);
+      };
+      pollTimer = setTimeout(tick, 2500);
+    }
+
+    function backToForm() {
+      clearTimeout(pollTimer);
+      currentOrder = null;
+      showStep("formView");
+    }
+
+    async function loadTopSupporters() {
+      const box = document.getElementById("topBox");
+      const list = document.getElementById("topList");
+      list.textContent = "";
+      const base = apiBase();
+      if (!CONFIG.showTopSupporters || !base) { box.style.display = "none"; return; }
+      try {
+        const r = await fetch(`${base}/api/donate/top?_t=${Date.now()}`, { cache: "no-store" });
+        if (!r.ok) return;
+        const d = await r.json();
+        const items = d.items || [];
+        if (!items.length) { box.style.display = "none"; return; }
+        box.style.display = "block";
+        document.getElementById("topTitle").textContent = CONFIG.topTitle || "Top ủng hộ tháng này";
+        items.slice(0, 5).forEach((s, idx) => {
+          const row = document.createElement("div");
+          row.className = "top-row";
+          const left = document.createElement("div");
+          left.className = "top-left";
+          const dot = document.createElement("span");
+          dot.className = "rank-dot";
+          dot.textContent = String(idx + 1);
+          const nm = document.createElement("span");
+          nm.textContent = s.donor_name || "Ẩn danh";
+          left.appendChild(dot); left.appendChild(nm);
+          const amt = document.createElement("span");
+          amt.className = "top-amt";
+          amt.textContent = formatVnd(s.total || 0);
+          row.appendChild(left); row.appendChild(amt);
+          list.appendChild(row);
+        });
+      } catch (e) { }
+    }
+
+    document.getElementById("amountInput").addEventListener("input", () => {
+      const val = document.getElementById("amountInput").value;
+      document.querySelectorAll(".amt-pill").forEach(b => b.classList.toggle("active", b.dataset.amt === val));
+    });
+
+    (async function boot() {
+      applyConfigToPage();
+      const base = apiBase();
+      if (base) {
+        try {
+          const r = await fetch(`${base}/api/page-config?_t=${Date.now()}`, { cache: "no-store" });
+          if (r.ok) {
+            const remote = await r.json();
+            CONFIG = { ...CONFIG, ...remote };
+            applyConfigToPage();
+          }
+        } catch (e) { }
+        loadTopSupporters();
+      }
+    })();
+  </script>
+</body>
+
+</html>
