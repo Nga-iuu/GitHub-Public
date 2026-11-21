@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản trị Trang Donate &amp; Overlay</title>
+  <title>Donate Studio Cloud — Quản trị Trang Donate &amp; Overlay</title>
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='64' y2='64' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 50s-17-10.4-21-20.8C8 21.2 13.2 13 21.4 13c4.6 0 8.2 2.5 10.6 5.9 2.4-3.4 6-5.9 10.6-5.9 8.2 0 13.4 8.2 10.4 16.2C49 39.6 32 50 32 50Z' fill='%23fff'/%3E%3C/svg%3E">
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='64' y2='64' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%23ec4899'/%3E%3Cstop offset='1' stop-color='%237c3aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 50s-17-10.4-21-20.8C8 21.2 13.2 13 21.4 13c4.6 0 8.2 2.5 10.6 5.9 2.4-3.4 6-5.9 10.6-5.9 8.2 0 13.4 8.2 10.4 16.2C49 39.6 32 50 32 50Z' fill='%23fff'/%3E%3C/svg%3E">
   <style>
     :root {
       --bg: #0b0e14;
@@ -14,12 +14,16 @@
       --panel-2: #192030;
       --border: rgba(255, 255, 255, 0.08);
       --border-hi: rgba(255, 255, 255, 0.16);
+      --accent: #7c3aed;
+      --accent-2: #a855f7;
       --text: #f1f5f9;
       --muted: #94a3b8;
-      --accent: #7c3aed;
       --green: #10b981;
+      --yellow: #fde047;
+      --blue: #38bdf8;
       --red: #ef4444;
       --radius: 14px;
+      --sidebar-w: 232px;
     }
 
     * {
@@ -33,106 +37,358 @@
       min-height: 100%;
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 14px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Login Overlay */
+    svg.ico {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    svg.ico-lg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ================= LOGIN SCREEN ================= */
     #loginScreen {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      background:
+        radial-gradient(640px 320px at 20% 10%, rgba(124, 58, 237, 0.16), transparent 70%),
+        radial-gradient(540px 320px at 85% 90%, rgba(236, 72, 153, 0.12), transparent 70%),
+        var(--bg);
     }
 
     .login-card {
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       background: var(--panel);
       border: 1px solid var(--border-hi);
       border-radius: 18px;
-      padding: 26px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ec4899, #7c3aed);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.35);
+      flex-shrink: 0;
+    }
+
+    .brand-mark svg {
+      width: 22px;
+      height: 22px;
+      fill: #fff;
+      stroke: none;
     }
 
     .login-card h1 {
-      margin: 0 0 6px;
+      margin: 0;
       font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
     }
 
-    .login-card p {
+    .login-sub {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .login-desc {
       margin: 0 0 18px;
       color: var(--muted);
       font-size: 13px;
+      line-height: 1.5;
     }
 
-    /* App Layout */
+    .login-err {
+      display: none;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fecaca;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    /* ================= APP SHELL ================= */
     #appShell {
       display: none;
       min-height: 100vh;
     }
 
+    .shell-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: #0f131d;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 30;
+    }
+
+    .sb-head {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .sb-head .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+    }
+
+    .sb-head .brand-mark svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .sb-title {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .sb-sub {
+      font-size: 11px;
+      color: var(--accent-2);
+      font-weight: 600;
+      margin-top: 2px;
+      letter-spacing: 0.2px;
+    }
+
+    .sb-nav {
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .nav-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: all .15s;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .nav-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.26), rgba(168, 85, 247, 0.16));
+      border-color: rgba(168, 85, 247, 0.45);
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.16);
+    }
+
+    .nav-btn.active svg.ico {
+      color: #c084fc;
+    }
+
+    .sb-foot {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .conn-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border-radius: 9px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      font-size: 12px;
+      font-weight: 600;
+      color: #6ee7b7;
+    }
+
+    .conn-pill.offline {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.32);
+      color: #fca5a5;
+    }
+
+    .conn-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      flex-shrink: 0;
+    }
+
+    .conn-pill.offline .conn-dot {
+      background: var(--red);
+      box-shadow: 0 0 10px var(--red);
+    }
+
+    /* Main Column */
+    .main-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Quick-Link Topbar */
     .topbar {
       position: sticky;
       top: 0;
       z-index: 20;
-      background: rgba(14, 18, 27, 0.95);
-      backdrop-filter: blur(10px);
+      background: rgba(11, 14, 20, 0.92);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 12px 20px;
+      padding: 10px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .tabs {
+    .quick-links {
       display: flex;
-      gap: 6px;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .link-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px 5px 4px 10px;
+      max-width: 280px;
+      min-width: 0;
+    }
+
+    .link-pill.accent {
+      border-color: rgba(168, 85, 247, 0.45);
+      background: rgba(124, 58, 237, 0.12);
+    }
+
+    .link-pill .lp-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .link-pill.accent .lp-lbl {
+      color: #d8b4fe;
+    }
+
+    .link-pill .lp-val {
+      font-family: Consolas, monospace;
+      font-size: 11.5px;
+      color: #cbd5e1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 130px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
-    .tab-btn {
-      padding: 8px 14px;
-      border-radius: 9px;
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--muted);
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .tab-btn:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .tab-btn.active {
-      background: rgba(124, 58, 237, 0.22);
-      border-color: rgba(168, 85, 247, 0.45);
-      color: #fff;
-    }
-
-    .wrap {
-      max-width: 1220px;
+    .content-wrap {
+      width: 100%;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 20px;
     }
 
-    .view {
+    .tab-view {
       display: none;
     }
 
-    .view.active {
+    .tab-view.active {
       display: block;
     }
 
+    /* Grids & Cards */
     .grid-2 {
       display: grid;
       grid-template-columns: 1.15fr 1fr;
       gap: 18px;
+      align-items: start;
+    }
+
+    .grid-2-eq {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: start;
     }
 
     .grid-4 {
@@ -140,16 +396,6 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       margin-bottom: 18px;
-    }
-
-    @media (max-width: 960px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-
-      .grid-4 {
-        grid-template-columns: repeat(2, 1fr);
-      }
     }
 
     .card {
@@ -160,32 +406,70 @@
       margin-bottom: 16px;
     }
 
-    .card h2 {
-      margin: 0 0 14px;
-      font-size: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .card-sticky {
+      position: sticky;
+      top: 72px;
     }
 
+    .card-head {
+      margin: 0 0 14px;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title-left svg.ico {
+      color: #a855f7;
+    }
+
+    .section-sep {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      margin: 16px 0 10px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Stat Cards */
     .stat {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .stat .k {
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       color: var(--muted);
       font-size: 12px;
+      font-weight: 600;
     }
 
     .stat .v {
-      font-size: 21px;
+      font-size: 22px;
       font-weight: 800;
-      margin-top: 4px;
+      letter-spacing: -0.3px;
     }
 
+    /* Form Controls */
     .field {
       margin-bottom: 12px;
     }
@@ -193,15 +477,28 @@
     .field label {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      gap: 8px;
       font-size: 12px;
       font-weight: 600;
       color: #cbd5e1;
       margin-bottom: 5px;
     }
 
+    .val-badge {
+      font-family: Consolas, monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #d8b4fe;
+      background: rgba(124, 58, 237, 0.18);
+      padding: 1px 7px;
+      border-radius: 99px;
+    }
+
     input[type="text"],
     input[type="password"],
     input[type="number"],
+    input[type="search"],
     select,
     textarea {
       width: 100%;
@@ -213,6 +510,18 @@
       font-size: 13px;
       font-family: inherit;
       outline: none;
+      transition: border-color .15s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent-2);
+    }
+
+    textarea {
+      resize: vertical;
+      line-height: 1.45;
     }
 
     input[type="color"] {
@@ -227,17 +536,30 @@
 
     input[type="range"] {
       width: 100%;
-      accent-color: #8b5cf6;
+      accent-color: #a855f7;
+      cursor: pointer;
     }
 
     .row {
       display: flex;
       gap: 10px;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .row>* {
       flex: 1;
+      min-width: 0;
+    }
+
+    .row-center {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .row-center>* {
+      flex: 1;
+      min-width: 0;
     }
 
     .row-auto {
@@ -251,20 +573,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
-      border-radius: 9px;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
       background: var(--bg);
       border: 1px solid var(--border);
       margin-bottom: 10px;
       cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      user-select: none;
     }
 
     .toggle input {
       width: 17px;
       height: 17px;
-      accent-color: #8b5cf6;
+      accent-color: #a855f7;
+      cursor: pointer;
+      flex-shrink: 0;
     }
 
+    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -274,43 +603,358 @@
       border-radius: 9px;
       border: 1px solid var(--border-hi);
       background: var(--panel-2);
-      color: #fff;
+      color: var(--text);
       font-size: 13px;
       font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
+      text-decoration: none;
+      transition: background .15s, border-color .15s, transform .1s;
+      white-space: nowrap;
     }
 
     .btn:hover {
       background: #232d42;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #6366f1, #a855f7);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #6d28d9, #9333ea);
       border-color: transparent;
     }
 
     .btn-success {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.16);
+      border-color: rgba(16, 185, 129, 0.42);
       color: #6ee7b7;
     }
 
+    .btn-success:hover {
+      background: rgba(16, 185, 129, 0.25);
+    }
+
     .btn-warn {
-      background: rgba(245, 158, 11, 0.18);
-      border-color: rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.16);
+      border-color: rgba(245, 158, 11, 0.42);
       color: #fcd34d;
     }
 
+    .btn-warn:hover {
+      background: rgba(245, 158, 11, 0.25);
+    }
+
     .btn-danger {
-      background: rgba(239, 68, 68, 0.18);
+      background: rgba(239, 68, 68, 0.16);
       border-color: rgba(239, 68, 68, 0.45);
       color: #fca5a5;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.26);
     }
 
     .btn-sm {
       padding: 5px 10px;
       font-size: 12px;
       border-radius: 7px;
+    }
+
+    .btn-xs {
+      padding: 4px 8px;
+      font-size: 11.5px;
+      border-radius: 7px;
+    }
+
+    .btn-icon {
+      padding: 6px;
+      width: 30px;
+      height: 30px;
+    }
+
+    /* Live Deck */
+    .deck-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .deck-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 16px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border-hi);
+      background: var(--panel-2);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .deck-btn:hover {
+      background: #232d42;
+      transform: translateY(-1px);
+    }
+
+    .deck-btn.warn {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.36);
+      color: #fcd34d;
+    }
+
+    .deck-btn.danger-active {
+      background: rgba(239, 68, 68, 0.22);
+      border-color: rgba(239, 68, 68, 0.6);
+      color: #fecaca;
+    }
+
+    .deck-btn.clear-btn {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.32);
+      color: #fca5a5;
+    }
+
+    /* Chips */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      padding: 5px 11px;
+      border-radius: 99px;
+      border: 1px solid var(--border-hi);
+      background: var(--bg);
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .14s;
+    }
+
+    .chip:hover {
+      border-color: var(--accent-2);
+      color: #fff;
+      background: rgba(124, 58, 237, 0.18);
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-color: transparent;
+      color: #fff;
+    }
+
+    /* Feed & Search */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .search-wrap svg.ico {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .search-wrap input {
+      padding-left: 34px;
+    }
+
+    .feed {
+      max-height: 360px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 2px;
+    }
+
+    .feed-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .feed-main {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .feed-top {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .feed-amt {
+      color: var(--yellow);
+      font-weight: 800;
+      font-size: 13.5px;
+    }
+
+    .feed-msg {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-top: 3px;
+      word-break: break-word;
+    }
+
+    .feed-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-family: Consolas, monospace;
+    }
+
+    /* Top Donators */
+    .top-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .rank-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .rank-1 {
+      background: linear-gradient(135deg, #f59e0b, #fde047);
+      color: #422006;
+    }
+
+    .rank-2 {
+      background: linear-gradient(135deg, #94a3b8, #e2e8f0);
+      color: #0f172a;
+    }
+
+    .rank-3 {
+      background: linear-gradient(135deg, #b45309, #f59e0b);
+      color: #fffbeb;
+    }
+
+    .rank-other {
+      background: #1e293b;
+      color: #94a3b8;
+    }
+
+    .top-name {
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-count {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    .top-total {
+      font-weight: 800;
+      color: #34d399;
+      white-space: nowrap;
+    }
+
+    /* Presets */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .preset-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .preset-card {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hi);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: all .15s;
+    }
+
+    .preset-card:hover {
+      border-color: var(--accent-2);
+      background: rgba(124, 58, 237, 0.12);
+    }
+
+    .preset-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
     /* Mini Donate Page Preview */
@@ -320,18 +964,25 @@
       border: 1px solid var(--border-hi);
       padding: 20px 18px 24px;
       text-align: center;
-      min-height: 360px;
-      transition: background .2s;
+      min-height: 380px;
+      transition: background .2s, color .2s;
+      position: relative;
     }
 
     .pp-cover {
-      height: 80px;
-      margin: -20px -18px -28px;
+      height: 92px;
+      margin: -20px -18px -36px;
       background-size: cover;
-      background-position: center;
-      opacity: .75;
+      background-position: center 25%;
+      opacity: .78;
       mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+    }
+
+    .pp-head {
+      position: relative;
+      z-index: 2;
+      padding-top: 10px;
     }
 
     .pp-pill {
@@ -342,13 +993,27 @@
       font-size: 11px;
       font-weight: 800;
       margin: 12px 0;
+      letter-spacing: 0.4px;
+    }
+
+    .pp-input-mock {
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.28);
+      border: 1px solid rgba(15, 23, 42, 0.16);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 11.5px;
+      opacity: 0.75;
     }
 
     .pp-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      margin: 10px 0;
+      margin: 8px 0 10px;
     }
 
     .pp-amt {
@@ -366,18 +1031,94 @@
       border-radius: 99px;
       color: #fff;
       font-weight: 800;
+      font-size: 13px;
       border: none;
-      margin-top: 10px;
+      margin-top: 6px;
     }
 
-    /* Overlay Preview */
+    /* Badge Picker Grid 5x2 */
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .badge-opt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 9px 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border-hi);
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .badge-opt:hover {
+      border-color: var(--accent-2);
+      color: #fff;
+    }
+
+    .badge-opt.active {
+      background: rgba(124, 58, 237, 0.24);
+      border-color: var(--accent-2);
+      color: #fff;
+      box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.4);
+    }
+
+    .badge-opt svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .custom-badge-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px dashed var(--border-hi);
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .custom-badge-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .custom-badge-thumb {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.06);
+      display: none;
+    }
+
+    /* Overlay Preview Stage */
     .ov-stage {
-      height: 210px;
+      height: 250px;
       border-radius: 12px;
       padding: 18px;
       display: flex;
+      overflow: hidden;
       background: repeating-conic-gradient(#1a2030 0% 25%, #121723 0% 50%) 50% / 20px 20px;
       border: 1px solid var(--border-hi);
+      margin-bottom: 14px;
     }
 
     .ov-stage.pos-bottom-left {
@@ -416,29 +1157,110 @@
     }
 
     .ov-card {
-      padding: 14px 20px;
-      max-width: 100%;
-    }
-
-    .feed {
-      max-height: 360px;
-      overflow-y: auto;
+      padding: 14px 18px;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .feed-item {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: var(--bg);
-      border: 1px solid var(--border);
+      gap: 13px;
+      max-width: 100%;
+      transition: border-radius .15s, border .15s, box-shadow .15s;
     }
 
+    .ov-badge {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ov-badge svg {
+      width: 44px;
+      height: 44px;
+      display: block;
+    }
+
+    .ov-badge img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .ov-body {
+      min-width: 0;
+    }
+
+    @keyframes ovSlideUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes ovPop {
+      0% { opacity: 0; transform: scale(0.72); }
+      65% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes ovSlideLeft {
+      from { opacity: 0; transform: translateX(36px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes ovFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .anim-slide-up { animation: ovSlideUp .42s cubic-bezier(.2, .8, .2, 1); }
+    .anim-pop { animation: ovPop .42s cubic-bezier(.2, .8, .2, 1); }
+    .anim-slide-left { animation: ovSlideLeft .42s cubic-bezier(.2, .8, .2, 1); }
+    .anim-fade { animation: ovFade .45s ease; }
+
+    /* Info Box / System Links */
+    .tip-box {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      color: #bae6fd;
+      font-size: 12.5px;
+      line-height: 1.55;
+      margin-top: 12px;
+    }
+
+    .secret-box {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.28);
+      color: #e9d5ff;
+      font-size: 12.5px;
+      line-height: 1.55;
+      margin-top: 12px;
+    }
+
+    .secret-box code {
+      font-family: Consolas, monospace;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 1px 6px;
+      border-radius: 5px;
+      color: #fde047;
+    }
+
+    .sys-link-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .sys-link-row input {
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+
+    /* Toast */
     #toast {
       position: fixed;
       right: 20px;
@@ -446,19 +1268,87 @@
       padding: 10px 16px;
       border-radius: 10px;
       background: #1e293b;
-      border: 1px solid rgba(168, 85, 247, 0.5);
+      border: 1px solid rgba(168, 85, 247, 0.55);
       color: #fff;
+      font-size: 13px;
       font-weight: 600;
       opacity: 0;
       transform: translateY(12px);
       transition: all .2s;
       pointer-events: none;
       z-index: 999;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+      max-width: 380px;
     }
 
     #toast.show {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* Responsive (< 900px) */
+    @media (max-width: 900px) {
+      .shell-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sb-head {
+        padding: 12px 14px;
+      }
+
+      .sb-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 8px 10px;
+        gap: 6px;
+      }
+
+      .nav-btn {
+        width: auto;
+        white-space: nowrap;
+        padding: 8px 11px;
+        font-size: 12.5px;
+      }
+
+      .sb-foot {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+      }
+
+      .grid-2,
+      .grid-2-eq {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card-sticky {
+        position: static;
+      }
+
+      .preset-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .badge-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .link-pill {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -466,324 +1356,801 @@
 <body>
 
   <script>
-    // Có thể điền sẵn link Worker của bạn ở đây (hoặc nhập trực tiếp ở màn hình đăng nhập)
-    const DEFAULT_WORKER_URL = "https://donate-sepay.tduy5781.workers.dev"; // VD: "https://donate-sepay-api.ten-cua-ban.workers.dev"
+    const DEFAULT_WORKER_URL = "https://donate-sepay.tduy5781.workers.dev";
   </script>
 
-  <!-- MÀN HÌNH ĐĂNG NHẬP -->
+  <!-- ==================== MÀN HÌNH ĐĂNG NHẬP ==================== -->
   <div id="loginScreen">
     <div class="login-card">
-      <h1>Donate Studio Cloud</h1>
-      <p>Đăng nhập để chỉnh từng chi tiết Trang Donate, Hộp thông báo Overlay &amp; điều khiển livestream.</p>
-      <div id="loginErr"
-        style="display:none;margin-bottom:12px;padding:9px 12px;border-radius:9px;background:rgba(239,68,68,0.16);color:#fecaca;font-size:13px;">
+      <div class="login-brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 64 64">
+            <path d="M32 52s-18-11-22-22C6.8 21.5 12.4 13 21 13c4.8 0 8.5 2.6 11 6.2 2.5-3.6 6.2-6.2 11-6.2 8.6 0 14.2 8.5 11 17C50 41 32 52 32 52Z" />
+          </svg>
+        </div>
+        <div>
+          <h1>Donate Studio</h1>
+          <div class="login-sub">Cloud Edition</div>
+        </div>
       </div>
+      <p class="login-desc">Đăng nhập để điều khiển livestream, tùy chỉnh trực quan Trang Donate, Hộp thông báo Overlay và giọng đọc TTS.</p>
+      <div id="loginErr" class="login-err"></div>
       <div class="field">
         <label>Link Cloudflare Worker của bạn</label>
-        <input id="inWorkerUrl" type="text" placeholder="https://donate-sepay-api.xxxx.workers.dev">
+        <input id="inWorkerUrl" type="text" placeholder="https://donate-sepay.tduy5781.workers.dev">
       </div>
       <div class="field">
         <label>Mật khẩu Admin (ADMIN_PASSWORD)</label>
-        <input id="inAdminPw" type="password" placeholder="Nhập mật khẩu bí mật..."
-          onkeydown="if(event.key==='Enter') doLogin()">
+        <input id="inAdminPw" type="password" placeholder="Nhập mật khẩu quản trị..." onkeydown="if(event.key==='Enter') doLogin()">
       </div>
-      <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="doLogin()">Đăng nhập Quản trị</button>
+      <button id="btnLogin" class="btn btn-primary" style="width:100%;padding:11px;" onclick="doLogin()">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Đăng nhập Quản trị
+      </button>
     </div>
   </div>
 
-  <!-- GIAO DIỆN QUẢN TRỊ CHÍNH -->
+  <!-- ==================== GIAO DIỆN QUẢN TRỊ CHÍNH ==================== -->
   <div id="appShell">
-    <header class="topbar">
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="page">Trang Donate (index.html)</button>
-        <button class="tab-btn" data-tab="overlay">Hộp thông báo &amp; TTS</button>
-        <button class="tab-btn" data-tab="live">Điều khiển, Test &amp; Lịch sử</button>
-      </div>
-      <div class="row-auto">
-        <button class="btn btn-sm btn-success"
-          onclick="copyText(links.overlay_url, 'Đã copy link cứng TikTok LIVE Studio!')">Copy Link TikTok LIVE</button>
-        <button class="btn btn-sm" onclick="copyText(links.sepay_webhook, 'Đã copy link cứng SePay Webhook!')">Copy Link
-          SePay</button>
-        <button class="btn btn-sm btn-danger" onclick="logout()">Đăng xuất</button>
-      </div>
-    </header>
+    <div class="shell-layout">
 
-    <div class="wrap">
-      <!-- TAB 1: CHỈNH TỪNG TÝ 1 TRANG DONATE (index.html) -->
-      <section id="view-page" class="view active">
-        <div class="grid-2">
-          <div class="card">
-            <h2>Cấu hình chi tiết Trang Donate (GitHub Pages)</h2>
-            <div class="row">
-              <div class="field"><label>Tên kênh hiển thị</label><input id="p_streamerName" type="text"
-                  oninput="syncPagePreview()"></div>
-              <div class="field"><label>Lời chào (Subtitle)</label><input id="p_subtitle" type="text"
-                  oninput="syncPagePreview()"></div>
-            </div>
-
-            <div class="field">
-              <label>Ảnh bìa (Dán link ảnh hoặc tải trực tiếp ảnh nhẹ &lt; 400KB)</label>
-              <div class="row">
-                <input id="p_coverImage" type="text" placeholder="https://... hoặc bấm Tải ảnh"
-                  oninput="syncPagePreview()">
-                <input id="coverFile" type="file" accept="image/*" style="display:none"
-                  onchange="uploadCoverFile(this)">
-                <button class="btn btn-sm" style="flex:0" onclick="document.getElementById('coverFile').click()">Tải
-                  ảnh</button>
-                <button class="btn btn-sm btn-danger" style="flex:0"
-                  onclick="document.getElementById('p_coverImage').value='';syncPagePreview()">Xóa</button>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="field"><label>Màu nền chính</label><input id="p_themeBg" type="color"
-                  oninput="syncPagePreview()"></div>
-              <div class="field"><label>Màu nhấn (Pill)</label><input id="p_themeAccent" type="color"
-                  oninput="syncPagePreview()"></div>
-              <div class="field"><label>Màu nút Tạo QR</label><input id="p_themeButtonDark" type="color"
-                  oninput="syncPagePreview()"></div>
-              <div class="field"><label>Màu chữ chính</label><input id="p_themeText" type="color"
-                  oninput="syncPagePreview()"></div>
-            </div>
-
-            <div class="row">
-              <div class="field">
-                <label>Ngân hàng nhận tiền</label>
-                <select id="p_bankCode" onchange="autoBankName()">
-                  <option value="MB">MB Bank</option>
-                  <option value="VCB">Vietcombank</option>
-                  <option value="TCB">Techcombank</option>
-                  <option value="ACB">ACB</option>
-                  <option value="BIDV">BIDV</option>
-                  <option value="ICB">VietinBank</option>
-                  <option value="VPB">VPBank</option>
-                  <option value="TPB">TPBank</option>
-                  <option value="STB">Sacombank</option>
-                  <option value="VIB">VIB</option>
-                  <option value="SHB">SHB</option>
-                  <option value="OCB">OCB</option>
-                  <option value="MSB">MSB</option>
-                  <option value="HDB">HDBank</option>
-                  <option value="CAKE">CAKE</option>
-                  <option value="TIMO">Timo</option>
-                </select>
-              </div>
-              <div class="field"><label>Số tài khoản</label><input id="p_bankAccount" type="text"></div>
-              <div class="field"><label>Chủ tài khoản (IN HOA)</label><input id="p_bankAccountName" type="text"></div>
-            </div>
-
-            <div class="row">
-              <div class="field"><label>Link TikTok</label><input id="p_tiktokUrl" type="text"
-                  placeholder="https://www.tiktok.com/@..."></div>
-              <div class="field"><label>Link Facebook</label><input id="p_facebookUrl" type="text"
-                  placeholder="https://www.facebook.com/..."></div>
-              <div class="field"><label>Link YouTube</label><input id="p_youtubeUrl" type="text"
-                  placeholder="Để trống nếu không dùng"></div>
-            </div>
-
-            <div class="field">
-              <label>Các mức chọn tiền nhanh (phân cách bằng dấu phẩy)</label>
-              <input id="p_amounts" type="text" oninput="syncPagePreview()"
-                placeholder="10000, 20000, 50000, 100000, 200000, 500000">
-            </div>
-
-            <div class="row">
-              <div class="field"><label>Số tiền tối thiểu (VNĐ)</label><input id="p_minAmount" type="number" min="1000"
-                  step="1000"></div>
-              <div class="field"><label>Tiền tố mã QR</label><input id="p_orderPrefix" type="text" maxlength="4"></div>
-              <div class="field"><label>Tiêu đề BXH</label><input id="p_topTitle" type="text"></div>
-            </div>
-
-            <div class="field"><label>Dòng chân trang (Footer)</label><input id="p_footerText" type="text"
-                oninput="syncPagePreview()"></div>
-            <label class="toggle"><span>Hiển thị BXH Top ủng hộ tự động trên trang Donate</span><input
-                id="p_showTopSupporters" type="checkbox"></label>
-
-            <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="savePageConfig()">Lưu &amp; Cập
-              nhật ngay Trang Donate</button>
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sb-head">
+          <div class="brand-mark">
+            <svg viewBox="0 0 64 64">
+              <path d="M32 52s-18-11-22-22C6.8 21.5 12.4 13 21 13c4.8 0 8.5 2.6 11 6.2 2.5-3.6 6.2-6.2 11-6.2 8.6 0 14.2 8.5 11 17C50 41 32 52 32 52Z" />
+            </svg>
           </div>
-
-          <div class="card" style="position:sticky;top:72px;align-self:start;">
-            <h2>Xem trước Trang Donate <a href="./index.html" target="_blank" class="btn btn-sm">Mở trang thật</a></h2>
-            <div id="ppFrame" class="page-preview-frame">
-              <div id="ppCover" class="pp-cover"></div>
-              <h2 id="ppName" style="justify-content:center;font-size:24px;margin:8px 0 4px;"></h2>
-              <div id="ppSub" style="font-size:13px;opacity:.8;"></div>
-              <div id="ppPill" class="pp-pill">CHUYỂN KHOẢN QR NGÂN HÀNG</div>
-              <div id="ppGrid" class="pp-grid"></div>
-              <button id="ppBtn" class="pp-btn" type="button">Tạo mã QR chuyển khoản</button>
-              <div id="ppFooter" style="margin-top:14px;font-size:11px;opacity:.75;"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 2: HỘP THÔNG BÁO & GIỌNG ĐỌC TTS -->
-      <section id="view-overlay" class="view">
-        <div class="grid-2">
-          <div class="card">
-            <h2>Giao diện Hộp thông báo &amp; Giọng đọc TTS</h2>
-            <div class="row">
-              <div class="field"><label>Màu nền 1</label><input id="o_bg_color_1" type="color"
-                  oninput="syncOvPreview()"></div>
-              <div class="field"><label>Màu nền 2</label><input id="o_bg_color_2" type="color"
-                  oninput="syncOvPreview()"></div>
-              <div class="field"><label>Màu viền Glow</label><input id="o_border_color" type="color"
-                  oninput="syncOvPreview()"></div>
-            </div>
-            <div class="row">
-              <div class="field"><label>Màu chữ tiêu đề</label><input id="o_text_color" type="color"
-                  oninput="syncOvPreview()"></div>
-              <div class="field"><label>Màu số tiền</label><input id="o_amount_color" type="color"
-                  oninput="syncOvPreview()"></div>
-              <div class="field"><label>Màu lời nhắn</label><input id="o_msg_color" type="color"
-                  oninput="syncOvPreview()"></div>
-            </div>
-            <div class="row">
-              <div class="field"><label>Cỡ chữ tiêu đề</label><input id="o_title_size" type="range" min="16" max="42"
-                  oninput="syncOvPreview()"></div>
-              <div class="field"><label>Cỡ chữ lời nhắn</label><input id="o_msg_size" type="range" min="14" max="34"
-                  oninput="syncOvPreview()"></div>
-              <div class="field"><label>Bo góc</label><input id="o_border_radius" type="range" min="0" max="36"
-                  oninput="syncOvPreview()"></div>
-            </div>
-            <div class="row">
-              <div class="field">
-                <label>Biểu tượng SVG</label>
-                <select id="o_badge_icon" onchange="syncOvPreview()">
-                  <option value="heart">Tim Neon</option>
-                  <option value="flame">Ngọn lửa</option>
-                  <option value="crown">Vương miện VIP</option>
-                  <option value="gem">Kim cương</option>
-                  <option value="music">Nốt nhạc TikTok</option>
-                  <option value="gift">Hộp quà</option>
-                  <option value="sparkle">Lấp lánh</option>
-                  <option value="rocket">Tên lửa</option>
-                  <option value="coin">Xu vàng</option>
-                  <option value="none">Tắt icon</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Vị trí</label>
-                <select id="o_position" onchange="syncOvPreview()">
-                  <option value="bottom-left">Góc dưới trái</option>
-                  <option value="bottom-center">Giữa dưới</option>
-                  <option value="bottom-right">Góc dưới phải</option>
-                  <option value="top-left">Góc trên trái</option>
-                  <option value="top-center">Giữa trên</option>
-                  <option value="top-right">Góc trên phải</option>
-                  <option value="center">Chính giữa</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Hiệu ứng</label>
-                <select id="o_animation">
-                  <option value="slide-up">Trượt lên</option>
-                  <option value="pop">Phóng to Pop</option>
-                  <option value="slide-left">Trượt trái</option>
-                  <option value="fade">Mờ dần</option>
-                </select>
-              </div>
-            </div>
-            <div class="field"><label>Mẫu tiêu đề ({name}, {amount})</label><input id="o_title_template" type="text"
-                oninput="syncOvPreview()"></div>
-            <div class="field"><label>Mẫu câu đọc TTS ({name}, {amount}, {message})</label><input id="o_tts_template"
-                type="text"></div>
-            <div class="row">
-              <div class="field"><label>Kiểu chuông</label><select id="o_alert_sound">
-                  <option value="ting">Ting-Ting</option>
-                  <option value="coin">Coin Retro</option>
-                  <option value="fanfare">Fanfare VIP</option>
-                  <option value="chime">Chime êm</option>
-                  <option value="none">Tắt chuông</option>
-                </select></div>
-              <div class="field"><label>Âm lượng TTS (0–1)</label><input id="o_tts_volume" type="number" min="0" max="1"
-                  step="0.1"></div>
-              <div class="field"><label>Tốc độ đọc (0.75–1.5)</label><input id="o_tts_rate" type="number" min="0.75"
-                  max="1.5" step="0.05"></div>
-              <div class="field"><label>TTS tối thiểu (VNĐ)</label><input id="o_min_tts_amount" type="number" min="0"
-                  step="1000"></div>
-            </div>
-            <div class="field"><label>Danh sách từ cấm (phân cách bằng dấu phẩy)</label><textarea id="o_bad_words"
-                rows="2"></textarea></div>
-            <div class="row">
-              <label class="toggle"><span>Bật giọng đọc TTS</span><input id="o_tts_enabled" type="checkbox"></label>
-              <label class="toggle"><span>Viền phát sáng Glow</span><input id="o_border_glow" type="checkbox"
-                  onchange="syncOvPreview()"></label>
-            </div>
-            <div class="row-auto">
-              <button class="btn btn-primary" onclick="saveOverlayConfig()">Lưu &amp; Áp dụng lên TikTok LIVE</button>
-              <button class="btn btn-success" onclick="previewTts()">Nghe thử câu đọc</button>
-            </div>
-          </div>
-
-          <div class="card" style="position:sticky;top:72px;align-self:start;">
-            <h2>Xem trước Hộp thông báo</h2>
-            <div id="ovStage" class="ov-stage pos-bottom-left">
-              <div id="ovCard" class="ov-card">
-                <div id="ovTitle" style="font-weight:800;"></div>
-                <div id="ovMsg" style="margin-top:5px;">Chúc bạn live thật vui vẻ nhé!</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 3: ĐIỀU KHIỂN, TEST & LỊCH SỬ -->
-      <section id="view-live" class="view">
-        <div class="grid-4">
-          <div class="stat">
-            <div class="k">Donate hôm nay</div>
-            <div class="v" style="color:#fde047" id="sTodayTotal">0đ</div>
-          </div>
-          <div class="stat">
-            <div class="k">Số lượt hôm nay</div>
-            <div class="v" style="color:#38bdf8" id="sTodayCount">0</div>
-          </div>
-          <div class="stat">
-            <div class="k">Tổng tất cả</div>
-            <div class="v" style="color:#34d399" id="sAllTotal">0đ</div>
-          </div>
-          <div class="stat">
-            <div class="k">Tổng số lượt</div>
-            <div class="v" id="sAllCount">0</div>
-          </div>
-        </div>
-
-        <div class="grid-2">
           <div>
-            <div class="card">
-              <h2>Điều khiển trực tiếp trên TikTok LIVE</h2>
-              <div class="row-auto">
-                <button class="btn btn-warn" onclick="sendCtrl('skip')">Bỏ qua (Skip)</button>
-                <button id="btnMute" class="btn" onclick="sendCtrl('toggle_mute')">Đang bật tiếng</button>
-                <button id="btnPause" class="btn" onclick="sendCtrl('toggle_pause')">Tạm dừng</button>
-                <button class="btn btn-danger" onclick="sendCtrl('clear')">Xóa hàng đợi</button>
-              </div>
-            </div>
-
-            <div class="card">
-              <h2>Bắn Donate Test (Tiếng Việt có dấu)</h2>
-              <div class="row">
-                <div class="field"><label>Tên</label><input id="tName" type="text" value="Thái VIP"></div>
-                <div class="field"><label>Số tiền</label><input id="tAmt" type="number" value="50000" step="1000"></div>
-              </div>
-              <div class="field"><label>Lời nhắn tiếng Việt có dấu</label><input id="tMsg" type="text"
-                  value="Chúc anh livestream thật bùng nổ và nhiều mắt xem nhé!"></div>
-              <label class="toggle"><span>Lưu vào lịch sử DB (cập nhật cả BXH)</span><input id="tSave"
-                  type="checkbox"></label>
-              <button class="btn btn-primary" onclick="sendTest()">Bắn Test lên TikTok LIVE ngay</button>
-            </div>
-          </div>
-
-          <div class="card">
-            <h2>Lịch sử Donate <div class="row-auto"><button class="btn btn-sm" onclick="bootstrap()">Làm
-                  mới</button><button class="btn btn-sm" onclick="exportCsv()">Xuất CSV</button></div>
-            </h2>
-            <div id="feedList" class="feed"></div>
+            <div class="sb-title">Donate Studio</div>
+            <div class="sb-sub">Cloud Edition</div>
           </div>
         </div>
-      </section>
+
+        <nav class="sb-nav">
+          <button class="nav-btn active" data-tab="live">
+            <svg class="ico" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Điều khiển &amp; Test</span>
+          </button>
+          <button class="nav-btn" data-tab="page">
+            <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            <span>Trang Donate</span>
+          </button>
+          <button class="nav-btn" data-tab="design">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span>Hộp thông báo</span>
+          </button>
+          <button class="nav-btn" data-tab="audio">
+            <svg class="ico" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            <span>Âm thanh &amp; TTS</span>
+          </button>
+          <button class="nav-btn" data-tab="system">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Hệ thống &amp; Lọc</span>
+          </button>
+        </nav>
+
+        <div class="sb-foot">
+          <div id="connStatus" class="conn-pill">
+            <span class="conn-dot"></span>
+            <span id="connStatusText">Worker Online</span>
+          </div>
+          <button class="btn btn-sm btn-danger" style="width:100%;" onclick="logout()">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Đăng xuất
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN COLUMN -->
+      <div class="main-col">
+
+        <!-- QUICK-LINK TOPBAR -->
+        <header class="topbar">
+          <div class="quick-links">
+            <div class="link-pill accent">
+              <span class="lp-lbl">TikTok LIVE</span>
+              <span id="qlOverlay" class="lp-val">Đang tải...</span>
+              <button class="btn btn-xs btn-primary" onclick="copyText(links.overlay_url, 'Đã copy link TikTok LIVE Overlay!')">
+                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+            </div>
+            <div class="link-pill">
+              <span class="lp-lbl">Trang Donate</span>
+              <span id="qlDonate" class="lp-val"></span>
+              <button class="btn btn-xs" onclick="copyText(getDonatePageUrl(), 'Đã copy link Trang Donate!')">
+                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+            </div>
+            <div class="link-pill">
+              <span class="lp-lbl">SePay Webhook</span>
+              <span id="qlSepay" class="lp-val">Đang tải...</span>
+              <button class="btn btn-xs" onclick="copyText(links.sepay_webhook, 'Đã copy link SePay Webhook!')">
+                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <div class="topbar-actions">
+            <a href="./index.html" target="_blank" rel="noopener" class="btn btn-sm">
+              <svg class="ico" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Mở Trang Donate
+            </a>
+            <button class="btn btn-sm btn-success" onclick="openOverlayTab()">
+              <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Mở thử Overlay
+            </button>
+          </div>
+        </header>
+
+        <div class="content-wrap">
+
+          <!-- ==================== TAB 1: ĐIỀU KHIỂN & TEST ==================== -->
+          <section id="tab-live" class="tab-view active">
+            <div class="grid-4">
+              <div class="stat">
+                <div class="stat-top">
+                  <span>Donate hôm nay</span>
+                  <svg class="ico" style="color:var(--yellow)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1.2 0-2.2-.5-2.7-1.5"/><line x1="12" y1="6.5" x2="12" y2="17.5"/></svg>
+                </div>
+                <div class="v" style="color:var(--yellow)" id="sTodayTotal">0đ</div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  <span>Số lượt hôm nay</span>
+                  <svg class="ico" style="color:var(--blue)" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <div class="v" style="color:var(--blue)" id="sTodayCount">0</div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  <span>Tổng tất cả</span>
+                  <svg class="ico" style="color:#34d399" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                </div>
+                <div class="v" style="color:#34d399" id="sAllTotal">0đ</div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  <span>Tổng số lượt</span>
+                  <svg class="ico" style="color:#c084fc" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="v" id="sAllCount">0</div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <!-- Cột trái -->
+              <div>
+                <div class="card">
+                  <div class="card-head">
+                    <span class="card-title-left">
+                      <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+                      Live Deck — Điều khiển trực tiếp
+                    </span>
+                  </div>
+                  <div class="deck-grid">
+                    <button class="deck-btn warn" onclick="sendCtrl('skip')">
+                      <svg class="ico ico-lg" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                      <span>Bỏ qua ngay</span>
+                    </button>
+                    <button id="btnMute" class="deck-btn" onclick="sendCtrl('toggle_mute')">
+                      <span id="icoMute">
+                        <svg class="ico ico-lg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                      </span>
+                      <span id="txtMute">Đang bật tiếng</span>
+                    </button>
+                    <button id="btnPause" class="deck-btn" onclick="sendCtrl('toggle_pause')">
+                      <span id="icoPause">
+                        <svg class="ico ico-lg" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                      </span>
+                      <span id="txtPause">Tạm dừng</span>
+                    </button>
+                    <button class="deck-btn clear-btn" onclick="sendCtrl('clear')">
+                      <svg class="ico ico-lg" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                      <span>Xóa hàng đợi</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-head">
+                    <span class="card-title-left">
+                      <svg class="ico" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                      Test Donate nhanh (Tiếng Việt có dấu)
+                    </span>
+                  </div>
+                  <div class="row">
+                    <div class="field">
+                      <label>Tên người donate</label>
+                      <input id="tName" type="text" maxlength="40" value="Thái VIP">
+                    </div>
+                    <div class="field">
+                      <label>Số tiền (VND)</label>
+                      <input id="tAmt" type="number" min="1000" step="1000" value="50000" oninput="syncTestChips()">
+                    </div>
+                  </div>
+                  <div class="chip-row" id="testAmtChips">
+                    <button type="button" class="chip" data-amt="10000" onclick="pickTestAmt(10000)">10k</button>
+                    <button type="button" class="chip" data-amt="20000" onclick="pickTestAmt(20000)">20k</button>
+                    <button type="button" class="chip active" data-amt="50000" onclick="pickTestAmt(50000)">50k</button>
+                    <button type="button" class="chip" data-amt="100000" onclick="pickTestAmt(100000)">100k</button>
+                    <button type="button" class="chip" data-amt="500000" onclick="pickTestAmt(500000)">500k</button>
+                    <button type="button" class="chip" data-amt="1000000" onclick="pickTestAmt(1000000)">1 Triệu</button>
+                  </div>
+                  <div class="field">
+                    <label>Lời nhắn</label>
+                    <input id="tMsg" type="text" maxlength="150" value="Chúc anh livestream thật bùng nổ và nhiều mắt xem nhé!">
+                  </div>
+                  <label class="toggle">
+                    <span>Lưu lượt test này vào lịch sử DB (cập nhật cả BXH)</span>
+                    <input id="tSave" type="checkbox">
+                  </label>
+                  <div class="row-auto">
+                    <button class="btn btn-primary" style="flex:1;" onclick="sendTest()">
+                      <svg class="ico" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                      Bắn Test lên TikTok LIVE ngay
+                    </button>
+                    <button class="btn btn-success" onclick="previewTestHere()">
+                      <svg class="ico" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                      Nghe thử tại đây
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cột phải -->
+              <div>
+                <div class="card">
+                  <div class="card-head">
+                    <span class="card-title-left">
+                      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      Lịch sử Donate
+                    </span>
+                    <div class="row-auto">
+                      <button class="btn btn-xs" onclick="refreshDashboard()">
+                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        Làm mới
+                      </button>
+                      <button class="btn btn-xs" onclick="exportCsv()">
+                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Xuất CSV
+                      </button>
+                      <button class="btn btn-xs btn-danger" onclick="deleteTestDonations()">
+                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                        Xóa đơn test
+                      </button>
+                    </div>
+                  </div>
+                  <div class="search-wrap">
+                    <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input id="feedSearch" type="search" placeholder="Tìm theo tên, lời nhắn hoặc mã giao dịch..." oninput="filterFeed()">
+                  </div>
+                  <div id="feedList" class="feed"></div>
+                </div>
+
+                <div class="card">
+                  <div class="card-head">
+                    <span class="card-title-left">
+                      <svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                      Top Donators (Top 5)
+                    </span>
+                  </div>
+                  <div id="topDonorsList" class="top-list"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== TAB 2: TRANG DONATE (index.html) ==================== -->
+          <section id="tab-page" class="tab-view">
+            <div class="grid-2">
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                    Cấu hình chi tiết Trang Donate (index.html)
+                  </span>
+                </div>
+
+                <div class="field"><label>Bộ màu mẫu nhanh</label></div>
+                <div class="preset-grid">
+                  <button type="button" class="preset-card" onclick="applyPagePreset('pastel_pink')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#f6c7d7 55%,#e06d9f 55%)"></span>
+                    <span>Hồng Pastel</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyPagePreset('dreamy_purple')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#e9d5ff 55%,#9333ea 55%)"></span>
+                    <span>Tím Mộng Mơ</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyPagePreset('light_ocean')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#dbeafe 55%,#2563eb 55%)"></span>
+                    <span>Xanh Biển Nhạt</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyPagePreset('luxury_cream')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#fef3c7 55%,#d97706 55%)"></span>
+                    <span>Kem Sang Trọng</span>
+                  </button>
+                </div>
+
+                <div class="row">
+                  <div class="field"><label>Tên kênh hiển thị</label><input id="p_streamerName" type="text" oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Lời chào (Subtitle)</label><input id="p_subtitle" type="text" oninput="syncPagePreview()"></div>
+                </div>
+
+                <div class="field">
+                  <label>Ảnh bìa (Dán link ảnh hoặc tải ảnh nhẹ &lt; 450KB)</label>
+                  <div class="row-center">
+                    <input id="p_coverImage" type="text" placeholder="https://... hoặc bấm Tải ảnh" oninput="syncPagePreview()">
+                    <input id="coverFile" type="file" accept="image/*" style="display:none" onchange="uploadCoverFile(this)">
+                    <button type="button" class="btn btn-sm" style="flex:0;" onclick="document.getElementById('coverFile').click()">
+                      <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                      Tải ảnh
+                    </button>
+                    <button type="button" class="btn btn-sm btn-danger" style="flex:0;" onclick="document.getElementById('p_coverImage').value='';syncPagePreview()">Xóa ảnh</button>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="field"><label>Màu nền</label><input id="p_themeBg" type="color" value="#f6c7d7" oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Màu nhấn</label><input id="p_themeAccent" type="color" value="#e06d9f" oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Màu nút Tạo QR</label><input id="p_themeButtonDark" type="color" value="#0c1428" oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Màu chữ</label><input id="p_themeText" type="color" value="#0f172a" oninput="syncPagePreview()"></div>
+                </div>
+
+                <div class="section-sep">Tài khoản ngân hàng nhận Donate</div>
+                <div class="row">
+                  <div class="field">
+                    <label>Ngân hàng</label>
+                    <select id="p_bankCode">
+                      <option value="MB">MB Bank</option>
+                      <option value="VCB">Vietcombank</option>
+                      <option value="TCB">Techcombank</option>
+                      <option value="ACB">ACB</option>
+                      <option value="BIDV">BIDV</option>
+                      <option value="ICB">VietinBank</option>
+                      <option value="VPB">VPBank</option>
+                      <option value="TPB">TPBank</option>
+                      <option value="STB">Sacombank</option>
+                      <option value="VIB">VIB</option>
+                      <option value="SHB">SHB</option>
+                      <option value="OCB">OCB</option>
+                      <option value="MSB">MSB</option>
+                      <option value="HDB">HDBank</option>
+                      <option value="CAKE">CAKE by VPBank</option>
+                      <option value="TIMO">Timo by BVBank</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>Số tài khoản</label><input id="p_bankAccount" type="text"></div>
+                  <div class="field"><label>Chủ tài khoản (IN HOA)</label><input id="p_bankAccountName" type="text" oninput="this.value=this.value.toUpperCase()"></div>
+                </div>
+
+                <div class="section-sep">Mạng xã hội &amp; Tùy chọn trang</div>
+                <div class="row">
+                  <div class="field"><label>Link TikTok</label><input id="p_tiktokUrl" type="text" placeholder="https://www.tiktok.com/@..."></div>
+                  <div class="field"><label>Link Facebook</label><input id="p_facebookUrl" type="text" placeholder="https://www.facebook.com/..."></div>
+                  <div class="field"><label>Link YouTube</label><input id="p_youtubeUrl" type="text" placeholder="Để trống nếu không dùng"></div>
+                </div>
+
+                <div class="field">
+                  <label>Các mức chọn tiền nhanh (phân cách bằng dấu phẩy)</label>
+                  <input id="p_amounts" type="text" oninput="syncPagePreview()"
+                    placeholder="10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000, 5000000">
+                </div>
+
+                <div class="row">
+                  <div class="field"><label>Số tiền tối thiểu (VNĐ)</label><input id="p_minAmount" type="number" min="1000" step="1000" value="1000"></div>
+                  <div class="field"><label>Tiền tố mã QR</label><input id="p_orderPrefix" type="text" maxlength="4" value="DN" oninput="this.value=this.value.toUpperCase()"></div>
+                  <div class="field"><label>Giới hạn ký tự lời nhắn</label><input id="p_maxMessageLength" type="number" min="30" max="300" value="150"></div>
+                </div>
+
+                <div class="row">
+                  <div class="field"><label>Tiêu đề BXH</label><input id="p_topTitle" type="text" value="Top ủng hộ tháng này"></div>
+                  <div class="field"><label>Dòng chân trang (Footer)</label><input id="p_footerText" type="text" oninput="syncPagePreview()"></div>
+                </div>
+
+                <label class="toggle">
+                  <span>Hiển thị BXH Top ủng hộ tự động trên trang Donate</span>
+                  <input id="p_showTopSupporters" type="checkbox">
+                </label>
+
+                <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="savePageConfig()">
+                  <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Lưu &amp; Cập nhật ngay Trang Donate
+                </button>
+              </div>
+
+              <!-- Sticky Live Preview -->
+              <div class="card card-sticky">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Xem trước Trang Donate
+                  </span>
+                  <a href="./index.html" target="_blank" rel="noopener" class="btn btn-xs">
+                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Mở trang thật
+                  </a>
+                </div>
+                <div id="ppFrame" class="page-preview-frame">
+                  <div id="ppCover" class="pp-cover"></div>
+                  <div class="pp-head">
+                    <h2 id="ppName" style="font-size:24px;font-weight:900;margin:6px 0 4px;"></h2>
+                    <div id="ppSub" style="font-size:12.5px;opacity:.82;"></div>
+                    <div id="ppPill" class="pp-pill">CHUYỂN KHOẢN QR NGÂN HÀNG</div>
+                    <div class="pp-input-mock">Tên của bạn (hỗ trợ tiếng Việt có dấu)</div>
+                    <div id="ppGrid" class="pp-grid"></div>
+                    <div class="pp-input-mock" style="height:44px;align-items:flex-start;padding-top:8px;">Lời nhắn hiện lên live &amp; đọc to...</div>
+                    <button id="ppBtn" class="pp-btn" type="button">Tạo mã QR chuyển khoản</button>
+                    <div id="ppFooter" style="margin-top:14px;font-size:11px;opacity:.75;"></div>
+                  </div>
+                </div>
+                <button class="btn btn-primary" style="width:100%;margin-top:12px;" onclick="savePageConfig()">
+                  <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  Lưu &amp; Cập nhật ngay Trang Donate
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== TAB 3: HỘP THÔNG BÁO OVERLAY ==================== -->
+          <section id="tab-design" class="tab-view">
+            <div class="grid-2">
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    Tùy chỉnh Hộp thông báo Overlay
+                  </span>
+                </div>
+
+                <div class="field"><label>6 Bộ giao diện mẫu (Presets)</label></div>
+                <div class="preset-grid-3">
+                  <button type="button" class="preset-card" onclick="applyOverlayPreset('purple_neon')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#6366f1,#a855f7)"></span>
+                    <span>Purple Neon</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyOverlayPreset('tiktok_vibe')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#fe2c55,#161823)"></span>
+                    <span>TikTok Vibe</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyOverlayPreset('gold_vip')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#92400e,#d97706)"></span>
+                    <span>Gold VIP</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyOverlayPreset('emerald_cyber')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#047857,#0e7490)"></span>
+                    <span>Emerald Cyber</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyOverlayPreset('sunset_fire')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#b91c1c,#ea580c)"></span>
+                    <span>Sunset Fire</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyOverlayPreset('minimal_dark')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#0f172a,#1e293b)"></span>
+                    <span>Minimal Dark</span>
+                  </button>
+                </div>
+
+                <div class="row">
+                  <div class="field"><label>Màu nền 1</label><input id="o_bg_color_1" type="color" value="#6366f1" oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu nền 2</label><input id="o_bg_color_2" type="color" value="#a855f7" oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu viền Glow</label><input id="o_border_color" type="color" value="#c084fc" oninput="syncOvPreview()"></div>
+                </div>
+                <div class="row">
+                  <div class="field"><label>Màu chữ tiêu đề</label><input id="o_text_color" type="color" value="#ffffff" oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu số tiền</label><input id="o_amount_color" type="color" value="#fde047" oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu lời nhắn</label><input id="o_msg_color" type="color" value="#f3e8ff" oninput="syncOvPreview()"></div>
+                </div>
+
+                <div class="row">
+                  <div class="field">
+                    <label><span>Độ mờ nền</span><span id="lbl_bg_opacity" class="val-badge">95%</span></label>
+                    <input id="o_bg_opacity" type="range" min="0.2" max="1" step="0.05" value="0.95" oninput="syncOvPreview()">
+                  </div>
+                  <div class="field">
+                    <label><span>Bo góc</span><span id="lbl_border_radius" class="val-badge">18px</span></label>
+                    <input id="o_border_radius" type="range" min="0" max="36" step="1" value="18" oninput="syncOvPreview()">
+                  </div>
+                  <div class="field">
+                    <label><span>Góc gradient</span><span id="lbl_bg_angle" class="val-badge">135°</span></label>
+                    <input id="o_bg_angle" type="range" min="0" max="360" step="15" value="135" oninput="syncOvPreview()">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="field">
+                    <label><span>Cỡ chữ tiêu đề</span><span id="lbl_title_size" class="val-badge">26px</span></label>
+                    <input id="o_title_size" type="range" min="16" max="44" step="1" value="26" oninput="syncOvPreview()">
+                  </div>
+                  <div class="field">
+                    <label><span>Cỡ chữ lời nhắn</span><span id="lbl_msg_size" class="val-badge">20px</span></label>
+                    <input id="o_msg_size" type="range" min="14" max="36" step="1" value="20" oninput="syncOvPreview()">
+                  </div>
+                  <div class="field">
+                    <label><span>Chiều rộng tối đa</span><span id="lbl_max_width" class="val-badge">640px</span></label>
+                    <input id="o_max_width" type="range" min="320" max="960" step="20" value="640" oninput="syncOvPreview()">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="field">
+                    <label>Vị trí hiển thị</label>
+                    <select id="o_position" onchange="syncOvPreview()">
+                      <option value="bottom-left">Góc dưới trái</option>
+                      <option value="bottom-center">Giữa dưới</option>
+                      <option value="bottom-right">Góc dưới phải</option>
+                      <option value="top-left">Góc trên trái</option>
+                      <option value="top-center">Giữa trên</option>
+                      <option value="top-right">Góc trên phải</option>
+                      <option value="center">Chính giữa</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Hiệu ứng xuất hiện</label>
+                    <select id="o_animation" onchange="playOvAnimation()">
+                      <option value="slide-up">Trượt lên (Slide Up)</option>
+                      <option value="pop">Phóng to (Pop)</option>
+                      <option value="slide-left">Trượt trái (Slide Left)</option>
+                      <option value="fade">Mờ dần (Fade)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="section-sep">Biểu tượng hộp thông báo (9 Vector SVG Gradient + Ảnh / GIF)</div>
+                <div id="badgeGrid" class="badge-grid"></div>
+                <div class="custom-badge-bar">
+                  <div class="custom-badge-info">
+                    <img id="customBadgeThumb" class="custom-badge-thumb" alt="Custom badge">
+                    <span id="customBadgeLabel">Chưa chọn Ảnh / GIF riêng (hỗ trợ PNG/JPG/WebP/GIF/SVG &lt; 300KB)</span>
+                  </div>
+                  <div class="row-auto">
+                    <input id="badgeFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" style="display:none" onchange="uploadBadgeFile(this)">
+                    <button type="button" class="btn btn-xs" onclick="document.getElementById('badgeFile').click()">
+                      <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      Tải Ảnh / GIF riêng
+                    </button>
+                    <button id="btnClearBadge" type="button" class="btn btn-xs btn-danger" style="display:none;" onclick="clearCustomBadge()">Bỏ ảnh</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Mẫu tiêu đề ({name}, {amount})</label>
+                  <input id="o_title_template" type="text" value="{name} đã donate {amount}đ" oninput="syncOvPreview()">
+                </div>
+
+                <div class="row">
+                  <label class="toggle"><span>Viền phát sáng Glow</span><input id="o_border_glow" type="checkbox" checked onchange="syncOvPreview()"></label>
+                  <label class="toggle"><span>Hiển thị lời nhắn</span><input id="o_show_message" type="checkbox" checked onchange="syncOvPreview()"></label>
+                </div>
+              </div>
+
+              <!-- Sticky Overlay Live Preview -->
+              <div class="card card-sticky">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    Xem trước trực tiếp (Live Preview)
+                  </span>
+                  <button type="button" class="btn btn-xs btn-success" onclick="playOvAnimation()">
+                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Chạy hiệu ứng
+                  </button>
+                </div>
+
+                <div id="ovStage" class="ov-stage pos-bottom-left">
+                  <div id="ovCard" class="ov-card">
+                    <div id="ovBadge" class="ov-badge"></div>
+                    <div class="ov-body">
+                      <div id="ovTitle" style="font-weight:800;line-height:1.25;"></div>
+                      <div id="ovMsg" style="margin-top:5px;line-height:1.35;">Chúc bạn live thật vui vẻ và bùng nổ nhé!</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label><span>Thời gian giữ sau khi đọc xong</span><span id="lbl_hold_seconds" class="val-badge">2.5s</span></label>
+                  <input id="o_hold_seconds" type="range" min="0.5" max="8" step="0.5" value="2.5" oninput="syncTimeLabels()">
+                </div>
+                <div class="field">
+                  <label><span>Thời gian hiện khi tắt TTS</span><span id="lbl_fallback_seconds" class="val-badge">6.0s</span></label>
+                  <input id="o_fallback_seconds" type="range" min="2" max="15" step="0.5" value="6" oninput="syncTimeLabels()">
+                </div>
+
+                <div class="row-auto" style="margin-top:14px;">
+                  <button class="btn btn-primary" style="flex:1;padding:10px;" onclick="saveOverlayConfig()">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                    Lưu &amp; Áp dụng ngay lên TikTok LIVE
+                  </button>
+                  <button class="btn btn-warn" style="padding:10px 14px;" onclick="resetOverlayConfig()">
+                    <svg class="ico" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    Khôi phục mặc định
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== TAB 4: ÂM THANH & TTS ==================== -->
+          <section id="tab-audio" class="tab-view">
+            <div class="grid-2-eq">
+              <!-- Cột trái: TTS -->
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    Cấu hình giọng đọc TTS
+                  </span>
+                </div>
+
+                <label class="toggle">
+                  <span>Bật giọng đọc tự động (TTS tiếng Việt)</span>
+                  <input id="o_tts_enabled" type="checkbox" checked>
+                </label>
+
+                <div class="field">
+                  <label><span>Âm lượng giọng đọc</span><span id="lbl_tts_volume" class="val-badge">100%</span></label>
+                  <input id="o_tts_volume" type="range" min="0" max="1" step="0.05" value="1" oninput="syncAudioLabels()">
+                </div>
+
+                <div class="field">
+                  <label><span>Tốc độ đọc</span><span id="lbl_tts_rate" class="val-badge">1.00x</span></label>
+                  <input id="o_tts_rate" type="range" min="0.75" max="1.5" step="0.05" value="1" oninput="syncAudioLabels()">
+                </div>
+
+                <div class="field">
+                  <label>Mẫu câu đọc TTS</label>
+                  <textarea id="o_tts_template" rows="3">{name} đã donate {amount} đồng. {message}</textarea>
+                  <div class="chip-row" style="margin-top:8px;margin-bottom:0;">
+                    <button type="button" class="chip" onclick="insertTtsToken('{name}')">+ {name}</button>
+                    <button type="button" class="chip" onclick="insertTtsToken('{amount}')">+ {amount}</button>
+                    <button type="button" class="chip" onclick="insertTtsToken('{message}')">+ {message}</button>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="field">
+                    <label>Chỉ đọc TTS khi tiền &ge; (VNĐ)</label>
+                    <input id="o_min_tts_amount" type="number" min="0" step="1000" value="0">
+                  </div>
+                  <div class="field">
+                    <label><span>Giới hạn đọc tối đa</span><span id="lbl_tts_max_chars" class="val-badge">220 ký tự</span></label>
+                    <input id="o_tts_max_chars" type="range" min="80" max="400" step="20" value="220" oninput="syncAudioLabels()">
+                  </div>
+                </div>
+
+                <div class="row-auto" style="margin-top:12px;">
+                  <button class="btn btn-success" onclick="previewTts()">
+                    <svg class="ico" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Nghe thử mẫu câu đọc
+                  </button>
+                  <button class="btn btn-primary" style="flex:1;" onclick="saveOverlayConfig('Đã lưu cấu hình âm thanh & TTS!')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                    Lưu cấu hình âm thanh
+                  </button>
+                </div>
+              </div>
+
+              <!-- Cột phải: Chuông Web Audio -->
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    Âm thanh chuông thông báo (Web Audio API)
+                  </span>
+                </div>
+
+                <div class="field">
+                  <label>Kiểu chuông thông báo</label>
+                  <select id="o_alert_sound">
+                    <option value="ting">Ting-Ting (Trong trẻo)</option>
+                    <option value="coin">Coin Retro (Xu game)</option>
+                    <option value="fanfare">Fanfare VIP (Hoành tráng)</option>
+                    <option value="chime">Chime êm dịu (Nhẹ nhàng)</option>
+                    <option value="none">Tắt chuông</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label><span>Âm lượng chuông</span><span id="lbl_alert_volume" class="val-badge">80%</span></label>
+                  <input id="o_alert_volume" type="range" min="0" max="1" step="0.05" value="0.8" oninput="syncAudioLabels()">
+                </div>
+
+                <div class="row-auto" style="margin-top:12px;">
+                  <button class="btn btn-success" onclick="playAlertSound()">
+                    <svg class="ico" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                    Nghe thử chuông
+                  </button>
+                  <button class="btn btn-primary" style="flex:1;" onclick="saveOverlayConfig('Đã lưu cấu hình chuông thông báo!')">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                    Lưu ngay
+                  </button>
+                </div>
+
+                <div class="tip-box">
+                  <strong>Mẹo chống spam tiếng khi live đông:</strong> Bạn có thể đặt <em>Số tiền tối thiểu</em> ở Tab Trang Donate là <strong>1.000đ</strong> để ai cũng ủng hộ được, nhưng đặt <em>Chỉ đọc TTS khi tiền &ge;</em> là <strong>10.000đ</strong>. Các khoản nhỏ hơn vẫn hiện hộp thông báo + kêu chuông nhưng sẽ không đọc giọng nói gây ngắt mạch trò chuyện.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== TAB 5: HỆ THỐNG & LỌC ==================== -->
+          <section id="tab-system" class="tab-view">
+            <div class="grid-2-eq">
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    Bộ lọc &amp; Cú pháp chuyển khoản trực tiếp
+                  </span>
+                </div>
+
+                <div class="row">
+                  <div class="field">
+                    <label>Từ khóa nhận diện chuyển khoản trực tiếp</label>
+                    <input id="s_keyword" type="text" value="DONATE" placeholder="DONATE" oninput="this.value=this.value.toUpperCase()">
+                  </div>
+                  <div class="field">
+                    <label>Tên mặc định khi không có tên</label>
+                    <input id="s_default_donor" type="text" value="Ẩn danh" placeholder="Ẩn danh">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Danh sách từ cấm (phân cách bằng dấu phẩy hoặc xuống dòng)</label>
+                  <textarea id="o_bad_words" rows="5" placeholder="từ cấm 1, từ cấm 2..."></textarea>
+                </div>
+
+                <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="saveSystemConfig()">
+                  <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  Lưu cài đặt hệ thống
+                </button>
+              </div>
+
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    Tổng hợp Link cứng &amp; Kiểm tra nhanh
+                  </span>
+                </div>
+
+                <div class="field">
+                  <label>Trang Donate Public (GitHub Pages)</label>
+                  <div class="sys-link-row">
+                    <input id="sysDonateUrl" type="text" readonly>
+                    <button class="btn btn-sm" onclick="copyText(document.getElementById('sysDonateUrl').value, 'Đã copy link Trang Donate!')">Copy</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>SePay Webhook URL (dán vào cấu hình SePay)</label>
+                  <div class="sys-link-row">
+                    <input id="sysSepayUrl" type="text" readonly>
+                    <button class="btn btn-sm" onclick="copyText(document.getElementById('sysSepayUrl').value, 'Đã copy link SePay Webhook!')">Copy</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>TikTok LIVE Overlay URL (dán vào nguồn Liên kết / Browser Source)</label>
+                  <div class="sys-link-row">
+                    <input id="sysOverlayUrl" type="text" readonly>
+                    <button class="btn btn-sm btn-primary" onclick="copyText(document.getElementById('sysOverlayUrl').value, 'Đã copy link TikTok LIVE Overlay!')">Copy</button>
+                  </div>
+                </div>
+
+                <div class="secret-box">
+                  <strong>Bảo mật Cloudflare Secrets:</strong> Các khóa bí mật <code>SEPAY_API_KEY</code>, <code>OVERLAY_TOKEN</code> và <code>ADMIN_PASSWORD</code> được lưu trữ mã hóa trực tiếp trong mục <em>Settings → Variables and Secrets</em> trên Cloudflare Worker, không bao giờ lộ ra mã nguồn public GitHub.
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
     </div>
   </div>
 
@@ -796,57 +2163,180 @@
       HDB: "HDBank", CAKE: "CAKE by VPBank", TIMO: "Timo by BVBank",
     };
 
+    const PAGE_PRESETS = {
+      pastel_pink:   { themeBg: "#f6c7d7", themeAccent: "#e06d9f", themeButtonDark: "#0c1428", themeText: "#0f172a" },
+      dreamy_purple: { themeBg: "#e9d5ff", themeAccent: "#9333ea", themeButtonDark: "#1e1b4b", themeText: "#1e1b4b" },
+      light_ocean:   { themeBg: "#dbeafe", themeAccent: "#2563eb", themeButtonDark: "#0f172a", themeText: "#0f172a" },
+      luxury_cream:  { themeBg: "#fef3c7", themeAccent: "#d97706", themeButtonDark: "#292524", themeText: "#1c1917" },
+    };
+
+    const OVERLAY_PRESETS = {
+      purple_neon:   { bg_color_1: "#6366f1", bg_color_2: "#a855f7", border_color: "#c084fc", text_color: "#ffffff", amount_color: "#fde047", msg_color: "#f3e8ff", border_glow: true,  badge_icon: "heart" },
+      tiktok_vibe:   { bg_color_1: "#fe2c55", bg_color_2: "#161823", border_color: "#25f4ee", text_color: "#ffffff", amount_color: "#25f4ee", msg_color: "#f8fafc", border_glow: true,  badge_icon: "music" },
+      gold_vip:      { bg_color_1: "#92400e", bg_color_2: "#d97706", border_color: "#fde047", text_color: "#fffbeb", amount_color: "#fef08a", msg_color: "#fef3c7", border_glow: true,  badge_icon: "crown" },
+      emerald_cyber: { bg_color_1: "#047857", bg_color_2: "#0e7490", border_color: "#34d399", text_color: "#ecfdf5", amount_color: "#a7f3d0", msg_color: "#cffafe", border_glow: true,  badge_icon: "gem" },
+      sunset_fire:   { bg_color_1: "#b91c1c", bg_color_2: "#ea580c", border_color: "#fdba74", text_color: "#ffffff", amount_color: "#fef08a", msg_color: "#ffedd5", border_glow: true,  badge_icon: "flame" },
+      minimal_dark:  { bg_color_1: "#0f172a", bg_color_2: "#1e293b", border_color: "#64748b", text_color: "#f8fafc", amount_color: "#38bdf8", msg_color: "#cbd5e1", border_glow: false, badge_icon: "coin" },
+    };
+
+    const BADGE_ITEMS = [
+      { id: "heart",   label: "Tim Neon" },
+      { id: "flame",   label: "Ngọn lửa" },
+      { id: "crown",   label: "Vương miện" },
+      { id: "gem",     label: "Kim cương" },
+      { id: "music",   label: "Nhạc TikTok" },
+      { id: "gift",    label: "Hộp quà" },
+      { id: "sparkle", label: "Lấp lánh" },
+      { id: "rocket",  label: "Tên lửa" },
+      { id: "coin",    label: "Xu vàng" },
+      { id: "none",    label: "Tắt icon" },
+    ];
+
+    function getBadgeSvg(id, pfx = "b") {
+      switch (id) {
+        case "heart":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_ht" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop stop-color="#f472b6"/><stop offset=".5" stop-color="#ec4899"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><path d="M32 54s-19-11.5-23.5-23.2C5 21.8 11 12 20.5 12c5.2 0 9.1 2.9 11.5 6.8C34.4 14.9 38.3 12 43.5 12 53 12 59 21.8 55.5 30.8 51 42.5 32 54 32 54Z" fill="url(#${pfx}_ht)"/><path d="M20 20c-3.5 0-6 2.8-6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".65"/></svg>`;
+        case "flame":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_fl" x1="32" y1="6" x2="32" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#fde047"/><stop offset=".5" stop-color="#f97316"/><stop offset="1" stop-color="#dc2626"/></linearGradient></defs><path d="M34 6c2 10-6 15-6 23 0 3 2 5 5 5 5 0 7-6 7-11 7 5 12 13 12 22 0 11-9 17-20 17S12 54 12 43c0-11 8-19 14-26 3-4 6-7 8-11Z" fill="url(#${pfx}_fl)"/><path d="M32 56c-6 0-10-4-10-10 0-5 4-9 8-13 1 5 4 7 6 7 3 0 5-2 5-5 2 3 3 6 3 10 0 6-5 11-12 11Z" fill="#fef08a" opacity=".85"/></svg>`;
+        case "crown":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_cr" x1="8" y1="14" x2="56" y2="54" gradientUnits="userSpaceOnUse"><stop stop-color="#fef08a"/><stop offset=".5" stop-color="#f59e0b"/><stop offset="1" stop-color="#b45309"/></linearGradient></defs><path d="M8 46L12 20l13 11 7-17 7 17 13-11 4 26H8Z" fill="url(#${pfx}_cr)" stroke="#fef9c3" stroke-width="1.5" stroke-linejoin="round"/><rect x="8" y="48" width="48" height="7" rx="3.5" fill="url(#${pfx}_cr)"/><circle cx="32" cy="36" r="3.5" fill="#fffbeb"/></svg>`;
+        case "gem":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_gm" x1="8" y1="10" x2="56" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#67e8f9"/><stop offset=".5" stop-color="#3b82f6"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><polygon points="18,12 46,12 58,26 32,56 6,26" fill="url(#${pfx}_gm)"/><polygon points="18,12 32,26 46,12" fill="#e0f2fe" opacity=".55"/><polygon points="6,26 32,26 32,56" fill="#1d4ed8" opacity=".35"/><polygon points="32,26 58,26 32,56" fill="#4c1d95" opacity=".25"/></svg>`;
+        case "music":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_ms" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#25f4ee"/><stop offset=".55" stop-color="#ec4899"/><stop offset="1" stop-color="#fe2c55"/></linearGradient></defs><path d="M40 10v28.5A11.5 11.5 0 1 1 32 27.6V36a4.5 4.5 0 1 0 3 4.2V10h5c1.8 5.2 6.2 8.8 12 9.4v7.5c-4.7-.3-8.8-2-12-4.8Z" fill="url(#${pfx}_ms)"/></svg>`;
+        case "gift":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_gf" x1="8" y1="16" x2="56" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#fb7185"/><stop offset="1" stop-color="#e11d48"/></linearGradient><linearGradient id="${pfx}_rb" x1="16" y1="8" x2="48" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#fef08a"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs><rect x="10" y="28" width="44" height="28" rx="5" fill="url(#${pfx}_gf)"/><rect x="7" y="20" width="50" height="10" rx="3" fill="#f43f5e"/><rect x="28" y="20" width="8" height="36" fill="url(#${pfx}_rb)"/><path d="M32 20c-8 0-14-3-14-8s5-6 9-3 5 11 5 11Zm0 0c8 0 14-3 14-8s-5-6-9-3-5 11-5 11Z" fill="url(#${pfx}_rb)"/></svg>`;
+        case "sparkle":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_sp" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#fef08a"/><stop offset=".5" stop-color="#c084fc"/><stop offset="1" stop-color="#38bdf8"/></linearGradient></defs><path d="M32 6l5.5 18.5L56 30l-18.5 5.5L32 54l-5.5-18.5L8 30l18.5-5.5L32 6Z" fill="url(#${pfx}_sp)"/><path d="M50 8l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6Z" fill="#fde047"/></svg>`;
+        case "rocket":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_rk" x1="14" y1="10" x2="52" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#38bdf8"/><stop offset=".5" stop-color="#818cf8"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs><path d="M48 10c-12 0-23 7-30 18l-8 3 8 8 8 8 3-8c11-7 18-18 19-29Z" fill="url(#${pfx}_rk)"/><circle cx="38" cy="24" r="5" fill="#e0f2fe"/><path d="M16 44c-4 2-6 7-6 10 3 0 8-2 10-6l-4-4Z" fill="#fbbf24"/></svg>`;
+        case "coin":
+          return `<svg viewBox="0 0 64 64"><defs><linearGradient id="${pfx}_cn" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse"><stop stop-color="#fef08a"/><stop offset=".5" stop-color="#f59e0b"/><stop offset="1" stop-color="#b45309"/></linearGradient></defs><circle cx="32" cy="32" r="24" fill="url(#${pfx}_cn)"/><circle cx="32" cy="32" r="18" fill="none" stroke="#fef9c3" stroke-width="2.5" opacity=".75"/><path d="M32 20v24M37 25.5c-1-1.6-2.7-2.5-5-2.5-3 0-5 1.6-5 4s2 3.3 5 4 5 1.8 5 4.2-2 4.3-5 4.3c-2.5 0-4.3-1-5.3-2.8" stroke="#fffbeb" stroke-width="3.2" stroke-linecap="round" fill="none"/></svg>`;
+        default:
+          return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg>`;
+      }
+    }
+
     function normalizeWorkerUrl(url) {
       const raw = (url || "").trim().replace(/\/+$/, "");
       if (!raw) return "";
       return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
     }
 
+    function getDonatePageUrl() {
+      try {
+        return new URL("./", location.href).href;
+      } catch {
+        return "https://nga-iuu.github.io/GitHub-Public/";
+      }
+    }
+
+    function hexToRgba(hex, alpha) {
+      const h = (hex || "#6366f1").replace("#", "");
+      const full = h.length === 3 ? h.split("").map(c => c + c).join("") : h.padEnd(6, "0");
+      const r = parseInt(full.slice(0, 2), 16) || 0;
+      const g = parseInt(full.slice(2, 4), 16) || 0;
+      const b = parseInt(full.slice(4, 6), 16) || 0;
+      const a = Math.max(0.2, Math.min(1, Number(alpha ?? 0.95)));
+      return `rgba(${r}, ${g}, ${b}, ${a})`;
+    }
+
     let workerUrl = normalizeWorkerUrl(localStorage.getItem("donate_admin_url") || DEFAULT_WORKER_URL || "");
     let adminPw = sessionStorage.getItem("donate_admin_pw") || "";
     let links = {};
+    let allDonations = [];
+    let selectedBadgeIcon = "heart";
     let toastTimer = null;
+    let audioCtx = null;
 
     function toast(msg) {
       const el = document.getElementById("toast");
-      el.textContent = msg; el.classList.add("show");
-      clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
-    }
-    function copyText(v, msg) {
-      if (!v) return toast("Chưa có link!");
-      navigator.clipboard.writeText(v).then(() => toast(msg)).catch(() => toast("Không sao chép được!"));
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
     }
 
-    document.querySelectorAll(".tab-btn").forEach(btn => {
+    function copyText(val, msg) {
+      if (!val) return toast("Chưa có link để sao chép!");
+      const fallback = () => {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = val;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          toast(ok ? msg : "Không sao chép được!");
+        } catch {
+          toast("Không sao chép được!");
+        }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).then(() => toast(msg)).catch(fallback);
+      } else {
+        fallback();
+      }
+    }
+
+    function setConnStatus(online) {
+      const pill = document.getElementById("connStatus");
+      const txt = document.getElementById("connStatusText");
+      if (!pill || !txt) return;
+      pill.classList.toggle("offline", !online);
+      txt.textContent = online ? "Worker Online" : "Mất kết nối";
+    }
+
+    function openOverlayTab() {
+      if (!links.overlay_url) return toast("Chưa có link Overlay từ Worker!");
+      window.open(links.overlay_url, "_blank", "noopener");
+    }
+
+    /* Navigation Tabs */
+    document.querySelectorAll(".nav-btn").forEach(btn => {
       btn.onclick = () => {
-        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+        document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-view").forEach(v => v.classList.remove("active"));
         btn.classList.add("active");
-        document.getElementById("view-" + btn.dataset.tab).classList.add("active");
+        const target = document.getElementById("tab-" + btn.dataset.tab);
+        if (target) target.classList.add("active");
       };
     });
 
     async function api(path, opts = {}) {
       const headers = { "X-Admin-Password": adminPw, ...(opts.headers || {}) };
-      return fetch(normalizeWorkerUrl(workerUrl) + path, { ...opts, headers, cache: "no-store" });
+      const r = await fetch(normalizeWorkerUrl(workerUrl) + path, { ...opts, headers, cache: "no-store" });
+      return r;
     }
 
     async function doLogin() {
       const err = document.getElementById("loginErr");
+      const btn = document.getElementById("btnLogin");
       err.style.display = "none";
       workerUrl = normalizeWorkerUrl(document.getElementById("inWorkerUrl").value);
       document.getElementById("inWorkerUrl").value = workerUrl;
       adminPw = document.getElementById("inAdminPw").value;
-      if (!workerUrl || !adminPw) { err.textContent = "Hãy nhập đủ Link Worker và Mật khẩu Admin."; err.style.display = "block"; return; }
-      const res = await bootstrap(true);
-      if (res.ok) {
-        localStorage.setItem("donate_admin_url", workerUrl);
-        sessionStorage.setItem("donate_admin_pw", adminPw);
-        document.getElementById("loginScreen").style.display = "none";
-        document.getElementById("appShell").style.display = "block";
-      } else {
-        err.textContent = res.error || "Không đăng nhập được — kiểm tra lại Link Worker hoặc Mật khẩu Admin.";
+      if (!workerUrl || !adminPw) {
+        err.textContent = "Hãy nhập đủ Link Worker và Mật khẩu Admin.";
         err.style.display = "block";
+        return;
+      }
+      btn.disabled = true;
+      try {
+        const res = await bootstrap(true);
+        if (res.ok) {
+          localStorage.setItem("donate_admin_url", workerUrl);
+          sessionStorage.setItem("donate_admin_pw", adminPw);
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("appShell").style.display = "block";
+        } else {
+          err.textContent = res.error || "Không đăng nhập được — kiểm tra lại Link Worker hoặc Mật khẩu Admin.";
+          err.style.display = "block";
+        }
+      } finally {
+        btn.disabled = false;
       }
     }
 
@@ -855,63 +2345,410 @@
       location.reload();
     }
 
-    function setV(id, val) { const e = document.getElementById(id); if (e) e.value = val ?? ""; }
-    function setC(id, val) { const e = document.getElementById(id); if (e) e.checked = Boolean(val); }
+    function setV(id, val, fallback = "") {
+      const e = document.getElementById(id);
+      if (e) e.value = (val !== undefined && val !== null && val !== "") ? val : fallback;
+    }
+    function setC(id, val, fallback = false) {
+      const e = document.getElementById(id);
+      if (e) e.checked = (val !== undefined && val !== null) ? Boolean(val) : fallback;
+    }
+
+    function hydrateOverlayForm(o) {
+      if (!o) return;
+      setV("o_bg_color_1", o.bg_color_1, "#6366f1");
+      setV("o_bg_color_2", o.bg_color_2, "#a855f7");
+      setV("o_border_color", o.border_color, "#c084fc");
+      setV("o_text_color", o.text_color, "#ffffff");
+      setV("o_amount_color", o.amount_color, "#fde047");
+      setV("o_msg_color", o.msg_color, "#f3e8ff");
+      setV("o_bg_opacity", o.bg_opacity, 0.95);
+      setV("o_border_radius", o.border_radius, 18);
+      setV("o_title_size", o.title_size, 26);
+      setV("o_msg_size", o.msg_size, 20);
+      setV("o_max_width", o.max_width, 640);
+      setV("o_bg_angle", o.bg_angle, 135);
+      setV("o_position", o.position, "bottom-left");
+      setV("o_animation", o.animation, "slide-up");
+      setV("o_title_template", o.title_template, "{name} đã donate {amount}đ");
+      setC("o_border_glow", o.border_glow, true);
+      setC("o_show_message", o.show_message, true);
+      setV("o_hold_seconds", o.hold_seconds, 2.5);
+      setV("o_fallback_seconds", o.fallback_seconds, 6);
+
+      selectedBadgeIcon = o.badge_icon || "heart";
+      syncBadgePickerUI();
+
+      setC("o_tts_enabled", o.tts_enabled, true);
+      setV("o_tts_volume", o.tts_volume, 1);
+      setV("o_tts_rate", o.tts_rate, 1);
+      setV("o_tts_template", o.tts_template, "{name} đã donate {amount} đồng. {message}");
+      setV("o_min_tts_amount", o.min_tts_amount, 0);
+      setV("o_tts_max_chars", o.tts_max_chars, 220);
+      setV("o_alert_sound", o.alert_sound, "ting");
+      setV("o_alert_volume", o.alert_volume, 0.8);
+      setV("o_bad_words", Array.isArray(o.bad_words) ? o.bad_words.join(", ") : (o.bad_words || ""));
+
+      syncOvPreview();
+      syncTimeLabels();
+      syncAudioLabels();
+    }
+
+    function syncQuickLinks() {
+      const donateUrl = getDonatePageUrl();
+      document.getElementById("qlDonate").textContent = donateUrl;
+      document.getElementById("qlOverlay").textContent = links.overlay_url || "(chưa có)";
+      document.getElementById("qlSepay").textContent = links.sepay_webhook || "(chưa có)";
+      document.getElementById("sysDonateUrl").value = donateUrl;
+      document.getElementById("sysOverlayUrl").value = links.overlay_url || "";
+      document.getElementById("sysSepayUrl").value = links.sepay_webhook || "";
+    }
 
     async function bootstrap(hydrate = true) {
       try {
         const r = await api("/api/admin/bootstrap");
         const d = await r.json().catch(() => ({}));
         if (!r.ok) {
+          setConnStatus(false);
           return { ok: false, error: d.error || `Lỗi máy chủ (HTTP ${r.status}) — kiểm tra lại Link Worker hoặc Mật khẩu Admin.` };
         }
+        setConnStatus(true);
         links = d.links || {};
+        syncQuickLinks();
 
         if (hydrate) {
           const p = d.page_config || {};
-          setV("p_streamerName", p.streamerName); setV("p_subtitle", p.subtitle); setV("p_coverImage", p.coverImage);
-          setV("p_themeBg", p.themeBg || "#f6c7d7"); setV("p_themeAccent", p.themeAccent || "#e06d9f"); setV("p_themeButtonDark", p.themeButtonDark || "#0c1428"); setV("p_themeText", p.themeText || "#0f172a");
-          setV("p_bankCode", p.bankCode); setV("p_bankAccount", p.bankAccount); setV("p_bankAccountName", p.bankAccountName);
-          setV("p_tiktokUrl", p.tiktokUrl); setV("p_facebookUrl", p.facebookUrl); setV("p_youtubeUrl", p.youtubeUrl);
-          setV("p_amounts", Array.isArray(p.amounts) ? p.amounts.join(", ") : "");
-          setV("p_minAmount", p.minAmount); setV("p_orderPrefix", p.orderPrefix); setV("p_topTitle", p.topTitle); setV("p_footerText", p.footerText);
-          setC("p_showTopSupporters", p.showTopSupporters);
+          setV("p_streamerName", p.streamerName, "Tên Kênh Của Bạn");
+          setV("p_subtitle", p.subtitle, "Góp gạo nuôi mình ở đây nhé");
+          setV("p_coverImage", p.coverImage, "");
+          setV("p_themeBg", p.themeBg, "#f6c7d7");
+          setV("p_themeAccent", p.themeAccent, "#e06d9f");
+          setV("p_themeButtonDark", p.themeButtonDark, "#0c1428");
+          setV("p_themeText", p.themeText, "#0f172a");
+          setV("p_bankCode", p.bankCode, "MB");
+          setV("p_bankAccount", p.bankAccount, "");
+          setV("p_bankAccountName", p.bankAccountName, "");
+          setV("p_tiktokUrl", p.tiktokUrl, "");
+          setV("p_facebookUrl", p.facebookUrl, "");
+          setV("p_youtubeUrl", p.youtubeUrl, "");
+          setV("p_amounts", Array.isArray(p.amounts) ? p.amounts.join(", ") : "10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000, 5000000");
+          setV("p_minAmount", p.minAmount, 1000);
+          setV("p_orderPrefix", p.orderPrefix, "DN");
+          setV("p_maxMessageLength", p.maxMessageLength, 150);
+          setV("p_topTitle", p.topTitle, "Top ủng hộ tháng này");
+          setV("p_footerText", p.footerText, "Cảm ơn bạn đã đồng hành cùng livestream!");
+          setC("p_showTopSupporters", p.showTopSupporters, true);
           syncPagePreview();
 
           const o = d.overlay_config || {};
-          setV("o_bg_color_1", o.bg_color_1 || "#1e1b4b"); setV("o_bg_color_2", o.bg_color_2 || "#312e81"); setV("o_border_color", o.border_color || "#a855f7");
-          setV("o_text_color", o.text_color || "#ffffff"); setV("o_amount_color", o.amount_color || "#fde047"); setV("o_msg_color", o.msg_color || "#e2e8f0");
-          setV("o_title_size", o.title_size); setV("o_msg_size", o.msg_size); setV("o_border_radius", o.border_radius);
-          setV("o_badge_icon", o.badge_icon); setV("o_position", o.position); setV("o_animation", o.animation);
-          setV("o_title_template", o.title_template); setV("o_tts_template", o.tts_template);
-          setV("o_alert_sound", o.alert_sound); setV("o_tts_volume", o.tts_volume); setV("o_tts_rate", o.tts_rate);
-          setV("o_min_tts_amount", o.min_tts_amount);
-          setV("o_bad_words", Array.isArray(o.bad_words) ? o.bad_words.join(", ") : (o.bad_words || ""));
-          setC("o_tts_enabled", o.tts_enabled); setC("o_border_glow", o.border_glow);
-          syncOvPreview();
+          hydrateOverlayForm(o);
+
+          setV("s_keyword", p.keyword || o.keyword, "DONATE");
+          setV("s_default_donor", p.default_donor || o.default_donor, "Ẩn danh");
         }
 
         const stats = d.stats || {};
         document.getElementById("sTodayTotal").textContent = Number(stats.today_total || 0).toLocaleString("vi-VN") + "đ";
-        document.getElementById("sTodayCount").textContent = stats.today_count || 0;
+        document.getElementById("sTodayCount").textContent = Number(stats.today_count || 0).toLocaleString("vi-VN");
         document.getElementById("sAllTotal").textContent = Number(stats.all_total || 0).toLocaleString("vi-VN") + "đ";
-        document.getElementById("sAllCount").textContent = stats.all_count || 0;
+        document.getElementById("sAllCount").textContent = Number(stats.all_count || 0).toLocaleString("vi-VN");
+
         renderCtrl(d.control);
-        renderFeed(d.donations || []);
+        allDonations = Array.isArray(d.donations) ? d.donations : [];
+        filterFeed();
+        renderTopDonors(stats.top_donors || []);
         return { ok: true };
       } catch {
+        setConnStatus(false);
         return { ok: false, error: "Không kết nối được tới Worker — kiểm tra lại Link Worker (phải có https://) hoặc kết nối mạng." };
       }
     }
 
-    function autoBankName() { }
+    async function refreshDashboard() {
+      const res = await bootstrap(false);
+      toast(res.ok ? "Đã làm mới dữ liệu!" : (res.error || "Không làm mới được!"));
+    }
+
+    /* ================= TAB 1: LIVE DECK, TEST, FEED, TOP ================= */
+    function renderCtrl(c) {
+      if (!c) return;
+      const btnMute = document.getElementById("btnMute");
+      const icoMute = document.getElementById("icoMute");
+      const txtMute = document.getElementById("txtMute");
+      btnMute.classList.toggle("danger-active", Boolean(c.muted));
+      txtMute.textContent = c.muted ? "Đang tắt tiếng" : "Đang bật tiếng";
+      icoMute.innerHTML = c.muted
+        ? '<svg class="ico ico-lg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>'
+        : '<svg class="ico ico-lg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+
+      const btnPause = document.getElementById("btnPause");
+      const icoPause = document.getElementById("icoPause");
+      const txtPause = document.getElementById("txtPause");
+      btnPause.classList.toggle("danger-active", Boolean(c.paused));
+      txtPause.textContent = c.paused ? "Đang tạm dừng" : "Tạm dừng";
+      icoPause.innerHTML = c.paused
+        ? '<svg class="ico ico-lg" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>'
+        : '<svg class="ico ico-lg" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+    }
+
+    async function sendCtrl(action) {
+      try {
+        const r = await api("/api/admin/control", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action }),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok) {
+          renderCtrl(d.control);
+          const labels = {
+            skip: "Đã bỏ qua thông báo hiện tại!",
+            toggle_mute: d.control?.muted ? "Đã tắt tiếng Overlay!" : "Đã bật tiếng Overlay!",
+            toggle_pause: d.control?.paused ? "Đã tạm dừng hàng đợi!" : "Đã tiếp tục chạy hàng đợi!",
+            clear: "Đã xóa sạch hàng đợi Overlay!",
+          };
+          toast(labels[action] || "Đã gửi lệnh điều khiển!");
+        } else {
+          toast(d.error || "Lỗi gửi lệnh điều khiển!");
+        }
+      } catch {
+        toast("Không kết nối được tới Worker!");
+      }
+    }
+
+    function pickTestAmt(amt) {
+      document.getElementById("tAmt").value = amt;
+      syncTestChips();
+    }
+
+    function syncTestChips() {
+      const val = String(document.getElementById("tAmt").value || "");
+      document.querySelectorAll("#testAmtChips .chip").forEach(c => {
+        c.classList.toggle("active", c.dataset.amt === val);
+      });
+    }
+
+    async function sendTest() {
+      const amt = Math.floor(Number(document.getElementById("tAmt").value || 0));
+      if (!Number.isFinite(amt) || amt <= 0) return toast("Số tiền test không hợp lệ!");
+      const body = {
+        donor_name: document.getElementById("tName").value.trim() || "Thái VIP",
+        amount: amt,
+        message: document.getElementById("tMsg").value.trim(),
+        save_to_db: document.getElementById("tSave").checked,
+      };
+      try {
+        const r = await api("/api/admin/test-donate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok) {
+          toast("Đã bắn donate tiếng Việt có dấu lên TikTok LIVE!");
+          if (body.save_to_db) bootstrap(false);
+        } else {
+          toast(d.error || "Lỗi bắn donate test!");
+        }
+      } catch {
+        toast("Không kết nối được tới Worker!");
+      }
+    }
+
+    function previewTestHere() {
+      const name = document.getElementById("tName").value.trim() || "Thái VIP";
+      const amt = Math.floor(Number(document.getElementById("tAmt").value || 50000));
+      const msg = document.getElementById("tMsg").value.trim();
+      const sound = document.getElementById("o_alert_sound").value;
+      const delay = sound && sound !== "none" ? 650 : 0;
+      if (sound && sound !== "none") playAlertSound();
+      setTimeout(() => playTtsSample(name, amt, msg), delay);
+    }
+
+    function filterFeed() {
+      const q = (document.getElementById("feedSearch").value || "").trim().toLowerCase();
+      const filtered = q
+        ? allDonations.filter(it =>
+            String(it.donor_name || "").toLowerCase().includes(q) ||
+            String(it.message || "").toLowerCase().includes(q) ||
+            String(it.reference_code || "").toLowerCase().includes(q) ||
+            String(it.id || "").includes(q)
+          )
+        : allDonations;
+      renderFeed(filtered);
+    }
+
+    function renderFeed(items) {
+      const box = document.getElementById("feedList");
+      box.textContent = "";
+      if (!items.length) {
+        box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:26px;font-size:13px;">Không có giao dịch nào</div>';
+        return;
+      }
+      items.forEach(it => {
+        const row = document.createElement("div");
+        row.className = "feed-item";
+
+        const main = document.createElement("div");
+        main.className = "feed-main";
+
+        const top = document.createElement("div");
+        top.className = "feed-top";
+        const strong = document.createElement("strong");
+        strong.textContent = it.donor_name || "Ẩn danh";
+        const amt = document.createElement("span");
+        amt.className = "feed-amt";
+        amt.textContent = Number(it.amount || 0).toLocaleString("vi-VN") + "đ";
+        top.appendChild(strong);
+        top.appendChild(amt);
+
+        const msg = document.createElement("div");
+        msg.className = "feed-msg";
+        msg.textContent = it.message || "(Không có lời nhắn)";
+
+        const meta = document.createElement("div");
+        meta.className = "feed-meta";
+        const parts = [`#${it.id}`];
+        if (it.created_at) parts.push(it.created_at);
+        if (it.reference_code) parts.push(it.reference_code);
+        meta.textContent = parts.join(" • ");
+
+        main.appendChild(top);
+        main.appendChild(msg);
+        main.appendChild(meta);
+
+        const acts = document.createElement("div");
+        acts.className = "row-auto";
+        acts.style.flexShrink = "0";
+
+        const bReplay = document.createElement("button");
+        bReplay.className = "btn btn-sm btn-icon";
+        bReplay.title = "Phát lại lên Overlay";
+        bReplay.innerHTML = '<svg class="ico" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+        bReplay.onclick = async () => {
+          try {
+            const r = await api(`/api/admin/donations/${it.id}/replay`, { method: "POST" });
+            toast(r.ok ? "Đã phát lại lên Overlay!" : "Lỗi khi phát lại!");
+          } catch {
+            toast("Không kết nối được tới Worker!");
+          }
+        };
+
+        const bDel = document.createElement("button");
+        bDel.className = "btn btn-sm btn-danger btn-icon";
+        bDel.title = "Xóa giao dịch";
+        bDel.innerHTML = '<svg class="ico" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+        bDel.onclick = async () => {
+          if (!confirm(`Xóa giao dịch #${it.id} của "${it.donor_name}"?`)) return;
+          try {
+            const r = await api(`/api/admin/donations/${it.id}`, { method: "DELETE" });
+            if (r.ok) {
+              toast("Đã xóa giao dịch!");
+              bootstrap(false);
+            } else {
+              toast("Lỗi khi xóa giao dịch!");
+            }
+          } catch {
+            toast("Không kết nối được tới Worker!");
+          }
+        };
+
+        acts.appendChild(bReplay);
+        acts.appendChild(bDel);
+        row.appendChild(main);
+        row.appendChild(acts);
+        box.appendChild(row);
+      });
+    }
+
+    function renderTopDonors(items) {
+      const box = document.getElementById("topDonorsList");
+      box.textContent = "";
+      if (!items.length) {
+        box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:18px;font-size:13px;">Chưa có dữ liệu Top Donators</div>';
+        return;
+      }
+      items.slice(0, 5).forEach((s, idx) => {
+        const row = document.createElement("div");
+        row.className = "top-row";
+
+        const left = document.createElement("div");
+        left.className = "top-left";
+        const rank = document.createElement("span");
+        rank.className = "rank-badge " + (idx === 0 ? "rank-1" : idx === 1 ? "rank-2" : idx === 2 ? "rank-3" : "rank-other");
+        rank.textContent = String(idx + 1);
+
+        const info = document.createElement("div");
+        info.style.minWidth = "0";
+        const nm = document.createElement("div");
+        nm.className = "top-name";
+        nm.textContent = s.donor_name || "Ẩn danh";
+        const cnt = document.createElement("div");
+        cnt.className = "top-count";
+        const countVal = s.count ?? s.donations_count ?? s.turns ?? 0;
+        cnt.textContent = countVal ? `${countVal} lượt ủng hộ` : "Nhà tài trợ";
+        info.appendChild(nm);
+        info.appendChild(cnt);
+
+        left.appendChild(rank);
+        left.appendChild(info);
+
+        const tot = document.createElement("div");
+        tot.className = "top-total";
+        tot.textContent = Number(s.total ?? s.total_amount ?? 0).toLocaleString("vi-VN") + "đ";
+
+        row.appendChild(left);
+        row.appendChild(tot);
+        box.appendChild(row);
+      });
+    }
+
+    function exportCsv() {
+      window.open(`${normalizeWorkerUrl(workerUrl)}/api/admin/donations/export?pw=${encodeURIComponent(adminPw)}`, "_blank");
+    }
+
+    async function deleteTestDonations() {
+      if (!confirm("Xóa toàn bộ các giao dịch TEST (mã bắt đầu bằng TEST)? Dữ liệu giao dịch thật sẽ được giữ nguyên.")) return;
+      try {
+        const r = await api("/api/admin/donations-test", { method: "DELETE" });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok) {
+          toast(`Đã xóa ${d.deleted ?? 0} đơn test!`);
+          bootstrap(false);
+        } else {
+          toast(d.error || `Không xóa được đơn test (HTTP ${r.status}). Kiểm tra endpoint DELETE /api/admin/donations-test trên Worker.`);
+        }
+      } catch {
+        toast("Không kết nối được tới Worker!");
+      }
+    }
+
+    /* ================= TAB 2: TRANG DONATE (index.html) ================= */
+    function applyPagePreset(key) {
+      const pr = PAGE_PRESETS[key];
+      if (!pr) return;
+      setV("p_themeBg", pr.themeBg);
+      setV("p_themeAccent", pr.themeAccent);
+      setV("p_themeButtonDark", pr.themeButtonDark);
+      setV("p_themeText", pr.themeText);
+      syncPagePreview();
+      toast("Đã áp dụng bộ màu mẫu — bấm Lưu để cập nhật trang thật!");
+    }
 
     function uploadCoverFile(input) {
       const f = input.files && input.files[0];
       if (!f) return;
-      if (f.size > 450 * 1024) { toast("Ảnh nên nhỏ hơn 450KB để tải thật nhanh!"); input.value = ""; return; }
+      if (f.size > 450 * 1024) {
+        toast("Ảnh bìa nên nhỏ hơn 450KB để trang tải thật nhanh!");
+        input.value = "";
+        return;
+      }
       const reader = new FileReader();
-      reader.onload = () => { document.getElementById("p_coverImage").value = reader.result; syncPagePreview(); toast("Đã chọn ảnh bìa — bấm Lưu để cập nhật!"); };
+      reader.onload = () => {
+        document.getElementById("p_coverImage").value = reader.result;
+        syncPagePreview();
+        toast("Đã tải ảnh bìa — bấm Lưu để cập nhật!");
+      };
       reader.readAsDataURL(f);
       input.value = "";
     }
@@ -926,32 +2763,41 @@
       const frame = document.getElementById("ppFrame");
       frame.style.background = bg;
       frame.style.color = tx;
+
       const cover = document.getElementById("ppCover");
       const safeCv = /^(https?:\/\/|data:image\/)/i.test(cv) ? cv : "";
       cover.style.display = safeCv ? "block" : "none";
       cover.style.backgroundImage = safeCv ? `url(${JSON.stringify(safeCv)})` : "none";
+
       document.getElementById("ppName").textContent = document.getElementById("p_streamerName").value || "Tên Kênh";
       document.getElementById("ppSub").textContent = document.getElementById("p_subtitle").value;
       document.getElementById("ppPill").style.background = ac;
       document.getElementById("ppBtn").style.background = dk;
       document.getElementById("ppFooter").textContent = document.getElementById("p_footerText").value;
 
-      const amts = document.getElementById("p_amounts").value.split(",").map(x => parseInt(x.trim(), 10)).filter(n => n > 0).slice(0, 9);
+      const amts = document.getElementById("p_amounts").value
+        .split(",")
+        .map(x => parseInt(x.trim(), 10))
+        .filter(n => n > 0)
+        .slice(0, 9);
       const grid = document.getElementById("ppGrid");
-      grid.innerHTML = "";
-      amts.forEach((a, i) => {
+      grid.textContent = "";
+      (amts.length ? amts : [10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000, 5000000]).forEach((a, i) => {
         const el = document.createElement("div");
         el.className = "pp-amt";
-        if (i === 2) { el.style.background = ac; el.style.color = "#fff"; }
+        if (i === 2) { el.style.background = ac; el.style.color = "#fff"; el.style.borderColor = tx; }
         el.textContent = a.toLocaleString("vi-VN") + "đ";
         grid.appendChild(el);
       });
     }
 
-    async function savePageConfig() {
+    function buildPageConfigPayload() {
       const code = document.getElementById("p_bankCode").value;
-      const amounts = document.getElementById("p_amounts").value.split(",").map(x => parseInt(x.trim(), 10)).filter(n => n >= 1000);
-      const body = {
+      const amounts = document.getElementById("p_amounts").value
+        .split(",")
+        .map(x => parseInt(x.trim(), 10))
+        .filter(n => n >= 1000);
+      return {
         streamerName: document.getElementById("p_streamerName").value.trim(),
         subtitle: document.getElementById("p_subtitle").value.trim(),
         coverImage: document.getElementById("p_coverImage").value.trim(),
@@ -966,20 +2812,117 @@
         tiktokUrl: document.getElementById("p_tiktokUrl").value.trim(),
         facebookUrl: document.getElementById("p_facebookUrl").value.trim(),
         youtubeUrl: document.getElementById("p_youtubeUrl").value.trim(),
-        amounts: amounts.length ? amounts : [10000, 20000, 50000, 100000, 200000, 500000],
-        minAmount: Number(document.getElementById("p_minAmount").value || 1000),
+        amounts: amounts.length ? amounts : [10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000, 5000000],
+        minAmount: Math.max(1000, Number(document.getElementById("p_minAmount").value || 1000)),
         orderPrefix: document.getElementById("p_orderPrefix").value.trim().toUpperCase() || "DN",
+        maxMessageLength: Math.max(30, Math.min(300, Number(document.getElementById("p_maxMessageLength").value || 150))),
         topTitle: document.getElementById("p_topTitle").value.trim(),
         footerText: document.getElementById("p_footerText").value.trim(),
         showTopSupporters: document.getElementById("p_showTopSupporters").checked,
+        keyword: document.getElementById("s_keyword").value.trim().toUpperCase() || "DONATE",
+        default_donor: document.getElementById("s_default_donor").value.trim() || "Ẩn danh",
       };
+    }
+
+    async function savePageConfig() {
       try {
-        const r = await api("/api/admin/page-config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const r = await api("/api/admin/page-config", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(buildPageConfigPayload()),
+        });
         const d = await r.json().catch(() => ({}));
-        toast(r.ok ? "Đã lưu! Trang Donate index.html đã cập nhật ngay." : (d.error || "Lỗi lưu cấu hình"));
+        toast(r.ok ? "Đã lưu! Trang Donate index.html đã cập nhật ngay." : (d.error || "Lỗi lưu cấu hình Trang Donate!"));
       } catch {
         toast("Không kết nối được tới Worker!");
       }
+    }
+
+    /* ================= TAB 3: HỘP THÔNG BÁO OVERLAY ================= */
+    function initBadgeGrid() {
+      const grid = document.getElementById("badgeGrid");
+      grid.textContent = "";
+      BADGE_ITEMS.forEach(item => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "badge-opt";
+        btn.dataset.badge = item.id;
+        btn.innerHTML = `${getBadgeSvg(item.id, "pk_" + item.id)}<span>${item.label}</span>`;
+        btn.onclick = () => {
+          selectedBadgeIcon = item.id;
+          syncBadgePickerUI();
+          syncOvPreview();
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function syncBadgePickerUI() {
+      const isCustom = typeof selectedBadgeIcon === "string" && selectedBadgeIcon.startsWith("img:");
+      document.querySelectorAll("#badgeGrid .badge-opt").forEach(btn => {
+        btn.classList.toggle("active", !isCustom && btn.dataset.badge === selectedBadgeIcon);
+      });
+      const thumb = document.getElementById("customBadgeThumb");
+      const lbl = document.getElementById("customBadgeLabel");
+      const clr = document.getElementById("btnClearBadge");
+      if (isCustom) {
+        thumb.src = selectedBadgeIcon.slice(4);
+        thumb.style.display = "block";
+        lbl.textContent = "Đang dùng Ảnh / GIF tùy chỉnh";
+        clr.style.display = "inline-flex";
+      } else {
+        thumb.style.display = "none";
+        thumb.removeAttribute("src");
+        lbl.textContent = "Chưa chọn Ảnh / GIF riêng (hỗ trợ PNG/JPG/WebP/GIF/SVG < 300KB)";
+        clr.style.display = "none";
+      }
+    }
+
+    function uploadBadgeFile(input) {
+      const f = input.files && input.files[0];
+      if (!f) return;
+      if (f.size > 300 * 1024) {
+        toast("Ảnh / GIF nên nhỏ hơn 300KB để tải nhanh trên Overlay!");
+        input.value = "";
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        selectedBadgeIcon = "img:" + reader.result;
+        syncBadgePickerUI();
+        syncOvPreview();
+        toast("Đã chọn Ảnh / GIF riêng — bấm Lưu để áp dụng!");
+      };
+      reader.readAsDataURL(f);
+      input.value = "";
+    }
+
+    function clearCustomBadge() {
+      selectedBadgeIcon = "heart";
+      syncBadgePickerUI();
+      syncOvPreview();
+    }
+
+    function applyOverlayPreset(key) {
+      const pr = OVERLAY_PRESETS[key];
+      if (!pr) return;
+      setV("o_bg_color_1", pr.bg_color_1);
+      setV("o_bg_color_2", pr.bg_color_2);
+      setV("o_border_color", pr.border_color);
+      setV("o_text_color", pr.text_color);
+      setV("o_amount_color", pr.amount_color);
+      setV("o_msg_color", pr.msg_color);
+      setC("o_border_glow", pr.border_glow);
+      selectedBadgeIcon = pr.badge_icon;
+      syncBadgePickerUI();
+      syncOvPreview();
+      playOvAnimation();
+      toast("Đã áp dụng mẫu giao diện — bấm Lưu để cập nhật lên TikTok LIVE!");
+    }
+
+    function syncTimeLabels() {
+      document.getElementById("lbl_hold_seconds").textContent = Number(document.getElementById("o_hold_seconds").value || 2.5).toFixed(1) + "s";
+      document.getElementById("lbl_fallback_seconds").textContent = Number(document.getElementById("o_fallback_seconds").value || 6).toFixed(1) + "s";
     }
 
     function syncOvPreview() {
@@ -989,147 +2932,263 @@
       const tc = document.getElementById("o_text_color").value;
       const ac = document.getElementById("o_amount_color").value;
       const mc = document.getElementById("o_msg_color").value;
+      const op = Number(document.getElementById("o_bg_opacity").value || 0.95);
+      const rad = Number(document.getElementById("o_border_radius").value || 18);
+      const tSize = Number(document.getElementById("o_title_size").value || 26);
+      const mSize = Number(document.getElementById("o_msg_size").value || 20);
+      const maxW = Number(document.getElementById("o_max_width").value || 640);
+      const ang = Number(document.getElementById("o_bg_angle").value || 135);
       const glow = document.getElementById("o_border_glow").checked;
+      const showMsg = document.getElementById("o_show_message").checked;
+
+      document.getElementById("lbl_bg_opacity").textContent = Math.round(op * 100) + "%";
+      document.getElementById("lbl_border_radius").textContent = rad + "px";
+      document.getElementById("lbl_title_size").textContent = tSize + "px";
+      document.getElementById("lbl_msg_size").textContent = mSize + "px";
+      document.getElementById("lbl_max_width").textContent = maxW + "px";
+      document.getElementById("lbl_bg_angle").textContent = ang + "°";
 
       document.getElementById("ovStage").className = "ov-stage pos-" + document.getElementById("o_position").value;
+
       const card = document.getElementById("ovCard");
-      card.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
-      card.style.borderRadius = document.getElementById("o_border_radius").value + "px";
+      card.style.background = `linear-gradient(${ang}deg, ${hexToRgba(c1, op)}, ${hexToRgba(c2, op)})`;
+      card.style.borderRadius = rad + "px";
+      card.style.maxWidth = `min(100%, ${maxW}px)`;
       card.style.border = glow ? `2px solid ${bc}` : "1px solid rgba(255,255,255,0.2)";
-      card.style.boxShadow = glow ? `0 8px 24px rgba(0,0,0,.4), 0 0 18px ${bc}` : "0 8px 24px rgba(0,0,0,.4)";
+      card.style.boxShadow = glow ? `0 10px 28px rgba(0,0,0,.45), 0 0 22px ${bc}` : "0 10px 28px rgba(0,0,0,.42)";
+
+      const badge = document.getElementById("ovBadge");
+      if (!selectedBadgeIcon || selectedBadgeIcon === "none") {
+        badge.style.display = "none";
+        badge.textContent = "";
+      } else if (selectedBadgeIcon.startsWith("img:")) {
+        const src = selectedBadgeIcon.slice(4);
+        if (/^(data:image\/|https?:\/\/)/i.test(src)) {
+          badge.style.display = "flex";
+          badge.textContent = "";
+          const im = document.createElement("img");
+          im.src = src;
+          im.alt = "Badge";
+          badge.appendChild(im);
+        } else {
+          badge.style.display = "none";
+        }
+      } else {
+        badge.style.display = "flex";
+        badge.innerHTML = getBadgeSvg(selectedBadgeIcon, "ov_prev");
+      }
 
       const t = document.getElementById("ovTitle");
-      t.style.fontSize = Math.min(30, Number(document.getElementById("o_title_size").value)) + "px";
+      t.style.fontSize = Math.min(30, tSize) + "px";
       t.style.color = tc;
       t.textContent = "";
       const tpl = document.getElementById("o_title_template").value || "{name} đã donate {amount}đ";
       for (const p of tpl.split(/(\{name\}|\{amount\})/g)) {
         if (p === "{name}") t.appendChild(document.createTextNode("Thái VIP"));
-        else if (p === "{amount}") { const s = document.createElement("span"); s.style.color = ac; s.textContent = "50.000"; t.appendChild(s); }
-        else if (p) t.appendChild(document.createTextNode(p));
+        else if (p === "{amount}") {
+          const s = document.createElement("span");
+          s.style.color = ac;
+          s.textContent = "50.000";
+          t.appendChild(s);
+        } else if (p) {
+          t.appendChild(document.createTextNode(p));
+        }
       }
+
       const m = document.getElementById("ovMsg");
-      m.style.fontSize = Math.min(24, Number(document.getElementById("o_msg_size").value)) + "px";
+      m.style.display = showMsg ? "block" : "none";
+      m.style.fontSize = Math.min(24, mSize) + "px";
       m.style.color = mc;
     }
 
-    async function saveOverlayConfig() {
-      const body = {
+    function playOvAnimation() {
+      const card = document.getElementById("ovCard");
+      const anim = document.getElementById("o_animation").value || "slide-up";
+      card.classList.remove("anim-slide-up", "anim-pop", "anim-slide-left", "anim-fade");
+      void card.offsetWidth;
+      card.classList.add("anim-" + anim);
+    }
+
+    function buildOverlayConfigPayload() {
+      return {
         bg_color_1: document.getElementById("o_bg_color_1").value,
         bg_color_2: document.getElementById("o_bg_color_2").value,
         border_color: document.getElementById("o_border_color").value,
         text_color: document.getElementById("o_text_color").value,
         amount_color: document.getElementById("o_amount_color").value,
         msg_color: document.getElementById("o_msg_color").value,
-        title_size: Number(document.getElementById("o_title_size").value),
-        msg_size: Number(document.getElementById("o_msg_size").value),
-        border_radius: Number(document.getElementById("o_border_radius").value),
-        badge_icon: document.getElementById("o_badge_icon").value,
+        bg_opacity: Number(document.getElementById("o_bg_opacity").value || 0.95),
+        border_radius: Number(document.getElementById("o_border_radius").value || 18),
+        title_size: Number(document.getElementById("o_title_size").value || 26),
+        msg_size: Number(document.getElementById("o_msg_size").value || 20),
+        max_width: Number(document.getElementById("o_max_width").value || 640),
+        bg_angle: Number(document.getElementById("o_bg_angle").value || 135),
         position: document.getElementById("o_position").value,
         animation: document.getElementById("o_animation").value,
+        badge_icon: selectedBadgeIcon || "heart",
         title_template: document.getElementById("o_title_template").value,
-        tts_template: document.getElementById("o_tts_template").value,
-        alert_sound: document.getElementById("o_alert_sound").value,
-        tts_volume: Number(document.getElementById("o_tts_volume").value),
-        tts_rate: Number(document.getElementById("o_tts_rate").value),
-        min_tts_amount: Number(document.getElementById("o_min_tts_amount").value),
-        bad_words: document.getElementById("o_bad_words").value,
-        tts_enabled: document.getElementById("o_tts_enabled").checked,
         border_glow: document.getElementById("o_border_glow").checked,
+        show_message: document.getElementById("o_show_message").checked,
+        hold_seconds: Number(document.getElementById("o_hold_seconds").value || 2.5),
+        fallback_seconds: Number(document.getElementById("o_fallback_seconds").value || 6),
+        tts_enabled: document.getElementById("o_tts_enabled").checked,
+        tts_volume: Number(document.getElementById("o_tts_volume").value ?? 1),
+        tts_rate: Number(document.getElementById("o_tts_rate").value || 1),
+        tts_template: document.getElementById("o_tts_template").value,
+        min_tts_amount: Number(document.getElementById("o_min_tts_amount").value || 0),
+        tts_max_chars: Number(document.getElementById("o_tts_max_chars").value || 220),
+        alert_sound: document.getElementById("o_alert_sound").value,
+        alert_volume: Number(document.getElementById("o_alert_volume").value ?? 0.8),
+        bad_words: document.getElementById("o_bad_words").value.split(/[\n,]+/).map(s => s.trim()).filter(Boolean).join(", "),
+        keyword: document.getElementById("s_keyword").value.trim().toUpperCase() || "DONATE",
+        default_donor: document.getElementById("s_default_donor").value.trim() || "Ẩn danh",
       };
+    }
+
+    async function saveOverlayConfig(okMsg) {
       try {
-        const r = await api("/api/admin/overlay-config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const r = await api("/api/admin/overlay-config", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(buildOverlayConfigPayload()),
+        });
         const d = await r.json().catch(() => ({}));
-        toast(r.ok ? "Đã lưu & áp dụng lên TikTok LIVE Overlay!" : (d.error || "Lỗi khi lưu"));
+        toast(r.ok ? (okMsg || "Đã lưu & áp dụng lên TikTok LIVE Overlay!") : (d.error || "Lỗi khi lưu cấu hình Overlay!"));
       } catch {
         toast("Không kết nối được tới Worker!");
       }
+    }
+
+    async function resetOverlayConfig() {
+      if (!confirm("Khôi phục toàn bộ giao diện Hộp thông báo & Âm thanh về mặc định?")) return;
+      try {
+        const r = await api("/api/admin/overlay-config/reset", { method: "POST" });
+        const d = await r.json().catch(() => ({}));
+        if (r.ok && d.overlay_config) {
+          hydrateOverlayForm(d.overlay_config);
+          toast("Đã khôi phục mặc định và áp dụng lên TikTok LIVE!");
+        } else {
+          toast(d.error || `Không khôi phục được (HTTP ${r.status}). Kiểm tra endpoint POST /api/admin/overlay-config/reset trên Worker.`);
+        }
+      } catch {
+        toast("Không kết nối được tới Worker!");
+      }
+    }
+
+    /* ================= TAB 4: ÂM THANH & TTS ================= */
+    function syncAudioLabels() {
+      document.getElementById("lbl_tts_volume").textContent = Math.round(Number(document.getElementById("o_tts_volume").value || 0) * 100) + "%";
+      document.getElementById("lbl_tts_rate").textContent = Number(document.getElementById("o_tts_rate").value || 1).toFixed(2) + "x";
+      document.getElementById("lbl_tts_max_chars").textContent = Number(document.getElementById("o_tts_max_chars").value || 220) + " ký tự";
+      document.getElementById("lbl_alert_volume").textContent = Math.round(Number(document.getElementById("o_alert_volume").value || 0) * 100) + "%";
+    }
+
+    function insertTtsToken(token) {
+      const ta = document.getElementById("o_tts_template");
+      const start = ta.selectionStart ?? ta.value.length;
+      const end = ta.selectionEnd ?? ta.value.length;
+      ta.value = ta.value.slice(0, start) + token + ta.value.slice(end);
+      ta.focus();
+      ta.selectionStart = ta.selectionEnd = start + token.length;
+    }
+
+    function playTtsSample(name, amount, msg) {
+      const tpl = document.getElementById("o_tts_template").value || "{name} đã donate {amount} đồng. {message}";
+      const maxChars = Number(document.getElementById("o_tts_max_chars").value || 220);
+      const q = tpl
+        .replaceAll("{name}", name)
+        .replaceAll("{amount}", String(amount))
+        .replaceAll("{message}", msg)
+        .trim()
+        .slice(0, maxChars);
+      const url = `${normalizeWorkerUrl(workerUrl)}/api/admin/tts-preview?pw=${encodeURIComponent(adminPw)}&q=${encodeURIComponent(q)}&_t=${Date.now()}`;
+      const a = new Audio(url);
+      a.volume = Math.max(0, Math.min(1, Number(document.getElementById("o_tts_volume").value ?? 1)));
+      a.playbackRate = Math.max(0.75, Math.min(1.5, Number(document.getElementById("o_tts_rate").value || 1)));
+      a.play().catch(() => toast("Không phát được âm thanh TTS thử!"));
     }
 
     function previewTts() {
-      const tpl = document.getElementById("o_tts_template").value || "{name} đã donate {amount} đồng. {message}";
-      const q = tpl.replaceAll("{name}", "Thái VIP").replaceAll("{amount}", "50000").replaceAll("{message}", "Chúc anh live thật vui vẻ!");
-      const a = new Audio(`${normalizeWorkerUrl(workerUrl)}/api/admin/tts-preview?pw=${encodeURIComponent(adminPw)}&q=${encodeURIComponent(q)}&_t=${Date.now()}`);
-      a.volume = Math.max(0, Math.min(1, Number(document.getElementById("o_tts_volume").value || 1)));
-      a.playbackRate = Math.max(0.75, Math.min(1.5, Number(document.getElementById("o_tts_rate").value || 1)));
-      a.play().catch(() => toast("Không phát được âm thanh thử"));
+      playTtsSample("Thái VIP", 50000, "Chúc anh live thật vui vẻ!");
     }
 
-    function renderCtrl(c) {
-      if (!c) return;
-      document.getElementById("btnMute").textContent = c.muted ? "Đang tắt tiếng" : "Đang bật tiếng";
-      document.getElementById("btnPause").textContent = c.paused ? "Đang tạm dừng" : "Tạm dừng";
-    }
-
-    async function sendCtrl(action) {
+    function playAlertSound() {
+      const type = document.getElementById("o_alert_sound").value;
+      if (!type || type === "none") return toast("Chuông đang ở chế độ Tắt!");
+      const vol = Math.max(0.01, Math.min(1, Number(document.getElementById("o_alert_volume").value ?? 0.8)));
       try {
-        const r = await api("/api/admin/control", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action }) });
-        const d = await r.json().catch(() => ({}));
-        if (r.ok) { renderCtrl(d.control); toast("Đã gửi lệnh điều khiển!"); }
-        else toast(d.error || "Lỗi gửi lệnh điều khiển!");
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx) audioCtx = new Ctx();
+        if (audioCtx.state === "suspended") audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        const playTone = (freq, start, dur, wave = "sine", gainScale = 1) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = wave;
+          osc.frequency.setValueAtTime(freq, now + start);
+          gain.gain.setValueAtTime(0.0001, now + start);
+          gain.gain.exponentialRampToValueAtTime(Math.max(0.001, vol * 0.35 * gainScale), now + start + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + start + dur);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + start);
+          osc.stop(now + start + dur + 0.02);
+        };
+
+        if (type === "ting") {
+          playTone(1046.5, 0, 0.28, "sine", 1);
+          playTone(1318.5, 0.14, 0.42, "sine", 1);
+        } else if (type === "coin") {
+          playTone(987.77, 0, 0.1, "square", 0.55);
+          playTone(1318.51, 0.09, 0.36, "square", 0.55);
+        } else if (type === "fanfare") {
+          playTone(523.25, 0, 0.14, "triangle", 0.9);
+          playTone(659.25, 0.12, 0.14, "triangle", 0.9);
+          playTone(783.99, 0.24, 0.14, "triangle", 0.9);
+          playTone(1046.5, 0.36, 0.52, "triangle", 1.1);
+        } else if (type === "chime") {
+          playTone(587.33, 0, 0.45, "sine", 0.8);
+          playTone(880.0, 0.12, 0.5, "sine", 0.75);
+          playTone(1174.66, 0.25, 0.65, "sine", 0.7);
+        }
+      } catch {
+        toast("Trình duyệt không hỗ trợ Web Audio API!");
+      }
+    }
+
+    /* ================= TAB 5: HỆ THỐNG & LỌC ================= */
+    async function saveSystemConfig() {
+      try {
+        const [r1, r2] = await Promise.all([
+          api("/api/admin/page-config", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(buildPageConfigPayload()),
+          }),
+          api("/api/admin/overlay-config", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(buildOverlayConfigPayload()),
+          }),
+        ]);
+        if (r1.ok && r2.ok) {
+          toast("Đã lưu cài đặt hệ thống & bộ lọc từ cấm!");
+        } else {
+          const d1 = await r1.json().catch(() => ({}));
+          const d2 = await r2.json().catch(() => ({}));
+          toast(d1.error || d2.error || "Có lỗi khi lưu cài đặt hệ thống!");
+        }
       } catch {
         toast("Không kết nối được tới Worker!");
       }
     }
 
-    async function sendTest() {
-      const body = {
-        donor_name: document.getElementById("tName").value,
-        amount: Number(document.getElementById("tAmt").value),
-        message: document.getElementById("tMsg").value,
-        save_to_db: document.getElementById("tSave").checked,
-      };
-      try {
-        const r = await api("/api/admin/test-donate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-        const d = await r.json().catch(() => ({}));
-        if (r.ok) { toast("Đã bắn donate tiếng Việt có dấu lên TikTok LIVE!"); if (body.save_to_db) bootstrap(false); }
-        else toast(d.error || "Lỗi bắn donate test!");
-      } catch {
-        toast("Không kết nối được tới Worker!");
-      }
-    }
-
-    function renderFeed(items) {
-      const box = document.getElementById("feedList");
-      box.textContent = "";
-      if (!items.length) { box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:24px;">Chưa có giao dịch nào</div>'; return; }
-      items.forEach(it => {
-        const row = document.createElement("div");
-        row.className = "feed-item";
-        const info = document.createElement("div");
-        const top = document.createElement("div");
-        top.innerHTML = `<strong></strong> <span style="color:#fde047;font-weight:800;"></span>`;
-        top.querySelector("strong").textContent = it.donor_name;
-        top.querySelector("span").textContent = Number(it.amount).toLocaleString("vi-VN") + "đ";
-        const m = document.createElement("div"); m.style.cssText = "font-size:13px;color:#cbd5e1;margin-top:2px;"; m.textContent = it.message || "(Không có lời nhắn)";
-        info.appendChild(top); info.appendChild(m);
-
-        const acts = document.createElement("div"); acts.className = "row-auto";
-        const b1 = document.createElement("button"); b1.className = "btn btn-sm"; b1.textContent = "Phát lại";
-        b1.onclick = async () => {
-          try {
-            const r = await api(`/api/admin/donations/${it.id}/replay`, { method: "POST" });
-            toast(r.ok ? "Đã phát lại!" : "Lỗi khi phát lại!");
-          } catch { toast("Không kết nối được tới Worker!"); }
-        };
-        const b2 = document.createElement("button"); b2.className = "btn btn-sm btn-danger"; b2.textContent = "Xóa";
-        b2.onclick = async () => {
-          if (!confirm(`Xóa giao dịch của "${it.donor_name}"?`)) return;
-          try {
-            const r = await api(`/api/admin/donations/${it.id}`, { method: "DELETE" });
-            if (r.ok) { toast("Đã xóa!"); bootstrap(false); }
-            else toast("Lỗi khi xóa giao dịch!");
-          } catch { toast("Không kết nối được tới Worker!"); }
-        };
-        acts.appendChild(b1); acts.appendChild(b2);
-        row.appendChild(info); row.appendChild(acts);
-        box.appendChild(row);
-      });
-    }
-
-    function exportCsv() {
-      window.open(`${normalizeWorkerUrl(workerUrl)}/api/admin/donations/export?pw=${encodeURIComponent(adminPw)}`, "_blank");
-    }
+    /* ================= BOOT ================= */
+    initBadgeGrid();
+    syncBadgePickerUI();
+    syncTimeLabels();
+    syncAudioLabels();
 
     (function initLogin() {
       document.getElementById("inWorkerUrl").value = workerUrl;
