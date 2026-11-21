@@ -1266,30 +1266,71 @@
     }
 
     @keyframes ovSlideUp {
-      from { opacity: 0; transform: translateY(28px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes ovPop {
-      0% { opacity: 0; transform: scale(0.72); }
-      65% { opacity: 1; transform: scale(1.05); }
-      100% { opacity: 1; transform: scale(1); }
+      0% {
+        opacity: 0;
+        transform: scale(0.72);
+      }
+
+      65% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     @keyframes ovSlideLeft {
-      from { opacity: 0; transform: translateX(36px); }
-      to { opacity: 1; transform: translateX(0); }
+      from {
+        opacity: 0;
+        transform: translateX(36px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     @keyframes ovFade {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
-    .anim-slide-up { animation: ovSlideUp .42s cubic-bezier(.2, .8, .2, 1); }
-    .anim-pop { animation: ovPop .42s cubic-bezier(.2, .8, .2, 1); }
-    .anim-slide-left { animation: ovSlideLeft .42s cubic-bezier(.2, .8, .2, 1); }
-    .anim-fade { animation: ovFade .45s ease; }
+    .anim-slide-up {
+      animation: ovSlideUp .42s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .anim-pop {
+      animation: ovPop .42s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .anim-slide-left {
+      animation: ovSlideLeft .42s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .anim-fade {
+      animation: ovFade .45s ease;
+    }
 
     /* Info Box / System Links */
     .tip-box {
@@ -1420,8 +1461,96 @@
     }
 
     @keyframes tkPreviewScroll {
-      from { transform: translate3d(0, 0, 0); }
-      to { transform: translate3d(-50%, 0, 0); }
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+
+      to {
+        transform: translate3d(-50%, 0, 0);
+      }
+    }
+
+    /* Full-System Live Test Monitor (Tab 1) */
+    .test-monitor {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-hi);
+      background: repeating-conic-gradient(#1a2030 0% 25%, #121723 0% 50%) 50% / 20px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .test-monitor .ov-stage {
+      min-height: 220px;
+      border: none;
+      border-radius: 0;
+      margin-bottom: 0;
+      background: transparent;
+      padding: 24px 18px 14px;
+    }
+
+    .test-ticker-dock {
+      padding: 8px 10px 10px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      background: rgba(11, 14, 20, 0.35);
+    }
+
+    .check-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .chk-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 600;
+      border: 1px solid var(--border-hi);
+      background: var(--bg);
+      color: #cbd5e1;
+    }
+
+    .chk-pill.ok {
+      border-color: rgba(16, 185, 129, 0.42);
+      background: rgba(16, 185, 129, 0.12);
+      color: #6ee7b7;
+    }
+
+    .chk-pill.warn {
+      border-color: rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.14);
+      color: #fcd34d;
+    }
+
+    .chk-pill.err {
+      border-color: rgba(239, 68, 68, 0.48);
+      background: rgba(239, 68, 68, 0.16);
+      color: #fca5a5;
+    }
+
+    .tts-preview-box {
+      padding: 9px 11px;
+      border-radius: 9px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .tts-preview-box .lbl {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--muted);
+      margin-bottom: 3px;
     }
 
     /* Toast */
@@ -1529,7 +1658,8 @@
       <div class="login-brand">
         <div class="brand-mark">
           <svg viewBox="0 0 64 64">
-            <path d="M32 52s-18-11-22-22C6.8 21.5 12.4 13 21 13c4.8 0 8.5 2.6 11 6.2 2.5-3.6 6.2-6.2 11-6.2 8.6 0 14.2 8.5 11 17C50 41 32 52 32 52Z" />
+            <path
+              d="M32 52s-18-11-22-22C6.8 21.5 12.4 13 21 13c4.8 0 8.5 2.6 11 6.2 2.5-3.6 6.2-6.2 11-6.2 8.6 0 14.2 8.5 11 17C50 41 32 52 32 52Z" />
           </svg>
         </div>
         <div>
@@ -1537,7 +1667,8 @@
           <div class="login-sub">Cloud Edition</div>
         </div>
       </div>
-      <p class="login-desc">Đăng nhập để điều khiển livestream, tùy chỉnh trực quan Trang Donate, Hộp thông báo Overlay và giọng đọc TTS.</p>
+      <p class="login-desc">Đăng nhập để điều khiển livestream, tùy chỉnh trực quan Trang Donate, Hộp thông báo Overlay
+        và giọng đọc TTS.</p>
       <div id="loginErr" class="login-err"></div>
       <div class="field">
         <label>Link Cloudflare Worker của bạn</label>
@@ -1545,10 +1676,15 @@
       </div>
       <div class="field">
         <label>Mật khẩu Admin (ADMIN_PASSWORD)</label>
-        <input id="inAdminPw" type="password" placeholder="Nhập mật khẩu quản trị..." onkeydown="if(event.key==='Enter') doLogin()">
+        <input id="inAdminPw" type="password" placeholder="Nhập mật khẩu quản trị..."
+          onkeydown="if(event.key==='Enter') doLogin()">
       </div>
       <button id="btnLogin" class="btn btn-primary" style="width:100%;padding:11px;" onclick="doLogin()">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        <svg class="ico" viewBox="0 0 24 24">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+          <polyline points="10 17 15 12 10 7" />
+          <line x1="15" y1="12" x2="3" y2="12" />
+        </svg>
         Đăng nhập Quản trị
       </button>
     </div>
@@ -1563,7 +1699,8 @@
         <div class="sb-head">
           <div class="brand-mark">
             <svg viewBox="0 0 64 64">
-              <path d="M32 52s-18-11-22-22C6.8 21.5 12.4 13 21 13c4.8 0 8.5 2.6 11 6.2 2.5-3.6 6.2-6.2 11-6.2 8.6 0 14.2 8.5 11 17C50 41 32 52 32 52Z" />
+              <path
+                d="M32 52s-18-11-22-22C6.8 21.5 12.4 13 21 13c4.8 0 8.5 2.6 11 6.2 2.5-3.6 6.2-6.2 11-6.2 8.6 0 14.2 8.5 11 17C50 41 32 52 32 52Z" />
             </svg>
           </div>
           <div>
@@ -1574,27 +1711,48 @@
 
         <nav class="sb-nav">
           <button class="nav-btn active" data-tab="live">
-            <svg class="ico" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
             <span>Điều khiển &amp; Test</span>
           </button>
           <button class="nav-btn" data-tab="page">
-            <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <line x1="3" y1="9" x2="21" y2="9" />
+              <line x1="9" y1="21" x2="9" y2="9" />
+            </svg>
             <span>Trang Donate</span>
           </button>
           <button class="nav-btn" data-tab="design">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
             <span>Hộp thông báo</span>
           </button>
           <button class="nav-btn" data-tab="ticker">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+              <path d="M4 22h16" />
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+            </svg>
             <span>Dòng chạy Top</span>
           </button>
           <button class="nav-btn" data-tab="audio">
-            <svg class="ico" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
             <span>Âm thanh &amp; TTS</span>
           </button>
           <button class="nav-btn" data-tab="system">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
             <span>Hệ thống &amp; Lọc</span>
           </button>
         </nav>
@@ -1605,7 +1763,11 @@
             <span id="connStatusText">Worker Online</span>
           </div>
           <button class="btn btn-sm btn-danger" style="width:100%;" onclick="logout()">
-            <svg class="ico" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <svg class="ico" viewBox="0 0 24 24">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
             Đăng xuất
           </button>
         </div>
@@ -1621,7 +1783,10 @@
               <span class="lp-lbl">TikTok LIVE</span>
               <span id="qlOverlay" class="lp-val">Đang tải...</span>
               <button class="btn btn-xs btn-primary" onclick="copyOverlayUrl()">
-                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
                 Copy
               </button>
             </div>
@@ -1629,7 +1794,10 @@
               <span class="lp-lbl">Trang Donate</span>
               <span id="qlDonate" class="lp-val"></span>
               <button class="btn btn-xs" onclick="copyText(getDonatePageUrl(), 'Đã copy link Trang Donate!')">
-                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
                 Copy
               </button>
             </div>
@@ -1637,7 +1805,10 @@
               <span class="lp-lbl">SePay Webhook</span>
               <span id="qlSepay" class="lp-val">Đang tải...</span>
               <button class="btn btn-xs" onclick="copySepayUrl()">
-                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                  <rect x="9" y="9" width="13" height="13" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
                 Copy
               </button>
             </div>
@@ -1645,15 +1816,26 @@
 
           <div class="topbar-actions">
             <a href="./index.html" target="_blank" rel="noopener" class="btn btn-sm">
-              <svg class="ico" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <svg class="ico" viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
               Mở Trang Donate
             </a>
             <button class="btn btn-sm btn-success" onclick="openOverlayTab()">
-              <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <svg class="ico" viewBox="0 0 24 24">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
               Mở thử Overlay
             </button>
             <button class="btn btn-sm btn-warn" onclick="openTickerTab()">
-              <svg class="ico" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+              <svg class="ico" viewBox="0 0 24 24">
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
               Mở thử Top Ticker
             </button>
           </div>
@@ -1667,28 +1849,44 @@
               <div class="stat">
                 <div class="stat-top">
                   <span>Donate hôm nay</span>
-                  <svg class="ico" style="color:var(--yellow)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1.2 0-2.2-.5-2.7-1.5"/><line x1="12" y1="6.5" x2="12" y2="17.5"/></svg>
+                  <svg class="ico" style="color:var(--yellow)" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" />
+                    <path
+                      d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1.2 0-2.2-.5-2.7-1.5" />
+                    <line x1="12" y1="6.5" x2="12" y2="17.5" />
+                  </svg>
                 </div>
                 <div class="v" style="color:var(--yellow)" id="sTodayTotal">0đ</div>
               </div>
               <div class="stat">
                 <div class="stat-top">
                   <span>Số lượt hôm nay</span>
-                  <svg class="ico" style="color:var(--blue)" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <svg class="ico" style="color:var(--blue)" viewBox="0 0 24 24">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  </svg>
                 </div>
                 <div class="v" style="color:var(--blue)" id="sTodayCount">0</div>
               </div>
               <div class="stat">
                 <div class="stat-top">
                   <span>Tổng tất cả</span>
-                  <svg class="ico" style="color:#34d399" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                  <svg class="ico" style="color:#34d399" viewBox="0 0 24 24">
+                    <line x1="12" y1="20" x2="12" y2="10" />
+                    <line x1="18" y1="20" x2="18" y2="4" />
+                    <line x1="6" y1="20" x2="6" y2="16" />
+                  </svg>
                 </div>
                 <div class="v" style="color:#34d399" id="sAllTotal">0đ</div>
               </div>
               <div class="stat">
                 <div class="stat-top">
                   <span>Tổng số lượt</span>
-                  <svg class="ico" style="color:#c084fc" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <svg class="ico" style="color:#c084fc" viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
                 </div>
                 <div class="v" id="sAllCount">0</div>
               </div>
@@ -1700,29 +1898,47 @@
                 <div class="card">
                   <div class="card-head">
                     <span class="card-title-left">
-                      <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <rect x="2" y="7" width="20" height="15" rx="2" />
+                        <polyline points="17 2 12 7 7 2" />
+                      </svg>
                       Live Deck — Điều khiển trực tiếp
                     </span>
                   </div>
                   <div class="deck-grid">
                     <button class="deck-btn warn" onclick="sendCtrl('skip')">
-                      <svg class="ico ico-lg" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                      <svg class="ico ico-lg" viewBox="0 0 24 24">
+                        <polygon points="5 4 15 12 5 20 5 4" />
+                        <line x1="19" y1="5" x2="19" y2="19" />
+                      </svg>
                       <span>Bỏ qua ngay</span>
                     </button>
                     <button id="btnMute" class="deck-btn" onclick="sendCtrl('toggle_mute')">
                       <span id="icoMute">
-                        <svg class="ico ico-lg" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                        <svg class="ico ico-lg" viewBox="0 0 24 24">
+                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                        </svg>
                       </span>
                       <span id="txtMute">Đang bật tiếng</span>
                     </button>
                     <button id="btnPause" class="deck-btn" onclick="sendCtrl('toggle_pause')">
                       <span id="icoPause">
-                        <svg class="ico ico-lg" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                        <svg class="ico ico-lg" viewBox="0 0 24 24">
+                          <rect x="6" y="4" width="4" height="16" />
+                          <rect x="14" y="4" width="4" height="16" />
+                        </svg>
                       </span>
                       <span id="txtPause">Tạm dừng</span>
                     </button>
                     <button class="deck-btn clear-btn" onclick="sendCtrl('clear')">
-                      <svg class="ico ico-lg" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                      <svg class="ico ico-lg" viewBox="0 0 24 24">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                        <path d="M10 11v6" />
+                        <path d="M14 11v6" />
+                      </svg>
                       <span>Xóa hàng đợi</span>
                     </button>
                   </div>
@@ -1731,18 +1947,21 @@
                 <div class="card">
                   <div class="card-head">
                     <span class="card-title-left">
-                      <svg class="ico" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <line x1="22" y1="2" x2="11" y2="13" />
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                      </svg>
                       Test Donate nhanh (Tiếng Việt có dấu)
                     </span>
                   </div>
                   <div class="row">
                     <div class="field">
                       <label>Tên người donate</label>
-                      <input id="tName" type="text" maxlength="40" value="Thái VIP">
+                      <input id="tName" type="text" maxlength="40" value="Thái VIP" oninput="syncAllTestConsumers()">
                     </div>
                     <div class="field">
                       <label>Số tiền (VND)</label>
-                      <input id="tAmt" type="number" min="1000" step="1000" value="50000" oninput="syncTestChips()">
+                      <input id="tAmt" type="number" min="1000" step="1000" value="50000" oninput="syncTestChips();syncAllTestConsumers()">
                     </div>
                   </div>
                   <div class="chip-row" id="testAmtChips">
@@ -1751,24 +1970,30 @@
                     <button type="button" class="chip active" data-amt="50000" onclick="pickTestAmt(50000)">50k</button>
                     <button type="button" class="chip" data-amt="100000" onclick="pickTestAmt(100000)">100k</button>
                     <button type="button" class="chip" data-amt="500000" onclick="pickTestAmt(500000)">500k</button>
-                    <button type="button" class="chip" data-amt="1000000" onclick="pickTestAmt(1000000)">1 Triệu</button>
+                    <button type="button" class="chip" data-amt="1000000" onclick="pickTestAmt(1000000)">1
+                      Triệu</button>
                   </div>
                   <div class="field">
                     <label>Lời nhắn</label>
-                    <input id="tMsg" type="text" maxlength="150" value="Chúc anh livestream thật bùng nổ và nhiều mắt xem nhé!">
+                    <input id="tMsg" type="text" maxlength="150"
+                      value="Chúc anh livestream thật bùng nổ và nhiều mắt xem nhé!" oninput="syncAllTestConsumers()">
                   </div>
                   <label class="toggle">
                     <span>Lưu lượt test này vào lịch sử DB (cập nhật cả BXH)</span>
-                    <input id="tSave" type="checkbox">
+                    <input id="tSave" type="checkbox" onchange="syncAllTestConsumers()">
                   </label>
                   <div class="row-auto">
                     <button class="btn btn-primary" style="flex:1;" onclick="sendTest()">
-                      <svg class="ico" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                      </svg>
                       Bắn Test lên TikTok LIVE ngay
                     </button>
                     <button class="btn btn-success" onclick="previewTestHere()">
-                      <svg class="ico" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                      Nghe thử tại đây
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <polygon points="5 3 19 12 5 21 5 3" />
+                      </svg>
+                      Xem &amp; Nghe thử tại đây
                     </button>
                   </div>
                 </div>
@@ -1779,27 +2004,97 @@
                 <div class="card">
                   <div class="card-head">
                     <span class="card-title-left">
-                      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                        <line x1="8" y1="21" x2="16" y2="21" />
+                        <line x1="12" y1="17" x2="12" y2="21" />
+                      </svg>
+                      Xem trước toàn hệ thống (Overlay + Top Ticker + TTS + Lọc)
+                    </span>
+                    <button type="button" class="btn btn-xs btn-success" onclick="previewTestHere()">
+                      <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                        <polygon points="5 3 19 12 5 21 5 3" />
+                      </svg>
+                      Chạy thử full
+                    </button>
+                  </div>
+
+                  <div class="test-monitor">
+                    <div id="testStage" class="ov-stage pos-bottom-left">
+                      <div id="testCard" class="ov-card">
+                        <div id="testBadge" class="ov-badge"></div>
+                        <div class="ov-body">
+                          <div id="testTitle" style="font-weight:800;line-height:1.25;"></div>
+                          <div id="testMsg" style="margin-top:5px;line-height:1.35;"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="test-ticker-dock">
+                      <div id="testTkBar" class="tk-bar">
+                        <div id="testTkLabel" class="tk-lbl">
+                          <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                            <path d="M4 22h16" />
+                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                          </svg>
+                          <span id="testTkTitle">TOP DONATE</span>
+                        </div>
+                        <div class="tk-viewport">
+                          <div id="testTkTrack" class="tk-track"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="testCheckPills" class="check-pills"></div>
+                  <div class="tts-preview-box">
+                    <div class="lbl">Câu đọc TTS thực tế (đã ghép mẫu + lọc từ cấm + giới hạn ký tự)</div>
+                    <div id="testTtsSentence"></div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-head">
+                    <span class="card-title-left">
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
                       Lịch sử Donate
                     </span>
                     <div class="row-auto">
                       <button class="btn btn-xs" onclick="refreshDashboard()">
-                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                          <polyline points="23 4 23 10 17 10" />
+                          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                        </svg>
                         Làm mới
                       </button>
                       <button class="btn btn-xs" onclick="exportCsv()">
-                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
                         Xuất CSV
                       </button>
                       <button class="btn btn-xs btn-danger" onclick="deleteTestDonations()">
-                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                        </svg>
                         Xóa đơn test
                       </button>
                     </div>
                   </div>
                   <div class="search-wrap">
-                    <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <input id="feedSearch" type="search" placeholder="Tìm theo tên, lời nhắn hoặc mã giao dịch..." oninput="filterFeed()">
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <input id="feedSearch" type="search" placeholder="Tìm theo tên, lời nhắn hoặc mã giao dịch..."
+                      oninput="filterFeed()">
                   </div>
                   <div id="feedList" class="feed"></div>
                 </div>
@@ -1807,7 +2102,14 @@
                 <div class="card">
                   <div class="card-head">
                     <span class="card-title-left">
-                      <svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                        <path d="M4 22h16" />
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                      </svg>
                       Top Donators (Top 5)
                     </span>
                   </div>
@@ -1823,7 +2125,11 @@
               <div class="card">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <line x1="3" y1="9" x2="21" y2="9" />
+                      <line x1="9" y1="21" x2="9" y2="9" />
+                    </svg>
                     Cấu hình chi tiết Trang Donate (index.html)
                   </span>
                 </div>
@@ -1831,46 +2137,64 @@
                 <div class="field"><label>Bộ màu mẫu nhanh</label></div>
                 <div class="preset-grid">
                   <button type="button" class="preset-card" onclick="applyPagePreset('pastel_pink')">
-                    <span class="preset-swatch" style="background:linear-gradient(135deg,#f6c7d7 55%,#e06d9f 55%)"></span>
+                    <span class="preset-swatch"
+                      style="background:linear-gradient(135deg,#f6c7d7 55%,#e06d9f 55%)"></span>
                     <span>Hồng Pastel</span>
                   </button>
                   <button type="button" class="preset-card" onclick="applyPagePreset('dreamy_purple')">
-                    <span class="preset-swatch" style="background:linear-gradient(135deg,#e9d5ff 55%,#9333ea 55%)"></span>
+                    <span class="preset-swatch"
+                      style="background:linear-gradient(135deg,#e9d5ff 55%,#9333ea 55%)"></span>
                     <span>Tím Mộng Mơ</span>
                   </button>
                   <button type="button" class="preset-card" onclick="applyPagePreset('light_ocean')">
-                    <span class="preset-swatch" style="background:linear-gradient(135deg,#dbeafe 55%,#2563eb 55%)"></span>
+                    <span class="preset-swatch"
+                      style="background:linear-gradient(135deg,#dbeafe 55%,#2563eb 55%)"></span>
                     <span>Xanh Biển Nhạt</span>
                   </button>
                   <button type="button" class="preset-card" onclick="applyPagePreset('luxury_cream')">
-                    <span class="preset-swatch" style="background:linear-gradient(135deg,#fef3c7 55%,#d97706 55%)"></span>
+                    <span class="preset-swatch"
+                      style="background:linear-gradient(135deg,#fef3c7 55%,#d97706 55%)"></span>
                     <span>Kem Sang Trọng</span>
                   </button>
                 </div>
 
                 <div class="row">
-                  <div class="field"><label>Tên kênh hiển thị</label><input id="p_streamerName" type="text" oninput="syncPagePreview()"></div>
-                  <div class="field"><label>Lời chào (Subtitle)</label><input id="p_subtitle" type="text" oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Tên kênh hiển thị</label><input id="p_streamerName" type="text"
+                      oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Lời chào (Subtitle)</label><input id="p_subtitle" type="text"
+                      oninput="syncPagePreview()"></div>
                 </div>
 
                 <div class="field">
                   <label>Ảnh bìa (Dán link ảnh hoặc tải ảnh &lt; 5MB — tự tối ưu khi lưu)</label>
                   <div class="row-center">
-                    <input id="p_coverImage" type="text" placeholder="https://... hoặc bấm Tải ảnh" oninput="syncPagePreview()">
-                    <input id="coverFile" type="file" accept="image/*" style="display:none" onchange="uploadCoverFile(this)">
-                    <button type="button" class="btn btn-sm" style="flex:0;" onclick="document.getElementById('coverFile').click()">
-                      <svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <input id="p_coverImage" type="text" placeholder="https://... hoặc bấm Tải ảnh"
+                      oninput="syncPagePreview()">
+                    <input id="coverFile" type="file" accept="image/*" style="display:none"
+                      onchange="uploadCoverFile(this)">
+                    <button type="button" class="btn btn-sm" style="flex:0;"
+                      onclick="document.getElementById('coverFile').click()">
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
                       Tải ảnh
                     </button>
-                    <button type="button" class="btn btn-sm btn-danger" style="flex:0;" onclick="document.getElementById('p_coverImage').value='';syncPagePreview()">Xóa ảnh</button>
+                    <button type="button" class="btn btn-sm btn-danger" style="flex:0;"
+                      onclick="document.getElementById('p_coverImage').value='';syncPagePreview()">Xóa ảnh</button>
                   </div>
                 </div>
 
                 <div class="row">
-                  <div class="field"><label>Màu nền</label><input id="p_themeBg" type="color" value="#f6c7d7" oninput="syncPagePreview()"></div>
-                  <div class="field"><label>Màu nhấn</label><input id="p_themeAccent" type="color" value="#e06d9f" oninput="syncPagePreview()"></div>
-                  <div class="field"><label>Màu nút Tạo QR</label><input id="p_themeButtonDark" type="color" value="#0c1428" oninput="syncPagePreview()"></div>
-                  <div class="field"><label>Màu chữ</label><input id="p_themeText" type="color" value="#0f172a" oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Màu nền</label><input id="p_themeBg" type="color" value="#f6c7d7"
+                      oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Màu nhấn</label><input id="p_themeAccent" type="color" value="#e06d9f"
+                      oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Màu nút Tạo QR</label><input id="p_themeButtonDark" type="color"
+                      value="#0c1428" oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Màu chữ</label><input id="p_themeText" type="color" value="#0f172a"
+                      oninput="syncPagePreview()"></div>
                 </div>
 
                 <div class="section-sep">Tài khoản ngân hàng nhận Donate</div>
@@ -1897,14 +2221,18 @@
                     </select>
                   </div>
                   <div class="field"><label>Số tài khoản</label><input id="p_bankAccount" type="text"></div>
-                  <div class="field"><label>Chủ tài khoản (IN HOA)</label><input id="p_bankAccountName" type="text" oninput="this.value=this.value.toUpperCase()"></div>
+                  <div class="field"><label>Chủ tài khoản (IN HOA)</label><input id="p_bankAccountName" type="text"
+                      oninput="this.value=this.value.toUpperCase()"></div>
                 </div>
 
                 <div class="section-sep">Mạng xã hội &amp; Tùy chọn trang</div>
                 <div class="row">
-                  <div class="field"><label>Link TikTok</label><input id="p_tiktokUrl" type="text" placeholder="https://www.tiktok.com/@..."></div>
-                  <div class="field"><label>Link Facebook</label><input id="p_facebookUrl" type="text" placeholder="https://www.facebook.com/..."></div>
-                  <div class="field"><label>Link YouTube</label><input id="p_youtubeUrl" type="text" placeholder="Để trống nếu không dùng"></div>
+                  <div class="field"><label>Link TikTok</label><input id="p_tiktokUrl" type="text"
+                      placeholder="https://www.tiktok.com/@..."></div>
+                  <div class="field"><label>Link Facebook</label><input id="p_facebookUrl" type="text"
+                      placeholder="https://www.facebook.com/..."></div>
+                  <div class="field"><label>Link YouTube</label><input id="p_youtubeUrl" type="text"
+                      placeholder="Để trống nếu không dùng"></div>
                 </div>
 
                 <div class="field">
@@ -1914,14 +2242,19 @@
                 </div>
 
                 <div class="row">
-                  <div class="field"><label>Số tiền tối thiểu (VNĐ)</label><input id="p_minAmount" type="number" min="1000" step="1000" value="1000"></div>
-                  <div class="field"><label>Tiền tố mã QR</label><input id="p_orderPrefix" type="text" maxlength="4" value="DN" oninput="this.value=this.value.toUpperCase()"></div>
-                  <div class="field"><label>Giới hạn ký tự lời nhắn</label><input id="p_maxMessageLength" type="number" min="30" max="300" value="150"></div>
+                  <div class="field"><label>Số tiền tối thiểu (VNĐ)</label><input id="p_minAmount" type="number"
+                      min="1000" step="1000" value="1000"></div>
+                  <div class="field"><label>Tiền tố mã QR</label><input id="p_orderPrefix" type="text" maxlength="4"
+                      value="DN" oninput="this.value=this.value.toUpperCase()"></div>
+                  <div class="field"><label>Giới hạn ký tự lời nhắn</label><input id="p_maxMessageLength" type="number"
+                      min="30" max="300" value="150"></div>
                 </div>
 
                 <div class="row">
-                  <div class="field"><label>Tiêu đề BXH</label><input id="p_topTitle" type="text" value="Top ủng hộ tháng này"></div>
-                  <div class="field"><label>Dòng chân trang (Footer)</label><input id="p_footerText" type="text" oninput="syncPagePreview()"></div>
+                  <div class="field"><label>Tiêu đề BXH</label><input id="p_topTitle" type="text"
+                      value="Top ủng hộ tháng này"></div>
+                  <div class="field"><label>Dòng chân trang (Footer)</label><input id="p_footerText" type="text"
+                      oninput="syncPagePreview()"></div>
                 </div>
 
                 <label class="toggle">
@@ -1930,7 +2263,11 @@
                 </label>
 
                 <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="savePageConfig()">
-                  <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
+                  </svg>
                   Lưu &amp; Cập nhật ngay Trang Donate
                 </button>
               </div>
@@ -1939,11 +2276,18 @@
               <div class="card card-sticky">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
                     Xem trước Trang Donate
                   </span>
                   <a href="./index.html" target="_blank" rel="noopener" class="btn btn-xs">
-                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
                     Mở trang thật
                   </a>
                 </div>
@@ -1953,15 +2297,19 @@
                     <h2 id="ppName" style="font-size:24px;font-weight:900;margin:6px 0 4px;"></h2>
                     <div id="ppSub" style="font-size:12.5px;opacity:.82;"></div>
                     <div id="ppPill" class="pp-pill">CHUYỂN KHOẢN QR NGÂN HÀNG</div>
-                    <div class="pp-input-mock">Tên của bạn (hỗ trợ tiếng Việt có dấu)</div>
+                    <div id="ppMockName" class="pp-input-mock">Tên của bạn (hỗ trợ tiếng Việt có dấu)</div>
                     <div id="ppGrid" class="pp-grid"></div>
-                    <div class="pp-input-mock" style="height:44px;align-items:flex-start;padding-top:8px;">Lời nhắn hiện lên live &amp; đọc to...</div>
+                    <div id="ppMockMsg" class="pp-input-mock" style="height:44px;align-items:flex-start;padding-top:8px;">Lời nhắn hiện
+                      lên live &amp; đọc to...</div>
                     <button id="ppBtn" class="pp-btn" type="button">Tạo mã QR chuyển khoản</button>
                     <div id="ppFooter" style="margin-top:14px;font-size:11px;opacity:.75;"></div>
                   </div>
                 </div>
                 <button class="btn btn-primary" style="width:100%;margin-top:12px;" onclick="savePageConfig()">
-                  <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                  </svg>
                   Lưu &amp; Cập nhật ngay Trang Donate
                 </button>
               </div>
@@ -1974,7 +2322,10 @@
               <div class="card">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path
+                        d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
                     Tùy chỉnh Hộp thông báo Overlay
                   </span>
                 </div>
@@ -2008,35 +2359,45 @@
                 </div>
 
                 <div class="row">
-                  <div class="field"><label>Màu nền 1</label><input id="o_bg_color_1" type="color" value="#6366f1" oninput="syncOvPreview()"></div>
-                  <div class="field"><label>Màu nền 2</label><input id="o_bg_color_2" type="color" value="#a855f7" oninput="syncOvPreview()"></div>
-                  <div class="field"><label>Màu viền Glow</label><input id="o_border_color" type="color" value="#c084fc" oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu nền 1</label><input id="o_bg_color_1" type="color" value="#6366f1"
+                      oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu nền 2</label><input id="o_bg_color_2" type="color" value="#a855f7"
+                      oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu viền Glow</label><input id="o_border_color" type="color" value="#c084fc"
+                      oninput="syncOvPreview()"></div>
                 </div>
                 <div class="row">
-                  <div class="field"><label>Màu chữ tiêu đề</label><input id="o_text_color" type="color" value="#ffffff" oninput="syncOvPreview()"></div>
-                  <div class="field"><label>Màu số tiền</label><input id="o_amount_color" type="color" value="#fde047" oninput="syncOvPreview()"></div>
-                  <div class="field"><label>Màu lời nhắn</label><input id="o_msg_color" type="color" value="#f3e8ff" oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu chữ tiêu đề</label><input id="o_text_color" type="color" value="#ffffff"
+                      oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu số tiền</label><input id="o_amount_color" type="color" value="#fde047"
+                      oninput="syncOvPreview()"></div>
+                  <div class="field"><label>Màu lời nhắn</label><input id="o_msg_color" type="color" value="#f3e8ff"
+                      oninput="syncOvPreview()"></div>
                 </div>
 
                 <div class="row">
                   <div class="field">
                     <label><span>Độ mờ nền</span><span id="lbl_bg_opacity" class="val-badge">95%</span></label>
-                    <input id="o_bg_opacity" type="range" min="0.2" max="1" step="0.05" value="0.95" oninput="syncOvPreview()">
+                    <input id="o_bg_opacity" type="range" min="0.2" max="1" step="0.05" value="0.95"
+                      oninput="syncOvPreview()">
                   </div>
                   <div class="field">
                     <label><span>Bo góc</span><span id="lbl_border_radius" class="val-badge">18px</span></label>
-                    <input id="o_border_radius" type="range" min="0" max="36" step="1" value="18" oninput="syncOvPreview()">
+                    <input id="o_border_radius" type="range" min="0" max="36" step="1" value="18"
+                      oninput="syncOvPreview()">
                   </div>
                   <div class="field">
                     <label><span>Góc gradient</span><span id="lbl_bg_angle" class="val-badge">135°</span></label>
-                    <input id="o_bg_angle" type="range" min="0" max="360" step="15" value="135" oninput="syncOvPreview()">
+                    <input id="o_bg_angle" type="range" min="0" max="360" step="15" value="135"
+                      oninput="syncOvPreview()">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="field">
                     <label><span>Cỡ chữ tiêu đề</span><span id="lbl_title_size" class="val-badge">26px</span></label>
-                    <input id="o_title_size" type="range" min="16" max="44" step="1" value="26" oninput="syncOvPreview()">
+                    <input id="o_title_size" type="range" min="16" max="44" step="1" value="26"
+                      oninput="syncOvPreview()">
                   </div>
                   <div class="field">
                     <label><span>Cỡ chữ lời nhắn</span><span id="lbl_msg_size" class="val-badge">20px</span></label>
@@ -2044,7 +2405,8 @@
                   </div>
                   <div class="field">
                     <label><span>Chiều rộng tối đa</span><span id="lbl_max_width" class="val-badge">640px</span></label>
-                    <input id="o_max_width" type="range" min="320" max="960" step="20" value="640" oninput="syncOvPreview()">
+                    <input id="o_max_width" type="range" min="320" max="960" step="20" value="640"
+                      oninput="syncOvPreview()">
                   </div>
                 </div>
 
@@ -2077,46 +2439,64 @@
                 <div class="custom-badge-bar">
                   <div class="custom-badge-info">
                     <img id="customBadgeThumb" class="custom-badge-thumb" alt="Custom badge">
-                    <span id="customBadgeLabel">Chưa chọn Ảnh / GIF riêng (hỗ trợ PNG/JPG/WebP/GIF/SVG tối đa 5MB)</span>
+                    <span id="customBadgeLabel">Chưa chọn Ảnh / GIF riêng (hỗ trợ PNG/JPG/WebP/GIF/SVG tối đa
+                      5MB)</span>
                   </div>
                   <div class="row-auto">
-                    <input id="badgeFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" style="display:none" onchange="uploadBadgeFile(this)">
+                    <input id="badgeFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                      style="display:none" onchange="uploadBadgeFile(this)">
                     <button type="button" class="btn btn-xs" onclick="document.getElementById('badgeFile').click()">
-                      <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                      </svg>
                       Tải Ảnh / GIF riêng
                     </button>
-                    <button id="btnClearBadge" type="button" class="btn btn-xs btn-danger" style="display:none;" onclick="clearCustomBadge()">Bỏ ảnh</button>
+                    <button id="btnClearBadge" type="button" class="btn btn-xs btn-danger" style="display:none;"
+                      onclick="clearCustomBadge()">Bỏ ảnh</button>
                   </div>
                 </div>
 
                 <div class="field">
                   <label>Vị trí biểu tượng trong hộp thông báo</label>
                   <div id="badgePosGrid" class="bpos-grid">
-                    <button type="button" class="bpos-btn active" data-bpos="left" onclick="setBadgePosition('left')">Bên trái</button>
-                    <button type="button" class="bpos-btn" data-bpos="right" onclick="setBadgePosition('right')">Bên phải</button>
-                    <button type="button" class="bpos-btn" data-bpos="top" onclick="setBadgePosition('top')">Ở trên (giữa)</button>
-                    <button type="button" class="bpos-btn" data-bpos="bottom" onclick="setBadgePosition('bottom')">Ở dưới (giữa)</button>
-                    <button type="button" class="bpos-btn" data-bpos="top-left" onclick="setBadgePosition('top-left')">Nổi góc trên trái</button>
-                    <button type="button" class="bpos-btn" data-bpos="top-right" onclick="setBadgePosition('top-right')">Nổi góc trên phải</button>
+                    <button type="button" class="bpos-btn active" data-bpos="left"
+                      onclick="setBadgePosition('left')">Bên trái</button>
+                    <button type="button" class="bpos-btn" data-bpos="right" onclick="setBadgePosition('right')">Bên
+                      phải</button>
+                    <button type="button" class="bpos-btn" data-bpos="top" onclick="setBadgePosition('top')">Ở trên
+                      (giữa)</button>
+                    <button type="button" class="bpos-btn" data-bpos="bottom" onclick="setBadgePosition('bottom')">Ở
+                      dưới (giữa)</button>
+                    <button type="button" class="bpos-btn" data-bpos="top-left"
+                      onclick="setBadgePosition('top-left')">Nổi góc trên trái</button>
+                    <button type="button" class="bpos-btn" data-bpos="top-right"
+                      onclick="setBadgePosition('top-right')">Nổi góc trên phải</button>
                   </div>
                 </div>
 
                 <div class="field">
-                  <label><span>Kích thước biểu tượng / Ảnh GIF</span><span id="lbl_badge_size" class="val-badge">52px</span></label>
-                  <input id="o_badge_size" type="range" min="32" max="140" step="4" value="52" oninput="syncOvPreview()">
+                  <label><span>Kích thước biểu tượng / Ảnh GIF</span><span id="lbl_badge_size"
+                      class="val-badge">52px</span></label>
+                  <input id="o_badge_size" type="range" min="32" max="140" step="4" value="52"
+                    oninput="syncOvPreview()">
                 </div>
 
                 <div class="field">
                   <label>
                     <span>Mẫu tiêu đề ({name}, {amount})</span>
-                    <button type="button" class="btn btn-xs" onclick="syncTitleToTts()">Đồng bộ sang câu đọc TTS</button>
+                    <button type="button" class="btn btn-xs" onclick="syncTitleToTts()">Đồng bộ sang câu đọc
+                      TTS</button>
                   </label>
                   <input id="o_title_template" type="text" value="{name} đã donate {amount}đ" oninput="syncOvPreview()">
                 </div>
 
                 <div class="row">
-                  <label class="toggle"><span>Viền phát sáng Glow</span><input id="o_border_glow" type="checkbox" checked onchange="syncOvPreview()"></label>
-                  <label class="toggle"><span>Hiển thị lời nhắn</span><input id="o_show_message" type="checkbox" checked onchange="syncOvPreview()"></label>
+                  <label class="toggle"><span>Viền phát sáng Glow</span><input id="o_border_glow" type="checkbox"
+                      checked onchange="syncOvPreview()"></label>
+                  <label class="toggle"><span>Hiển thị lời nhắn</span><input id="o_show_message" type="checkbox" checked
+                      onchange="syncOvPreview()"></label>
                 </div>
               </div>
 
@@ -2124,11 +2504,17 @@
               <div class="card card-sticky">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <rect x="2" y="3" width="20" height="14" rx="2" />
+                      <line x1="8" y1="21" x2="16" y2="21" />
+                      <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
                     Xem trước trực tiếp (Live Preview)
                   </span>
                   <button type="button" class="btn btn-xs btn-success" onclick="playOvAnimation()">
-                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
                     Chạy hiệu ứng
                   </button>
                 </div>
@@ -2138,27 +2524,38 @@
                     <div id="ovBadge" class="ov-badge"></div>
                     <div class="ov-body">
                       <div id="ovTitle" style="font-weight:800;line-height:1.25;"></div>
-                      <div id="ovMsg" style="margin-top:5px;line-height:1.35;">Chúc bạn live thật vui vẻ và bùng nổ nhé!</div>
+                      <div id="ovMsg" style="margin-top:5px;line-height:1.35;">Chúc bạn live thật vui vẻ và bùng nổ nhé!
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div class="field">
-                  <label><span>Thời gian giữ sau khi đọc xong</span><span id="lbl_hold_seconds" class="val-badge">2.5s</span></label>
-                  <input id="o_hold_seconds" type="range" min="0.5" max="8" step="0.5" value="2.5" oninput="syncTimeLabels()">
+                  <label><span>Thời gian giữ sau khi đọc xong</span><span id="lbl_hold_seconds"
+                      class="val-badge">2.5s</span></label>
+                  <input id="o_hold_seconds" type="range" min="0.5" max="8" step="0.5" value="2.5"
+                    oninput="syncTimeLabels()">
                 </div>
                 <div class="field">
-                  <label><span>Thời gian hiện khi tắt TTS</span><span id="lbl_fallback_seconds" class="val-badge">6.0s</span></label>
-                  <input id="o_fallback_seconds" type="range" min="2" max="15" step="0.5" value="6" oninput="syncTimeLabels()">
+                  <label><span>Thời gian hiện khi tắt TTS</span><span id="lbl_fallback_seconds"
+                      class="val-badge">6.0s</span></label>
+                  <input id="o_fallback_seconds" type="range" min="2" max="15" step="0.5" value="6"
+                    oninput="syncTimeLabels()">
                 </div>
 
                 <div class="row-auto" style="margin-top:14px;">
                   <button class="btn btn-primary" style="flex:1;padding:10px;" onclick="saveOverlayConfig()">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                    </svg>
                     Lưu &amp; Áp dụng ngay lên TikTok LIVE
                   </button>
                   <button class="btn btn-warn" style="padding:10px 14px;" onclick="resetOverlayConfig()">
-                    <svg class="ico" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <polyline points="1 4 1 10 7 10" />
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                    </svg>
                     Khôi phục mặc định
                   </button>
                 </div>
@@ -2173,57 +2570,77 @@
               <div class="card">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                      <line x1="12" y1="19" x2="12" y2="23" />
+                      <line x1="8" y1="23" x2="16" y2="23" />
+                    </svg>
                     Cấu hình giọng đọc TTS
                   </span>
                 </div>
 
                 <label class="toggle">
                   <span>Bật giọng đọc tự động (TTS tiếng Việt)</span>
-                  <input id="o_tts_enabled" type="checkbox" checked>
+                  <input id="o_tts_enabled" type="checkbox" checked onchange="syncTestStage()">
                 </label>
 
                 <div class="field">
                   <label><span>Âm lượng giọng đọc</span><span id="lbl_tts_volume" class="val-badge">100%</span></label>
-                  <input id="o_tts_volume" type="range" min="0" max="1" step="0.05" value="1" oninput="syncAudioLabels()">
+                  <input id="o_tts_volume" type="range" min="0" max="1" step="0.05" value="1"
+                    oninput="syncAudioLabels()">
                 </div>
 
                 <div class="field">
                   <label><span>Tốc độ đọc</span><span id="lbl_tts_rate" class="val-badge">1.00x</span></label>
-                  <input id="o_tts_rate" type="range" min="0.75" max="1.5" step="0.05" value="1" oninput="syncAudioLabels()">
+                  <input id="o_tts_rate" type="range" min="0.75" max="1.5" step="0.05" value="1"
+                    oninput="syncAudioLabels()">
                 </div>
 
                 <div class="field">
                   <label>
                     <span>Mẫu câu đọc TTS</span>
-                    <button type="button" class="btn btn-xs" onclick="syncTtsToTitle()">Đồng bộ sang Mẫu tiêu đề</button>
+                    <button type="button" class="btn btn-xs" onclick="syncTtsToTitle()">Đồng bộ sang Mẫu tiêu
+                      đề</button>
                   </label>
-                  <textarea id="o_tts_template" rows="3">{name} đã donate {amount} đồng. {message}</textarea>
-                  <div class="chip-row" style="margin-top:8px;margin-bottom:0;">
+                  <textarea id="o_tts_template" rows="3" oninput="syncTestStage()">{name} đã donate {amount} đồng. {message}</textarea>
+                  <div class="chip-row" style="margin-top:8px;margin-bottom:8px;">
                     <button type="button" class="chip" onclick="insertTtsToken('{name}')">+ {name}</button>
                     <button type="button" class="chip" onclick="insertTtsToken('{amount}')">+ {amount}</button>
                     <button type="button" class="chip" onclick="insertTtsToken('{message}')">+ {message}</button>
+                  </div>
+                  <div class="tts-preview-box">
+                    <div class="lbl">Đọc thử với dữ liệu từ Hộp Test</div>
+                    <div id="audioTtsPreview"></div>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="field">
                     <label>Chỉ đọc TTS khi tiền &ge; (VNĐ)</label>
-                    <input id="o_min_tts_amount" type="number" min="0" step="1000" value="0">
+                    <input id="o_min_tts_amount" type="number" min="0" step="1000" value="0" oninput="syncTestStage()">
                   </div>
                   <div class="field">
-                    <label><span>Giới hạn đọc tối đa</span><span id="lbl_tts_max_chars" class="val-badge">220 ký tự</span></label>
-                    <input id="o_tts_max_chars" type="range" min="80" max="400" step="20" value="220" oninput="syncAudioLabels()">
+                    <label><span>Giới hạn đọc tối đa</span><span id="lbl_tts_max_chars" class="val-badge">220 ký
+                        tự</span></label>
+                    <input id="o_tts_max_chars" type="range" min="80" max="400" step="20" value="220"
+                      oninput="syncAudioLabels()">
                   </div>
                 </div>
 
                 <div class="row-auto" style="margin-top:12px;">
                   <button class="btn btn-success" onclick="previewTts()">
-                    <svg class="ico" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <polygon points="5 3 19 12 5 21 5 3" />
+                    </svg>
                     Nghe thử mẫu câu đọc
                   </button>
-                  <button class="btn btn-primary" style="flex:1;" onclick="saveOverlayConfig('Đã lưu cấu hình âm thanh & TTS!')">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  <button class="btn btn-primary" style="flex:1;"
+                    onclick="saveOverlayConfig('Đã lưu cấu hình âm thanh & TTS!')">
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                    </svg>
                     Lưu cấu hình âm thanh
                   </button>
                 </div>
@@ -2233,14 +2650,17 @@
               <div class="card">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
                     Âm thanh chuông thông báo (Web Audio API)
                   </span>
                 </div>
 
                 <div class="field">
                   <label>Kiểu chuông thông báo</label>
-                  <select id="o_alert_sound">
+                  <select id="o_alert_sound" onchange="syncTestStage()">
                     <option value="ting">Ting-Ting (Trong trẻo)</option>
                     <option value="coin">Coin Retro (Xu game)</option>
                     <option value="fanfare">Fanfare VIP (Hoành tráng)</option>
@@ -2251,22 +2671,33 @@
 
                 <div class="field">
                   <label><span>Âm lượng chuông</span><span id="lbl_alert_volume" class="val-badge">80%</span></label>
-                  <input id="o_alert_volume" type="range" min="0" max="1" step="0.05" value="0.8" oninput="syncAudioLabels()">
+                  <input id="o_alert_volume" type="range" min="0" max="1" step="0.05" value="0.8"
+                    oninput="syncAudioLabels()">
                 </div>
 
                 <div class="row-auto" style="margin-top:12px;">
                   <button class="btn btn-success" onclick="playAlertSound()">
-                    <svg class="ico" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    </svg>
                     Nghe thử chuông
                   </button>
-                  <button class="btn btn-primary" style="flex:1;" onclick="saveOverlayConfig('Đã lưu cấu hình chuông thông báo!')">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  <button class="btn btn-primary" style="flex:1;"
+                    onclick="saveOverlayConfig('Đã lưu cấu hình chuông thông báo!')">
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                    </svg>
                     Lưu ngay
                   </button>
                 </div>
 
                 <div class="tip-box">
-                  <strong>Mẹo chống spam tiếng khi live đông:</strong> Bạn có thể đặt <em>Số tiền tối thiểu</em> ở Tab Trang Donate là <strong>1.000đ</strong> để ai cũng ủng hộ được, nhưng đặt <em>Chỉ đọc TTS khi tiền &ge;</em> là <strong>10.000đ</strong>. Các khoản nhỏ hơn vẫn hiện hộp thông báo + kêu chuông nhưng sẽ không đọc giọng nói gây ngắt mạch trò chuyện.
+                  <strong>Mẹo chống spam tiếng khi live đông:</strong> Bạn có thể đặt <em>Số tiền tối thiểu</em> ở Tab
+                  Trang Donate là <strong>1.000đ</strong> để ai cũng ủng hộ được, nhưng đặt <em>Chỉ đọc TTS khi tiền
+                    &ge;</em> là <strong>10.000đ</strong>. Các khoản nhỏ hơn vẫn hiện hộp thông báo + kêu chuông nhưng
+                  sẽ không đọc giọng nói gây ngắt mạch trò chuyện.
                 </div>
               </div>
             </div>
@@ -2278,7 +2709,9 @@
               <div class="card">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                    </svg>
                     Bộ lọc &amp; Cú pháp chuyển khoản trực tiếp
                   </span>
                 </div>
@@ -2286,21 +2719,25 @@
                 <div class="row">
                   <div class="field">
                     <label>Từ khóa nhận diện chuyển khoản trực tiếp</label>
-                    <input id="s_keyword" type="text" value="DONATE" placeholder="DONATE" oninput="this.value=this.value.toUpperCase()">
+                    <input id="s_keyword" type="text" value="DONATE" placeholder="DONATE"
+                      oninput="this.value=this.value.toUpperCase()">
                   </div>
                   <div class="field">
                     <label>Tên mặc định khi không có tên</label>
-                    <input id="s_default_donor" type="text" value="Ẩn danh" placeholder="Ẩn danh">
+                    <input id="s_default_donor" type="text" value="Ẩn danh" placeholder="Ẩn danh" oninput="syncAllTestConsumers()">
                   </div>
                 </div>
 
                 <div class="field">
                   <label>Danh sách từ cấm (phân cách bằng dấu phẩy hoặc xuống dòng)</label>
-                  <textarea id="o_bad_words" rows="5" placeholder="từ cấm 1, từ cấm 2..."></textarea>
+                  <textarea id="o_bad_words" rows="5" placeholder="từ cấm 1, từ cấm 2..." oninput="syncAllTestConsumers()"></textarea>
                 </div>
 
                 <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="saveSystemConfig()">
-                  <svg class="ico" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  <svg class="ico" viewBox="0 0 24 24">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                  </svg>
                   Lưu cài đặt hệ thống
                 </button>
               </div>
@@ -2308,7 +2745,10 @@
               <div class="card">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
                     Tổng hợp Link cứng &amp; Kiểm tra nhanh
                   </span>
                 </div>
@@ -2317,7 +2757,8 @@
                   <label>Trang Donate Public (GitHub Pages)</label>
                   <div class="sys-link-row">
                     <input id="sysDonateUrl" type="text" readonly>
-                    <button class="btn btn-sm" onclick="copyText(document.getElementById('sysDonateUrl').value, 'Đã copy link Trang Donate!')">Copy</button>
+                    <button class="btn btn-sm"
+                      onclick="copyText(document.getElementById('sysDonateUrl').value, 'Đã copy link Trang Donate!')">Copy</button>
                   </div>
                 </div>
 
@@ -2325,7 +2766,8 @@
                   <label>SePay Webhook URL (dán vào cấu hình SePay)</label>
                   <div class="sys-link-row">
                     <input id="sysSepayUrl" type="text" readonly>
-                    <button class="btn btn-sm" onclick="copyText(document.getElementById('sysSepayUrl').value, 'Đã copy link SePay Webhook!')">Copy</button>
+                    <button class="btn btn-sm"
+                      onclick="copyText(document.getElementById('sysSepayUrl').value, 'Đã copy link SePay Webhook!')">Copy</button>
                   </div>
                 </div>
 
@@ -2333,7 +2775,8 @@
                   <label>TikTok LIVE Overlay URL (dán vào nguồn Liên kết / Browser Source)</label>
                   <div class="sys-link-row">
                     <input id="sysOverlayUrl" type="text" readonly>
-                    <button class="btn btn-sm btn-primary" onclick="copyText(document.getElementById('sysOverlayUrl').value, 'Đã copy link TikTok LIVE Overlay!')">Copy</button>
+                    <button class="btn btn-sm btn-primary"
+                      onclick="copyText(document.getElementById('sysOverlayUrl').value, 'Đã copy link TikTok LIVE Overlay!')">Copy</button>
                   </div>
                 </div>
 
@@ -2341,12 +2784,16 @@
                   <label>Dòng chạy Top Donate URL (link riêng — dán ở vị trí khác trên TikTok LIVE / OBS)</label>
                   <div class="sys-link-row">
                     <input id="sysTickerUrl" type="text" readonly>
-                    <button class="btn btn-sm btn-warn" onclick="copyText(document.getElementById('sysTickerUrl').value, 'Đã copy link Dòng chạy Top Donate!')">Copy</button>
+                    <button class="btn btn-sm btn-warn"
+                      onclick="copyText(document.getElementById('sysTickerUrl').value, 'Đã copy link Dòng chạy Top Donate!')">Copy</button>
                   </div>
                 </div>
 
                 <div class="secret-box">
-                  <strong>Bảo mật Cloudflare Secrets:</strong> Các khóa bí mật <code>SEPAY_API_KEY</code>, <code>OVERLAY_TOKEN</code> và <code>ADMIN_PASSWORD</code> được lưu trữ mã hóa trực tiếp trong mục <em>Settings → Variables and Secrets</em> trên Cloudflare Worker, không bao giờ lộ ra mã nguồn public GitHub.
+                  <strong>Bảo mật Cloudflare Secrets:</strong> Các khóa bí mật <code>SEPAY_API_KEY</code>,
+                  <code>OVERLAY_TOKEN</code> và <code>ADMIN_PASSWORD</code> được lưu trữ mã hóa trực tiếp trong mục
+                  <em>Settings → Variables and Secrets</em> trên Cloudflare Worker, không bao giờ lộ ra mã nguồn public
+                  GitHub.
                 </div>
               </div>
             </div>
@@ -2358,7 +2805,14 @@
               <div class="card">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                      <path d="M4 22h16" />
+                      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                    </svg>
                     Tùy chỉnh Dòng chữ chạy Top Donate (Link riêng)
                   </span>
                 </div>
@@ -2378,7 +2832,8 @@
                     <span>Gold VIP</span>
                   </button>
                   <button type="button" class="preset-card" onclick="applyTickerPreset('transparent_float')">
-                    <span class="preset-swatch" style="background:repeating-conic-gradient(#475569 0% 25%, #1e293b 0% 50%) 50% / 10px 10px"></span>
+                    <span class="preset-swatch"
+                      style="background:repeating-conic-gradient(#475569 0% 25%, #1e293b 0% 50%) 50% / 10px 10px"></span>
                     <span>Nền trong suốt</span>
                   </button>
                   <button type="button" class="preset-card" onclick="applyTickerPreset('emerald')">
@@ -2398,40 +2853,51 @@
                   </div>
                   <div class="field">
                     <label>Chữ hiện khi chưa có donate</label>
-                    <input id="tk_empty" type="text" value="Chưa có lượt ủng hộ nào — hãy là người mở hàng đầu tiên!" oninput="syncTickerPreview()">
+                    <input id="tk_empty" type="text" value="Chưa có lượt ủng hộ nào — hãy là người mở hàng đầu tiên!"
+                      oninput="syncTickerPreview()">
                   </div>
                 </div>
 
                 <div class="row">
-                  <div class="field"><label>Màu nền</label><input id="tk_bg" type="color" value="#0f172a" oninput="syncTickerPreview()"></div>
-                  <div class="field"><label>Màu nhấn / Viền</label><input id="tk_accent" type="color" value="#a855f7" oninput="syncTickerPreview()"></div>
-                  <div class="field"><label>Màu chữ tên</label><input id="tk_text" type="color" value="#ffffff" oninput="syncTickerPreview()"></div>
-                  <div class="field"><label>Màu số tiền</label><input id="tk_amt" type="color" value="#fde047" oninput="syncTickerPreview()"></div>
+                  <div class="field"><label>Màu nền</label><input id="tk_bg" type="color" value="#0f172a"
+                      oninput="syncTickerPreview()"></div>
+                  <div class="field"><label>Màu nhấn / Viền</label><input id="tk_accent" type="color" value="#a855f7"
+                      oninput="syncTickerPreview()"></div>
+                  <div class="field"><label>Màu chữ tên</label><input id="tk_text" type="color" value="#ffffff"
+                      oninput="syncTickerPreview()"></div>
+                  <div class="field"><label>Màu số tiền</label><input id="tk_amt" type="color" value="#fde047"
+                      oninput="syncTickerPreview()"></div>
                 </div>
 
                 <div class="row">
                   <div class="field">
                     <label><span>Số người Top hiển thị</span><span id="lbl_tk_limit" class="val-badge">10</span></label>
-                    <input id="tk_limit" type="range" min="3" max="20" step="1" value="10" oninput="syncTickerPreview()">
+                    <input id="tk_limit" type="range" min="3" max="20" step="1" value="10"
+                      oninput="syncTickerPreview()">
                   </div>
                   <div class="field">
                     <label><span>Tốc độ chạy</span><span id="lbl_tk_speed" class="val-badge">75 px/s</span></label>
-                    <input id="tk_speed" type="range" min="30" max="180" step="5" value="75" oninput="syncTickerPreview()">
+                    <input id="tk_speed" type="range" min="30" max="180" step="5" value="75"
+                      oninput="syncTickerPreview()">
                   </div>
                   <div class="field">
                     <label><span>Cỡ chữ</span><span id="lbl_tk_size" class="val-badge">20px</span></label>
-                    <input id="tk_size" type="range" min="14" max="36" step="1" value="20" oninput="syncTickerPreview()">
+                    <input id="tk_size" type="range" min="14" max="36" step="1" value="20"
+                      oninput="syncTickerPreview()">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="field">
-                    <label><span>Độ mờ nền (0% = trong suốt)</span><span id="lbl_tk_opacity" class="val-badge">85%</span></label>
-                    <input id="tk_opacity" type="range" min="0" max="1" step="0.05" value="0.85" oninput="syncTickerPreview()">
+                    <label><span>Độ mờ nền (0% = trong suốt)</span><span id="lbl_tk_opacity"
+                        class="val-badge">85%</span></label>
+                    <input id="tk_opacity" type="range" min="0" max="1" step="0.05" value="0.85"
+                      oninput="syncTickerPreview()">
                   </div>
                   <div class="field">
                     <label><span>Bo góc thanh</span><span id="lbl_tk_radius" class="val-badge">14px</span></label>
-                    <input id="tk_radius" type="range" min="0" max="32" step="2" value="14" oninput="syncTickerPreview()">
+                    <input id="tk_radius" type="range" min="0" max="32" step="2" value="14"
+                      oninput="syncTickerPreview()">
                   </div>
                 </div>
 
@@ -2445,11 +2911,18 @@
               <div class="card card-sticky">
                 <div class="card-head">
                   <span class="card-title-left">
-                    <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg class="ico" viewBox="0 0 24 24">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
                     Xem trước Dòng chạy Top Donate
                   </span>
                   <button type="button" class="btn btn-xs btn-success" onclick="openTickerTab()">
-                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
                     Mở tab mới
                   </button>
                 </div>
@@ -2457,7 +2930,12 @@
                 <div class="tk-stage">
                   <div id="tkPrevBar" class="tk-bar">
                     <div id="tkPrevLabel" class="tk-lbl">
-                      <svg class="ico" style="width:14px;height:14px;" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                      <svg class="ico" style="width:14px;height:14px;" viewBox="0 0 24 24">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                        <path d="M4 22h16" />
+                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+                      </svg>
                       <span id="tkPrevTitle">TOP DONATE</span>
                     </div>
                     <div id="tkPrevViewport" class="tk-viewport">
@@ -2470,15 +2948,22 @@
                   <label>Link riêng để gắn vào TikTok LIVE Studio / OBS (Nguồn Liên kết)</label>
                   <div class="sys-link-row">
                     <input id="tkGeneratedUrl" type="text" readonly>
-                    <button class="btn btn-sm btn-primary" onclick="copyText(getTickerUrl(), 'Đã copy link Dòng chạy Top Donate!')">
-                      <svg class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <button class="btn btn-sm btn-primary"
+                      onclick="copyText(getTickerUrl(), 'Đã copy link Dòng chạy Top Donate!')">
+                      <svg class="ico" viewBox="0 0 24 24">
+                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                      </svg>
                       Copy Link
                     </button>
                   </div>
                 </div>
 
                 <div class="tip-box">
-                  <strong>Cách gắn trên TikTok LIVE Studio / OBS:</strong> Tạo thêm 1 nguồn <em>Liên kết / Browser Source</em> mới, dán link ở trên vào (gợi ý kích thước <strong>1280 × 70</strong> hoặc <strong>1920 × 80</strong>), rồi kéo đặt ở cạnh trên hoặc cạnh dưới màn hình. Dữ liệu Top Donate tự động cập nhật mỗi <strong>10 giây</strong> mà không cần tải lại!
+                  <strong>Cách gắn trên TikTok LIVE Studio / OBS:</strong> Tạo thêm 1 nguồn <em>Liên kết / Browser
+                    Source</em> mới, dán link ở trên vào (gợi ý kích thước <strong>1280 × 70</strong> hoặc <strong>1920
+                    × 80</strong>), rồi kéo đặt ở cạnh trên hoặc cạnh dưới màn hình. Dữ liệu Top Donate tự động cập nhật
+                  mỗi <strong>10 giây</strong> mà không cần tải lại!
                 </div>
               </div>
             </div>
@@ -2499,32 +2984,32 @@
     };
 
     const PAGE_PRESETS = {
-      pastel_pink:   { themeBg: "#f6c7d7", themeAccent: "#e06d9f", themeButtonDark: "#0c1428", themeText: "#0f172a" },
+      pastel_pink: { themeBg: "#f6c7d7", themeAccent: "#e06d9f", themeButtonDark: "#0c1428", themeText: "#0f172a" },
       dreamy_purple: { themeBg: "#e9d5ff", themeAccent: "#9333ea", themeButtonDark: "#1e1b4b", themeText: "#1e1b4b" },
-      light_ocean:   { themeBg: "#dbeafe", themeAccent: "#2563eb", themeButtonDark: "#0f172a", themeText: "#0f172a" },
-      luxury_cream:  { themeBg: "#fef3c7", themeAccent: "#d97706", themeButtonDark: "#292524", themeText: "#1c1917" },
+      light_ocean: { themeBg: "#dbeafe", themeAccent: "#2563eb", themeButtonDark: "#0f172a", themeText: "#0f172a" },
+      luxury_cream: { themeBg: "#fef3c7", themeAccent: "#d97706", themeButtonDark: "#292524", themeText: "#1c1917" },
     };
 
     const OVERLAY_PRESETS = {
-      purple_neon:   { bg_color_1: "#6366f1", bg_color_2: "#a855f7", border_color: "#c084fc", text_color: "#ffffff", amount_color: "#fde047", msg_color: "#f3e8ff", border_glow: true,  badge_icon: "heart" },
-      tiktok_vibe:   { bg_color_1: "#fe2c55", bg_color_2: "#161823", border_color: "#25f4ee", text_color: "#ffffff", amount_color: "#25f4ee", msg_color: "#f8fafc", border_glow: true,  badge_icon: "music" },
-      gold_vip:      { bg_color_1: "#92400e", bg_color_2: "#d97706", border_color: "#fde047", text_color: "#fffbeb", amount_color: "#fef08a", msg_color: "#fef3c7", border_glow: true,  badge_icon: "crown" },
-      emerald_cyber: { bg_color_1: "#047857", bg_color_2: "#0e7490", border_color: "#34d399", text_color: "#ecfdf5", amount_color: "#a7f3d0", msg_color: "#cffafe", border_glow: true,  badge_icon: "gem" },
-      sunset_fire:   { bg_color_1: "#b91c1c", bg_color_2: "#ea580c", border_color: "#fdba74", text_color: "#ffffff", amount_color: "#fef08a", msg_color: "#ffedd5", border_glow: true,  badge_icon: "flame" },
-      minimal_dark:  { bg_color_1: "#0f172a", bg_color_2: "#1e293b", border_color: "#64748b", text_color: "#f8fafc", amount_color: "#38bdf8", msg_color: "#cbd5e1", border_glow: false, badge_icon: "coin" },
+      purple_neon: { bg_color_1: "#6366f1", bg_color_2: "#a855f7", border_color: "#c084fc", text_color: "#ffffff", amount_color: "#fde047", msg_color: "#f3e8ff", border_glow: true, badge_icon: "heart" },
+      tiktok_vibe: { bg_color_1: "#fe2c55", bg_color_2: "#161823", border_color: "#25f4ee", text_color: "#ffffff", amount_color: "#25f4ee", msg_color: "#f8fafc", border_glow: true, badge_icon: "music" },
+      gold_vip: { bg_color_1: "#92400e", bg_color_2: "#d97706", border_color: "#fde047", text_color: "#fffbeb", amount_color: "#fef08a", msg_color: "#fef3c7", border_glow: true, badge_icon: "crown" },
+      emerald_cyber: { bg_color_1: "#047857", bg_color_2: "#0e7490", border_color: "#34d399", text_color: "#ecfdf5", amount_color: "#a7f3d0", msg_color: "#cffafe", border_glow: true, badge_icon: "gem" },
+      sunset_fire: { bg_color_1: "#b91c1c", bg_color_2: "#ea580c", border_color: "#fdba74", text_color: "#ffffff", amount_color: "#fef08a", msg_color: "#ffedd5", border_glow: true, badge_icon: "flame" },
+      minimal_dark: { bg_color_1: "#0f172a", bg_color_2: "#1e293b", border_color: "#64748b", text_color: "#f8fafc", amount_color: "#38bdf8", msg_color: "#cbd5e1", border_glow: false, badge_icon: "coin" },
     };
 
     const BADGE_ITEMS = [
-      { id: "heart",   label: "Tim Neon" },
-      { id: "flame",   label: "Ngọn lửa" },
-      { id: "crown",   label: "Vương miện" },
-      { id: "gem",     label: "Kim cương" },
-      { id: "music",   label: "Nhạc TikTok" },
-      { id: "gift",    label: "Hộp quà" },
+      { id: "heart", label: "Tim Neon" },
+      { id: "flame", label: "Ngọn lửa" },
+      { id: "crown", label: "Vương miện" },
+      { id: "gem", label: "Kim cương" },
+      { id: "music", label: "Nhạc TikTok" },
+      { id: "gift", label: "Hộp quà" },
       { id: "sparkle", label: "Lấp lánh" },
-      { id: "rocket",  label: "Tên lửa" },
-      { id: "coin",    label: "Xu vàng" },
-      { id: "none",    label: "Tắt icon" },
+      { id: "rocket", label: "Tên lửa" },
+      { id: "coin", label: "Xu vàng" },
+      { id: "none", label: "Tắt icon" },
     ];
 
     function getBadgeSvg(id, pfx = "b") {
@@ -2583,6 +3068,9 @@
     let currentTopDonors = [];
     let selectedBadgeIcon = "heart";
     let selectedBadgePosition = "left";
+    let liveControl = { muted: false, paused: false };
+    let previewAudio = null;
+    let previewTtsTimer = null;
     let toastTimer = null;
     let audioCtx = null;
 
@@ -2841,9 +3329,96 @@
       icoPause.innerHTML = c.paused
         ? '<svg class="ico ico-lg" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>'
         : '<svg class="ico ico-lg" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+      liveControl = { muted: Boolean(c.muted), paused: Boolean(c.paused) };
+      syncTestStage();
+    }
+
+    function stopPreviewAudio() {
+      clearTimeout(previewTtsTimer);
+      if (previewAudio) {
+        try { previewAudio.pause(); previewAudio.currentTime = 0; } catch { }
+        previewAudio = null;
+      }
+    }
+
+    function escapeRegex(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function filterBadWords(text) {
+      const raw = String(text || "");
+      const words = (document.getElementById("o_bad_words")?.value || "")
+        .split(/[\n,]+/)
+        .map(w => w.trim())
+        .filter(Boolean);
+      if (!words.length || !raw) return { text: raw, hits: 0 };
+      let out = raw;
+      let hits = 0;
+      for (const w of words) {
+        const re = new RegExp(escapeRegex(w), "gi");
+        out = out.replace(re, () => { hits++; return "***"; });
+      }
+      return { text: out, hits };
+    }
+
+    function getTestData() {
+      const defaultDonor = (document.getElementById("s_default_donor")?.value || "").trim() || "Ẩn danh";
+      const rawName = (document.getElementById("tName")?.value || "").trim() || defaultDonor;
+      const rawAmt = Math.floor(Number(document.getElementById("tAmt")?.value || 50000));
+      const amount = Number.isFinite(rawAmt) && rawAmt > 0 ? rawAmt : 50000;
+      const rawMsg = (document.getElementById("tMsg")?.value || "").trim();
+      const saveToDb = Boolean(document.getElementById("tSave")?.checked);
+
+      const fName = filterBadWords(rawName);
+      const fMsg = filterBadWords(rawMsg);
+      const totalBadHits = fName.hits + fMsg.hits;
+
+      const ttsTpl = document.getElementById("o_tts_template")?.value || "{name} đã donate {amount} đồng. {message}";
+      const maxChars = Number(document.getElementById("o_tts_max_chars")?.value || 220);
+      const ttsSentence = ttsTpl
+        .replaceAll("{name}", fName.text)
+        .replaceAll("{amount}", String(amount))
+        .replaceAll("{message}", fMsg.text)
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, maxChars);
+
+      const ttsEnabled = Boolean(document.getElementById("o_tts_enabled")?.checked);
+      const minTtsAmt = Number(document.getElementById("o_min_tts_amount")?.value || 0);
+      const alertSound = document.getElementById("o_alert_sound")?.value || "ting";
+
+      return {
+        rawName,
+        rawMsg,
+        name: fName.text,
+        amount,
+        message: fMsg.text,
+        saveToDb,
+        totalBadHits,
+        ttsSentence,
+        ttsEnabled,
+        minTtsAmt,
+        alertSound,
+        willSpeakTts: ttsEnabled && !liveControl.muted && amount >= minTtsAmt,
+        willPlayBell: alertSound !== "none" && !liveControl.muted,
+      };
+    }
+
+    function syncAllTestConsumers() {
+      syncOvPreview();
+      syncTestStage();
+      syncPagePreview();
     }
 
     async function sendCtrl(action) {
+      if (action === "skip" || action === "clear") {
+        stopPreviewAudio();
+        const tc = document.getElementById("testCard");
+        if (tc) {
+          tc.style.opacity = "0.22";
+          setTimeout(() => { tc.style.opacity = "1"; }, 450);
+        }
+      }
       try {
         const r = await api("/api/admin/control", {
           method: "POST",
@@ -2871,6 +3446,7 @@
     function pickTestAmt(amt) {
       document.getElementById("tAmt").value = amt;
       syncTestChips();
+      syncAllTestConsumers();
     }
 
     function syncTestChips() {
@@ -2880,14 +3456,27 @@
       });
     }
 
+    function playCardAnim(cardId) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+      const anim = document.getElementById("o_animation").value || "slide-up";
+      card.style.opacity = "1";
+      card.classList.remove("anim-slide-up", "anim-pop", "anim-slide-left", "anim-fade");
+      void card.offsetWidth;
+      card.classList.add("anim-" + anim);
+    }
+
     async function sendTest() {
       const amt = Math.floor(Number(document.getElementById("tAmt").value || 0));
       if (!Number.isFinite(amt) || amt <= 0) return toast("Số tiền test không hợp lệ!");
+      const td = getTestData();
+      syncTestStage();
+      playCardAnim("testCard");
       const body = {
-        donor_name: document.getElementById("tName").value.trim() || "Thái VIP",
+        donor_name: td.rawName,
         amount: amt,
-        message: document.getElementById("tMsg").value.trim(),
-        save_to_db: document.getElementById("tSave").checked,
+        message: td.rawMsg,
+        save_to_db: td.saveToDb,
       };
       try {
         const r = await api("/api/admin/test-donate", {
@@ -2897,7 +3486,9 @@
         });
         const d = await r.json().catch(() => ({}));
         if (r.ok) {
-          toast("Đã bắn donate tiếng Việt có dấu lên TikTok LIVE!");
+          toast(liveControl.paused
+            ? "Đã gửi vào hàng đợi TikTok LIVE (hiện đang Tạm dừng — bấm Tiếp tục để phát)!"
+            : "Đã bắn donate tiếng Việt có dấu lên TikTok LIVE!");
           if (body.save_to_db) bootstrap(false);
         } else {
           toast(d.error || "Lỗi bắn donate test!");
@@ -2908,24 +3499,40 @@
     }
 
     function previewTestHere() {
-      const name = document.getElementById("tName").value.trim() || "Thái VIP";
-      const amt = Math.floor(Number(document.getElementById("tAmt").value || 50000));
-      const msg = document.getElementById("tMsg").value.trim();
-      const sound = document.getElementById("o_alert_sound").value;
-      const delay = sound && sound !== "none" ? 650 : 0;
-      if (sound && sound !== "none") playAlertSound();
-      setTimeout(() => playTtsSample(name, amt, msg), delay);
+      stopPreviewAudio();
+      const td = getTestData();
+      syncAllTestConsumers();
+      playCardAnim("testCard");
+
+      if (liveControl.muted) {
+        toast("Live Deck đang Tắt tiếng — chỉ chạy thử hiệu ứng hình ảnh!");
+        return;
+      }
+
+      const delay = td.willPlayBell ? 650 : 0;
+      if (td.willPlayBell) playAlertSound();
+
+      if (!td.ttsEnabled) {
+        toast("Giọng đọc TTS đang tắt — chỉ phát chuông & hiệu ứng!");
+        return;
+      }
+      if (td.amount < td.minTtsAmt) {
+        toast(`Số tiền (${td.amount.toLocaleString("vi-VN")}đ) nhỏ hơn ngưỡng đọc TTS (${td.minTtsAmt.toLocaleString("vi-VN")}đ) — chỉ hiện thẻ & chuông!`);
+        return;
+      }
+
+      previewTtsTimer = setTimeout(() => playTtsSample(td.name, td.amount, td.message), delay);
     }
 
     function filterFeed() {
       const q = (document.getElementById("feedSearch").value || "").trim().toLowerCase();
       const filtered = q
         ? allDonations.filter(it =>
-            String(it.donor_name || "").toLowerCase().includes(q) ||
-            String(it.message || "").toLowerCase().includes(q) ||
-            String(it.reference_code || "").toLowerCase().includes(q) ||
-            String(it.id || "").includes(q)
-          )
+          String(it.donor_name || "").toLowerCase().includes(q) ||
+          String(it.message || "").toLowerCase().includes(q) ||
+          String(it.reference_code || "").toLowerCase().includes(q) ||
+          String(it.id || "").includes(q)
+        )
         : allDonations;
       renderFeed(filtered);
     }
@@ -3183,6 +3790,12 @@
       document.getElementById("ppBtn").style.background = dk;
       document.getElementById("ppFooter").textContent = document.getElementById("p_footerText").value;
 
+      const td = getTestData();
+      const mockName = document.getElementById("ppMockName");
+      const mockMsg = document.getElementById("ppMockMsg");
+      if (mockName) mockName.textContent = td.name || "Tên của bạn (hỗ trợ tiếng Việt có dấu)";
+      if (mockMsg) mockMsg.textContent = td.message || "Lời nhắn hiện lên live & đọc to...";
+
       const amts = document.getElementById("p_amounts").value
         .split(",")
         .map(x => parseInt(x.trim(), 10))
@@ -3352,7 +3965,7 @@
       document.getElementById("lbl_fallback_seconds").textContent = Number(document.getElementById("o_fallback_seconds").value || 6).toFixed(1) + "s";
     }
 
-    function syncOvPreview() {
+    function renderOverlayPreviewInto(ids, svgPrefix) {
       const c1 = document.getElementById("o_bg_color_1").value;
       const c2 = document.getElementById("o_bg_color_2").value;
       const bc = document.getElementById("o_border_color").value;
@@ -3368,18 +3981,17 @@
       const badgeSize = Number(document.getElementById("o_badge_size").value || 52);
       const glow = document.getElementById("o_border_glow").checked;
       const showMsg = document.getElementById("o_show_message").checked;
+      const td = getTestData();
 
-      document.getElementById("lbl_bg_opacity").textContent = Math.round(op * 100) + "%";
-      document.getElementById("lbl_border_radius").textContent = rad + "px";
-      document.getElementById("lbl_title_size").textContent = tSize + "px";
-      document.getElementById("lbl_msg_size").textContent = mSize + "px";
-      document.getElementById("lbl_max_width").textContent = maxW + "px";
-      document.getElementById("lbl_bg_angle").textContent = ang + "°";
-      document.getElementById("lbl_badge_size").textContent = badgeSize + "px";
+      const stage = document.getElementById(ids.stage);
+      const card = document.getElementById(ids.card);
+      const badge = document.getElementById(ids.badge);
+      const t = document.getElementById(ids.title);
+      const m = document.getElementById(ids.msg);
+      if (!stage || !card || !badge || !t || !m) return;
 
-      document.getElementById("ovStage").className = "ov-stage pos-" + document.getElementById("o_position").value;
+      stage.className = "ov-stage pos-" + document.getElementById("o_position").value;
 
-      const card = document.getElementById("ovCard");
       card.classList.remove("bpos-left", "bpos-right", "bpos-top", "bpos-bottom", "bpos-top-left", "bpos-top-right");
       card.classList.add("bpos-" + (selectedBadgePosition || "left"));
       card.style.setProperty("--ov-badge-sz", Math.min(96, badgeSize) + "px");
@@ -3389,7 +4001,6 @@
       card.style.border = glow ? `2px solid ${bc}` : "1px solid rgba(255,255,255,0.2)";
       card.style.boxShadow = glow ? `0 10px 28px rgba(0,0,0,.45), 0 0 22px ${bc}` : "0 10px 28px rgba(0,0,0,.42)";
 
-      const badge = document.getElementById("ovBadge");
       if (!selectedBadgeIcon || selectedBadgeIcon === "none") {
         badge.style.display = "none";
         badge.textContent = "";
@@ -3407,38 +4018,104 @@
         }
       } else {
         badge.style.display = "flex";
-        badge.innerHTML = getBadgeSvg(selectedBadgeIcon, "ov_prev");
+        badge.innerHTML = getBadgeSvg(selectedBadgeIcon, svgPrefix);
       }
 
-      const t = document.getElementById("ovTitle");
       t.style.fontSize = Math.min(30, tSize) + "px";
       t.style.color = tc;
       t.textContent = "";
       const tpl = document.getElementById("o_title_template").value || "{name} đã donate {amount}đ";
+      const amtFmt = td.amount.toLocaleString("vi-VN");
       for (const p of tpl.split(/(\{name\}|\{amount\})/g)) {
-        if (p === "{name}") t.appendChild(document.createTextNode("Thái VIP"));
+        if (p === "{name}") t.appendChild(document.createTextNode(td.name));
         else if (p === "{amount}") {
           const s = document.createElement("span");
           s.style.color = ac;
-          s.textContent = "50.000";
+          s.textContent = amtFmt;
           t.appendChild(s);
         } else if (p) {
           t.appendChild(document.createTextNode(p));
         }
       }
 
-      const m = document.getElementById("ovMsg");
-      m.style.display = showMsg ? "block" : "none";
+      m.style.display = showMsg && td.message ? "block" : "none";
       m.style.fontSize = Math.min(24, mSize) + "px";
       m.style.color = mc;
+      m.textContent = td.message;
+    }
+
+    function syncOvPreview() {
+      const op = Number(document.getElementById("o_bg_opacity").value || 0.95);
+      const rad = Number(document.getElementById("o_border_radius").value || 18);
+      const tSize = Number(document.getElementById("o_title_size").value || 26);
+      const mSize = Number(document.getElementById("o_msg_size").value || 20);
+      const maxW = Number(document.getElementById("o_max_width").value || 640);
+      const ang = Number(document.getElementById("o_bg_angle").value || 135);
+      const badgeSize = Number(document.getElementById("o_badge_size").value || 52);
+
+      document.getElementById("lbl_bg_opacity").textContent = Math.round(op * 100) + "%";
+      document.getElementById("lbl_border_radius").textContent = rad + "px";
+      document.getElementById("lbl_title_size").textContent = tSize + "px";
+      document.getElementById("lbl_msg_size").textContent = mSize + "px";
+      document.getElementById("lbl_max_width").textContent = maxW + "px";
+      document.getElementById("lbl_bg_angle").textContent = ang + "°";
+      document.getElementById("lbl_badge_size").textContent = badgeSize + "px";
+
+      renderOverlayPreviewInto({ stage: "ovStage", card: "ovCard", badge: "ovBadge", title: "ovTitle", msg: "ovMsg" }, "ov_prev");
+      syncTestStage();
+    }
+
+    function syncTestStage() {
+      renderOverlayPreviewInto({ stage: "testStage", card: "testCard", badge: "testBadge", title: "testTitle", msg: "testMsg" }, "test_prev");
+
+      const td = getTestData();
+      const ttsBox = document.getElementById("testTtsSentence");
+      const audioTts = document.getElementById("audioTtsPreview");
+      const ttsDisplay = td.ttsSentence || "(Trống)";
+      if (ttsBox) ttsBox.textContent = ttsDisplay;
+      if (audioTts) audioTts.textContent = ttsDisplay;
+
+      const pills = document.getElementById("testCheckPills");
+      if (pills) {
+        pills.textContent = "";
+        const addPill = (text, cls) => {
+          const sp = document.createElement("span");
+          sp.className = "chk-pill " + cls;
+          sp.textContent = text;
+          pills.appendChild(sp);
+        };
+
+        const bellNames = { ting: "Ting-Ting", coin: "Coin Retro", fanfare: "Fanfare VIP", chime: "Chime", none: "Tắt" };
+        const bellVol = Math.round(Number(document.getElementById("o_alert_volume")?.value ?? 0.8) * 100);
+        const ttsVol = Math.round(Number(document.getElementById("o_tts_volume")?.value ?? 1) * 100);
+        const ttsRate = Number(document.getElementById("o_tts_rate")?.value || 1).toFixed(2) + "x";
+
+        if (liveControl.muted) addPill("Live Deck: Đang tắt tiếng", "err");
+        if (liveControl.paused) addPill("Live Deck: Đang tạm dừng hàng đợi", "warn");
+
+        addPill(
+          td.willPlayBell ? `Chuông: ${bellNames[td.alertSound] || td.alertSound} (${bellVol}%)` : `Chuông: ${td.alertSound === "none" ? "Đang tắt" : "Bị mute"}`,
+          td.willPlayBell ? "ok" : "warn"
+        );
+
+        if (!td.ttsEnabled) addPill("TTS: Đang tắt", "warn");
+        else if (liveControl.muted) addPill("TTS: Bị mute", "err");
+        else if (td.amount < td.minTtsAmt) addPill(`TTS: Bỏ qua (< ${td.minTtsAmt.toLocaleString("vi-VN")}đ)`, "warn");
+        else addPill(`TTS: Sẽ đọc (${ttsVol}% • ${ttsRate})`, "ok");
+
+        addPill(
+          td.totalBadHits > 0 ? `Bộ lọc: Đã che ${td.totalBadHits} từ cấm` : "Bộ lọc từ cấm: Sạch",
+          td.totalBadHits > 0 ? "warn" : "ok"
+        );
+
+        addPill(td.saveToDb ? "DB & BXH: Sẽ lưu" : "DB & BXH: Không lưu", td.saveToDb ? "warn" : "");
+      }
+
+      renderTickerInto({ bar: "testTkBar", lbl: "testTkLabel", ttl: "testTkTitle", track: "testTkTrack" }, true);
     }
 
     function playOvAnimation() {
-      const card = document.getElementById("ovCard");
-      const anim = document.getElementById("o_animation").value || "slide-up";
-      card.classList.remove("anim-slide-up", "anim-pop", "anim-slide-left", "anim-fade");
-      void card.offsetWidth;
-      card.classList.add("anim-" + anim);
+      playCardAnim("ovCard");
     }
 
     function buildOverlayConfigPayload() {
@@ -3515,6 +4192,7 @@
       document.getElementById("lbl_tts_rate").textContent = Number(document.getElementById("o_tts_rate").value || 1).toFixed(2) + "x";
       document.getElementById("lbl_tts_max_chars").textContent = Number(document.getElementById("o_tts_max_chars").value || 220) + " ký tự";
       document.getElementById("lbl_alert_volume").textContent = Math.round(Number(document.getElementById("o_alert_volume").value || 0) * 100) + "%";
+      syncTestStage();
     }
 
     function insertTtsToken(token) {
@@ -3524,26 +4202,31 @@
       ta.value = ta.value.slice(0, start) + token + ta.value.slice(end);
       ta.focus();
       ta.selectionStart = ta.selectionEnd = start + token.length;
+      syncTestStage();
     }
 
     function playTtsSample(name, amount, msg) {
+      stopPreviewAudio();
       const tpl = document.getElementById("o_tts_template").value || "{name} đã donate {amount} đồng. {message}";
       const maxChars = Number(document.getElementById("o_tts_max_chars").value || 220);
       const q = tpl
         .replaceAll("{name}", name)
         .replaceAll("{amount}", String(amount))
         .replaceAll("{message}", msg)
+        .replace(/\s+/g, " ")
         .trim()
         .slice(0, maxChars);
       const url = `${normalizeWorkerUrl(workerUrl)}/api/admin/tts-preview?pw=${encodeURIComponent(adminPw)}&q=${encodeURIComponent(q)}&_t=${Date.now()}`;
       const a = new Audio(url);
       a.volume = Math.max(0, Math.min(1, Number(document.getElementById("o_tts_volume").value ?? 1)));
       a.playbackRate = Math.max(0.75, Math.min(1.5, Number(document.getElementById("o_tts_rate").value || 1)));
+      previewAudio = a;
       a.play().catch(() => toast("Không phát được âm thanh TTS thử!"));
     }
 
     function previewTts() {
-      playTtsSample("Thái VIP", 50000, "Chúc anh live thật vui vẻ!");
+      const td = getTestData();
+      playTtsSample(td.name, td.amount, td.message);
     }
 
     function playAlertSound() {
@@ -3644,12 +4327,12 @@
 
     /* ================= TAB 6: DÒNG CHẠY TOP DONATE (ticker.html) ================= */
     const TICKER_PRESETS = {
-      purple_neon:       { bg: "#0f172a", accent: "#a855f7", text: "#ffffff", amt: "#fde047", opacity: 0.85, radius: 14, glow: true },
-      tiktok_vibe:       { bg: "#161823", accent: "#fe2c55", text: "#ffffff", amt: "#25f4ee", opacity: 0.9,  radius: 14, glow: true },
-      gold_vip:          { bg: "#451a03", accent: "#f59e0b", text: "#fffbeb", amt: "#fde047", opacity: 0.88, radius: 14, glow: true },
-      transparent_float: { bg: "#0f172a", accent: "#a855f7", text: "#ffffff", amt: "#fde047", opacity: 0,    radius: 14, glow: false },
-      emerald:           { bg: "#022c22", accent: "#10b981", text: "#ecfdf5", amt: "#a7f3d0", opacity: 0.85, radius: 14, glow: true },
-      pink_cute:         { bg: "#500724", accent: "#ec4899", text: "#fff1f2", amt: "#fde047", opacity: 0.86, radius: 24, glow: true },
+      purple_neon: { bg: "#0f172a", accent: "#a855f7", text: "#ffffff", amt: "#fde047", opacity: 0.85, radius: 14, glow: true },
+      tiktok_vibe: { bg: "#161823", accent: "#fe2c55", text: "#ffffff", amt: "#25f4ee", opacity: 0.9, radius: 14, glow: true },
+      gold_vip: { bg: "#451a03", accent: "#f59e0b", text: "#fffbeb", amt: "#fde047", opacity: 0.88, radius: 14, glow: true },
+      transparent_float: { bg: "#0f172a", accent: "#a855f7", text: "#ffffff", amt: "#fde047", opacity: 0, radius: 14, glow: false },
+      emerald: { bg: "#022c22", accent: "#10b981", text: "#ecfdf5", amt: "#a7f3d0", opacity: 0.85, radius: 14, glow: true },
+      pink_cute: { bg: "#500724", accent: "#ec4899", text: "#fff1f2", amt: "#fde047", opacity: 0.86, radius: 24, glow: true },
     };
 
     function getTickerConfig() {
@@ -3727,27 +4410,15 @@
       } catch { }
     }
 
-    function syncTickerPreview() {
+    function renderTickerInto(ids, includeTestDonor = false) {
       const c = getTickerConfig();
-      try { localStorage.setItem("donate_ticker_cfg", JSON.stringify(c)); } catch { }
+      const bar = document.getElementById(ids.bar);
+      const lbl = document.getElementById(ids.lbl);
+      const ttl = document.getElementById(ids.ttl);
+      const track = document.getElementById(ids.track);
+      if (!bar || !lbl || !ttl || !track) return;
 
-      document.getElementById("lbl_tk_limit").textContent = String(c.limit);
-      document.getElementById("lbl_tk_speed").textContent = c.speed + " px/s";
-      document.getElementById("lbl_tk_size").textContent = c.size + "px";
-      document.getElementById("lbl_tk_opacity").textContent = Math.round(c.opacity * 100) + "%";
-      document.getElementById("lbl_tk_radius").textContent = c.radius + "px";
-
-      const url = getTickerUrl();
-      document.getElementById("tkGeneratedUrl").value = url;
-      const sysTk = document.getElementById("sysTickerUrl");
-      if (sysTk) sysTk.value = url;
-
-      const bar = document.getElementById("tkPrevBar");
-      const lbl = document.getElementById("tkPrevLabel");
-      const ttl = document.getElementById("tkPrevTitle");
-      const track = document.getElementById("tkPrevTrack");
-
-      const previewFontSize = Math.min(22, Math.max(13, Math.round(c.size * 0.85)));
+      const previewFontSize = Math.min(20, Math.max(12, Math.round(c.size * 0.8)));
       bar.style.fontSize = previewFontSize + "px";
       bar.style.color = c.text;
       bar.style.borderRadius = c.radius + "px";
@@ -3764,13 +4435,28 @@
         lbl.style.display = "none";
       }
 
-      const sample = currentTopDonors.length
-        ? currentTopDonors.slice(0, c.limit)
+      let list = currentTopDonors.map(x => ({
+        donor_name: x.donor_name || "Ẩn danh",
+        total: Number(x.total ?? x.total_amount ?? 0),
+      }));
+
+      if (includeTestDonor) {
+        const td = getTestData();
+        if (td.saveToDb || !list.length) {
+          const existing = list.find(x => x.donor_name.toLowerCase() === td.name.toLowerCase());
+          if (existing) existing.total += td.amount;
+          else list.push({ donor_name: td.name, total: td.amount });
+          list.sort((a, b) => b.total - a.total);
+        }
+      }
+
+      const sample = list.length
+        ? list.slice(0, c.limit)
         : [
-            { donor_name: "Anh Thái", total: 500000 },
-            { donor_name: "Minh Quân", total: 200000 },
-            { donor_name: "Lan Anh", total: 100000 },
-          ];
+          { donor_name: "Anh Thái", total: 500000 },
+          { donor_name: "Minh Quân", total: 200000 },
+          { donor_name: "Lan Anh", total: 100000 },
+        ];
 
       const makeGroup = () => {
         const g = document.createElement("div");
@@ -3793,7 +4479,7 @@
           dash.textContent = "—";
           const amt = document.createElement("strong");
           amt.style.color = c.amt;
-          amt.textContent = Number(it.total ?? it.total_amount ?? 0).toLocaleString("vi-VN") + "đ";
+          amt.textContent = Number(it.total ?? 0).toLocaleString("vi-VN") + "đ";
 
           item.appendChild(rk); item.appendChild(nm); item.appendChild(dash); item.appendChild(amt);
           g.appendChild(item);
@@ -3821,6 +4507,25 @@
       track.style.animationDuration = dur + "s";
     }
 
+    function syncTickerPreview() {
+      const c = getTickerConfig();
+      try { localStorage.setItem("donate_ticker_cfg", JSON.stringify(c)); } catch { }
+
+      document.getElementById("lbl_tk_limit").textContent = String(c.limit);
+      document.getElementById("lbl_tk_speed").textContent = c.speed + " px/s";
+      document.getElementById("lbl_tk_size").textContent = c.size + "px";
+      document.getElementById("lbl_tk_opacity").textContent = Math.round(c.opacity * 100) + "%";
+      document.getElementById("lbl_tk_radius").textContent = c.radius + "px";
+
+      const url = getTickerUrl();
+      document.getElementById("tkGeneratedUrl").value = url;
+      const sysTk = document.getElementById("sysTickerUrl");
+      if (sysTk) sysTk.value = url;
+
+      renderTickerInto({ bar: "tkPrevBar", lbl: "tkPrevLabel", ttl: "tkPrevTitle", track: "tkPrevTrack" }, false);
+      renderTickerInto({ bar: "testTkBar", lbl: "testTkLabel", ttl: "testTkTitle", track: "testTkTrack" }, true);
+    }
+
     /* ================= BOOT ================= */
     initBadgeGrid();
     syncBadgePickerUI();
@@ -3829,6 +4534,7 @@
     syncAudioLabels();
     loadSavedTickerConfig();
     syncTickerPreview();
+    syncAllTestConsumers();
 
     (function initLogin() {
       document.getElementById("inWorkerUrl").value = workerUrl;
