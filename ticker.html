@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Donate Ticker — Overlay</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='64' y2='64' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%23f59e0b'/%3E%3Cstop offset='1' stop-color='%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M20 18h24v12a12 12 0 0 1-24 0V18Z' fill='%23fff'/%3E%3Crect x='27' y='42' width='10' height='6' rx='2' fill='%23fff'/%3E%3C/svg%3E">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      overflow: hidden;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+    }
+
+    .ticker-bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      padding: 8px 14px 8px 10px;
+      gap: 14px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .ticker-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+      z-index: 2;
+    }
+
+    .ticker-label svg {
+      width: 1.05em;
+      height: 1.05em;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .ticker-viewport {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      position: relative;
+      mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 3%, #000 97%, transparent 100%);
+    }
+
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+      animation: tickerScroll linear infinite;
+    }
+
+    .ticker-group {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .donor-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 2px 16px;
+      white-space: nowrap;
+    }
+
+    .rank-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.55em;
+      height: 1.45em;
+      padding: 0 0.42em;
+      border-radius: 999px;
+      font-size: 0.78em;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .rank-1 {
+      background: linear-gradient(135deg, #f59e0b, #fde047);
+      color: #422006;
+      box-shadow: 0 0 12px rgba(253, 224, 71, 0.45);
+    }
+
+    .rank-2 {
+      background: linear-gradient(135deg, #94a3b8, #f1f5f9);
+      color: #0f172a;
+    }
+
+    .rank-3 {
+      background: linear-gradient(135deg, #b45309, #fb923c);
+      color: #fffbeb;
+    }
+
+    .rank-n {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .donor-name {
+      font-weight: 800;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+    }
+
+    .donor-dash {
+      opacity: 0.55;
+      font-weight: 700;
+    }
+
+    .donor-amt {
+      font-weight: 900;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+    }
+
+    .sep-star {
+      display: inline-flex;
+      align-items: center;
+      opacity: 0.65;
+      margin: 0 4px;
+    }
+
+    .sep-star svg {
+      width: 0.7em;
+      height: 0.7em;
+      fill: currentColor;
+    }
+
+    .empty-msg {
+      padding: 2px 24px;
+      font-weight: 700;
+      opacity: 0.9;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+    }
+
+    @keyframes tickerScroll {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+
+      to {
+        transform: translate3d(-50%, 0, 0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="tickerBar" class="ticker-bar">
+    <div id="tickerLabel" class="ticker-label">
+      <svg viewBox="0 0 24 24">
+        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+        <path d="M4 22h16" />
+        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+      </svg>
+      <span id="tickerTitleText">TOP DONATE</span>
+    </div>
+    <div id="tickerViewport" class="ticker-viewport">
+      <div id="tickerTrack" class="ticker-track"></div>
+    </div>
+  </div>
+
+  <script>
+    const WORKER_URL = "https://donate-sepay.tduy5781.workers.dev";
+
+    function normalizeWorkerUrl(url) {
+      const raw = (url || "").trim().replace(/\/+$/, "");
+      if (!raw) return "";
+      return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+    }
+
+    function cleanHex(v, fallback) {
+      const s = String(v || "").replace(/^#/, "").trim();
+      return /^[0-9a-fA-F]{6}$/.test(s) ? "#" + s : fallback;
+    }
+
+    function hexToRgba(hex, alpha) {
+      const h = hex.replace("#", "");
+      const r = parseInt(h.slice(0, 2), 16) || 0;
+      const g = parseInt(h.slice(2, 4), 16) || 0;
+      const b = parseInt(h.slice(4, 6), 16) || 0;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    const qp = new URLSearchParams(location.search);
+    const CFG = {
+      title: qp.has("title") ? qp.get("title") : "TOP DONATE",
+      limit: Math.max(1, Math.min(20, Number(qp.get("limit") || 10))),
+      speed: Math.max(20, Math.min(240, Number(qp.get("speed") || 75))),
+      bg: cleanHex(qp.get("bg"), "#0f172a"),
+      opacity: Math.max(0, Math.min(1, qp.has("opacity") ? Number(qp.get("opacity")) : 0.85)),
+      accent: cleanHex(qp.get("accent"), "#a855f7"),
+      text: cleanHex(qp.get("text"), "#ffffff"),
+      amt: cleanHex(qp.get("amt"), "#fde047"),
+      size: Math.max(12, Math.min(42, Number(qp.get("size") || 20))),
+      radius: Math.max(0, Math.min(40, Number(qp.has("radius") ? qp.get("radius") : 14))),
+      glow: qp.get("glow") !== "0",
+      empty: qp.get("empty") || "Chưa có lượt ủng hộ nào — hãy là người mở hàng đầu tiên!",
+      pollMs: Math.max(5000, Math.min(60000, Number(qp.get("poll") || 10) * 1000)),
+    };
+
+    function applyStyle() {
+      const bar = document.getElementById("tickerBar");
+      const lbl = document.getElementById("tickerLabel");
+      const titleEl = document.getElementById("tickerTitleText");
+
+      bar.style.fontSize = CFG.size + "px";
+      bar.style.color = CFG.text;
+      bar.style.borderRadius = CFG.radius + "px";
+      bar.style.background = CFG.opacity > 0 ? hexToRgba(CFG.bg, CFG.opacity) : "transparent";
+      if (CFG.opacity === 0) {
+        bar.style.backdropFilter = "none";
+        bar.style.webkitBackdropFilter = "none";
+      }
+      bar.style.border = CFG.glow
+        ? `1.5px solid ${hexToRgba(CFG.accent, 0.75)}`
+        : (CFG.opacity > 0 ? "1px solid rgba(255,255,255,0.14)" : "none");
+      bar.style.boxShadow = CFG.glow
+        ? `0 6px 20px rgba(0,0,0,0.35), 0 0 18px ${hexToRgba(CFG.accent, 0.4)}`
+        : "none";
+
+      if (CFG.title && CFG.title.trim()) {
+        lbl.style.display = "inline-flex";
+        lbl.style.background = `linear-gradient(135deg, ${CFG.accent}, ${hexToRgba(CFG.accent, 0.72)})`;
+        lbl.style.fontSize = Math.max(11, Math.round(CFG.size * 0.78)) + "px";
+        titleEl.textContent = CFG.title.trim();
+      } else {
+        lbl.style.display = "none";
+      }
+    }
+
+    function createSeparator() {
+      const s = document.createElement("span");
+      s.className = "sep-star";
+      s.style.color = CFG.accent;
+      s.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2l2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z"/></svg>';
+      return s;
+    }
+
+    function buildGroupFragment(items) {
+      const frag = document.createDocumentFragment();
+      if (!items.length) {
+        const em = document.createElement("span");
+        em.className = "empty-msg";
+        em.textContent = CFG.empty;
+        frag.appendChild(em);
+        frag.appendChild(createSeparator());
+        return frag;
+      }
+
+      items.forEach((it, idx) => {
+        const el = document.createElement("span");
+        el.className = "donor-item";
+
+        const rank = document.createElement("span");
+        rank.className = "rank-pill " + (idx === 0 ? "rank-1" : idx === 1 ? "rank-2" : idx === 2 ? "rank-3" : "rank-n");
+        rank.textContent = `#${idx + 1}`;
+
+        const nm = document.createElement("span");
+        nm.className = "donor-name";
+        nm.textContent = it.donor_name || "Ẩn danh";
+
+        const dash = document.createElement("span");
+        dash.className = "donor-dash";
+        dash.textContent = "—";
+
+        const amt = document.createElement("span");
+        amt.className = "donor-amt";
+        amt.style.color = CFG.amt;
+        amt.textContent = Number(it.total ?? it.total_amount ?? 0).toLocaleString("vi-VN") + "đ";
+
+        el.appendChild(rank);
+        el.appendChild(nm);
+        el.appendChild(dash);
+        el.appendChild(amt);
+        frag.appendChild(el);
+        frag.appendChild(createSeparator());
+      });
+      return frag;
+    }
+
+    let lastSignature = null;
+
+    function renderTicker(items) {
+      const sliced = (Array.isArray(items) ? items : []).slice(0, CFG.limit);
+      const sig = JSON.stringify(sliced);
+      if (sig === lastSignature) return;
+      lastSignature = sig;
+
+      const viewport = document.getElementById("tickerViewport");
+      const track = document.getElementById("tickerTrack");
+      track.style.animation = "none";
+      track.textContent = "";
+
+      const g1 = document.createElement("div");
+      g1.className = "ticker-group";
+      g1.appendChild(buildGroupFragment(sliced));
+      track.appendChild(g1);
+
+      const minWidth = Math.max(viewport.clientWidth || 800, 600) + 120;
+      let guard = 0;
+      while (g1.scrollWidth < minWidth && guard < 12) {
+        g1.appendChild(buildGroupFragment(sliced));
+        guard++;
+      }
+
+      const g2 = g1.cloneNode(true);
+      track.appendChild(g2);
+
+      const dist = Math.max(g1.scrollWidth, 300);
+      const duration = Math.max(4, dist / CFG.speed);
+      void track.offsetWidth;
+      track.style.animation = `tickerScroll ${duration.toFixed(2)}s linear infinite`;
+    }
+
+    async function fetchTop() {
+      const base = normalizeWorkerUrl(WORKER_URL);
+      if (!base) {
+        renderTicker([]);
+        return;
+      }
+      try {
+        const r = await fetch(`${base}/api/donate/top?_t=${Date.now()}`, { cache: "no-store" });
+        if (!r.ok) {
+          if (lastSignature === null) renderTicker([]);
+          return;
+        }
+        const d = await r.json();
+        renderTicker(d.items || []);
+      } catch {
+        if (lastSignature === null) renderTicker([]);
+      }
+    }
+
+    applyStyle();
+    fetchTop();
+    setInterval(fetchTop, CFG.pollMs);
+    window.addEventListener("resize", () => {
+      const prev = lastSignature;
+      lastSignature = null;
+      if (prev) {
+        try { renderTicker(JSON.parse(prev)); } catch { }
+      }
+    });
+  </script>
+</body>
+
+</html>

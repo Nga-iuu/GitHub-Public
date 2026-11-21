@@ -1260,6 +1260,95 @@
       color: #cbd5e1;
     }
 
+    /* Top Donate Ticker Preview */
+    .tk-stage {
+      height: 120px;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: repeating-conic-gradient(#1a2030 0% 25%, #121723 0% 50%) 50% / 20px 20px;
+      border: 1px solid var(--border-hi);
+      margin-bottom: 14px;
+    }
+
+    .tk-bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 7px 12px 7px 9px;
+      gap: 12px;
+    }
+
+    .tk-lbl {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+      color: #fff;
+    }
+
+    .tk-viewport {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
+    }
+
+    .tk-track {
+      display: flex;
+      width: max-content;
+      animation: tkPreviewScroll linear infinite;
+    }
+
+    .tk-group {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tk-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 2px 12px;
+      white-space: nowrap;
+    }
+
+    .tk-rank {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.5em;
+      height: 1.4em;
+      padding: 0 5px;
+      border-radius: 999px;
+      font-size: 0.78em;
+      font-weight: 900;
+    }
+
+    .tk-sep {
+      opacity: 0.65;
+      margin: 0 3px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    @keyframes tkPreviewScroll {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(-50%, 0, 0); }
+    }
+
     /* Toast */
     #toast {
       position: fixed;
@@ -1421,6 +1510,10 @@
             <svg class="ico" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <span>Hộp thông báo</span>
           </button>
+          <button class="nav-btn" data-tab="ticker">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            <span>Dòng chạy Top</span>
+          </button>
           <button class="nav-btn" data-tab="audio">
             <svg class="ico" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
             <span>Âm thanh &amp; TTS</span>
@@ -1483,6 +1576,10 @@
             <button class="btn btn-sm btn-success" onclick="openOverlayTab()">
               <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
               Mở thử Overlay
+            </button>
+            <button class="btn btn-sm btn-warn" onclick="openTickerTab()">
+              <svg class="ico" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+              Mở thử Top Ticker
             </button>
           </div>
         </header>
@@ -1918,7 +2015,10 @@
                 </div>
 
                 <div class="field">
-                  <label>Mẫu tiêu đề ({name}, {amount})</label>
+                  <label>
+                    <span>Mẫu tiêu đề ({name}, {amount})</span>
+                    <button type="button" class="btn btn-xs" onclick="syncTitleToTts()">Đồng bộ sang câu đọc TTS</button>
+                  </label>
                   <input id="o_title_template" type="text" value="{name} đã donate {amount}đ" oninput="syncOvPreview()">
                 </div>
 
@@ -2002,7 +2102,10 @@
                 </div>
 
                 <div class="field">
-                  <label>Mẫu câu đọc TTS</label>
+                  <label>
+                    <span>Mẫu câu đọc TTS</span>
+                    <button type="button" class="btn btn-xs" onclick="syncTtsToTitle()">Đồng bộ sang Mẫu tiêu đề</button>
+                  </label>
                   <textarea id="o_tts_template" rows="3">{name} đã donate {amount} đồng. {message}</textarea>
                   <div class="chip-row" style="margin-top:8px;margin-bottom:0;">
                     <button type="button" class="chip" onclick="insertTtsToken('{name}')">+ {name}</button>
@@ -2142,8 +2245,148 @@
                   </div>
                 </div>
 
+                <div class="field">
+                  <label>Dòng chạy Top Donate URL (link riêng — dán ở vị trí khác trên TikTok LIVE / OBS)</label>
+                  <div class="sys-link-row">
+                    <input id="sysTickerUrl" type="text" readonly>
+                    <button class="btn btn-sm btn-warn" onclick="copyText(document.getElementById('sysTickerUrl').value, 'Đã copy link Dòng chạy Top Donate!')">Copy</button>
+                  </div>
+                </div>
+
                 <div class="secret-box">
                   <strong>Bảo mật Cloudflare Secrets:</strong> Các khóa bí mật <code>SEPAY_API_KEY</code>, <code>OVERLAY_TOKEN</code> và <code>ADMIN_PASSWORD</code> được lưu trữ mã hóa trực tiếp trong mục <em>Settings → Variables and Secrets</em> trên Cloudflare Worker, không bao giờ lộ ra mã nguồn public GitHub.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== TAB 6: DÒNG CHẠY TOP DONATE (ticker.html) ==================== -->
+          <section id="tab-ticker" class="tab-view">
+            <div class="grid-2">
+              <div class="card">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    Tùy chỉnh Dòng chữ chạy Top Donate (Link riêng)
+                  </span>
+                </div>
+
+                <div class="field"><label>Bộ giao diện mẫu nhanh</label></div>
+                <div class="preset-grid-3">
+                  <button type="button" class="preset-card" onclick="applyTickerPreset('purple_neon')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#0f172a,#a855f7)"></span>
+                    <span>Purple Neon</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyTickerPreset('tiktok_vibe')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#161823,#fe2c55)"></span>
+                    <span>TikTok Vibe</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyTickerPreset('gold_vip')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#451a03,#f59e0b)"></span>
+                    <span>Gold VIP</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyTickerPreset('transparent_float')">
+                    <span class="preset-swatch" style="background:repeating-conic-gradient(#475569 0% 25%, #1e293b 0% 50%) 50% / 10px 10px"></span>
+                    <span>Nền trong suốt</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyTickerPreset('emerald')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#022c22,#10b981)"></span>
+                    <span>Emerald</span>
+                  </button>
+                  <button type="button" class="preset-card" onclick="applyTickerPreset('pink_cute')">
+                    <span class="preset-swatch" style="background:linear-gradient(135deg,#500724,#ec4899)"></span>
+                    <span>Hồng Cute</span>
+                  </button>
+                </div>
+
+                <div class="row">
+                  <div class="field">
+                    <label>Nhãn tiêu đề đầu dòng (để trống nếu muốn ẩn)</label>
+                    <input id="tk_title" type="text" value="TOP DONATE" oninput="syncTickerPreview()">
+                  </div>
+                  <div class="field">
+                    <label>Chữ hiện khi chưa có donate</label>
+                    <input id="tk_empty" type="text" value="Chưa có lượt ủng hộ nào — hãy là người mở hàng đầu tiên!" oninput="syncTickerPreview()">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="field"><label>Màu nền</label><input id="tk_bg" type="color" value="#0f172a" oninput="syncTickerPreview()"></div>
+                  <div class="field"><label>Màu nhấn / Viền</label><input id="tk_accent" type="color" value="#a855f7" oninput="syncTickerPreview()"></div>
+                  <div class="field"><label>Màu chữ tên</label><input id="tk_text" type="color" value="#ffffff" oninput="syncTickerPreview()"></div>
+                  <div class="field"><label>Màu số tiền</label><input id="tk_amt" type="color" value="#fde047" oninput="syncTickerPreview()"></div>
+                </div>
+
+                <div class="row">
+                  <div class="field">
+                    <label><span>Số người Top hiển thị</span><span id="lbl_tk_limit" class="val-badge">10</span></label>
+                    <input id="tk_limit" type="range" min="3" max="20" step="1" value="10" oninput="syncTickerPreview()">
+                  </div>
+                  <div class="field">
+                    <label><span>Tốc độ chạy</span><span id="lbl_tk_speed" class="val-badge">75 px/s</span></label>
+                    <input id="tk_speed" type="range" min="30" max="180" step="5" value="75" oninput="syncTickerPreview()">
+                  </div>
+                  <div class="field">
+                    <label><span>Cỡ chữ</span><span id="lbl_tk_size" class="val-badge">20px</span></label>
+                    <input id="tk_size" type="range" min="14" max="36" step="1" value="20" oninput="syncTickerPreview()">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="field">
+                    <label><span>Độ mờ nền (0% = trong suốt)</span><span id="lbl_tk_opacity" class="val-badge">85%</span></label>
+                    <input id="tk_opacity" type="range" min="0" max="1" step="0.05" value="0.85" oninput="syncTickerPreview()">
+                  </div>
+                  <div class="field">
+                    <label><span>Bo góc thanh</span><span id="lbl_tk_radius" class="val-badge">14px</span></label>
+                    <input id="tk_radius" type="range" min="0" max="32" step="2" value="14" oninput="syncTickerPreview()">
+                  </div>
+                </div>
+
+                <label class="toggle">
+                  <span>Bật viền phát sáng Glow quanh thanh chạy</span>
+                  <input id="tk_glow" type="checkbox" checked onchange="syncTickerPreview()">
+                </label>
+              </div>
+
+              <!-- Sticky Ticker Preview & Separate Link -->
+              <div class="card card-sticky">
+                <div class="card-head">
+                  <span class="card-title-left">
+                    <svg class="ico" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Xem trước Dòng chạy Top Donate
+                  </span>
+                  <button type="button" class="btn btn-xs btn-success" onclick="openTickerTab()">
+                    <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Mở tab mới
+                  </button>
+                </div>
+
+                <div class="tk-stage">
+                  <div id="tkPrevBar" class="tk-bar">
+                    <div id="tkPrevLabel" class="tk-lbl">
+                      <svg class="ico" style="width:14px;height:14px;" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                      <span id="tkPrevTitle">TOP DONATE</span>
+                    </div>
+                    <div id="tkPrevViewport" class="tk-viewport">
+                      <div id="tkPrevTrack" class="tk-track"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Link riêng để gắn vào TikTok LIVE Studio / OBS (Nguồn Liên kết)</label>
+                  <div class="sys-link-row">
+                    <input id="tkGeneratedUrl" type="text" readonly>
+                    <button class="btn btn-sm btn-primary" onclick="copyText(getTickerUrl(), 'Đã copy link Dòng chạy Top Donate!')">
+                      <svg class="ico" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      Copy Link
+                    </button>
+                  </div>
+                </div>
+
+                <div class="tip-box">
+                  <strong>Cách gắn trên TikTok LIVE Studio / OBS:</strong> Tạo thêm 1 nguồn <em>Liên kết / Browser Source</em> mới, dán link ở trên vào (gợi ý kích thước <strong>1280 × 70</strong> hoặc <strong>1920 × 80</strong>), rồi kéo đặt ở cạnh trên hoặc cạnh dưới màn hình. Dữ liệu Top Donate tự động cập nhật mỗi <strong>10 giây</strong> mà không cần tải lại!
                 </div>
               </div>
             </div>
@@ -2237,7 +2480,7 @@
       const r = parseInt(full.slice(0, 2), 16) || 0;
       const g = parseInt(full.slice(2, 4), 16) || 0;
       const b = parseInt(full.slice(4, 6), 16) || 0;
-      const a = Math.max(0.2, Math.min(1, Number(alpha ?? 0.95)));
+      const a = Math.max(0, Math.min(1, Number(alpha ?? 0.95)));
       return `rgba(${r}, ${g}, ${b}, ${a})`;
     }
 
@@ -2245,6 +2488,7 @@
     let adminPw = sessionStorage.getItem("donate_admin_pw") || "";
     let links = {};
     let allDonations = [];
+    let currentTopDonors = [];
     let selectedBadgeIcon = "heart";
     let toastTimer = null;
     let audioCtx = null;
@@ -2396,12 +2640,14 @@
 
     function syncQuickLinks() {
       const donateUrl = getDonatePageUrl();
+      const tickerUrl = getTickerUrl();
       document.getElementById("qlDonate").textContent = donateUrl;
       document.getElementById("qlOverlay").textContent = links.overlay_url || "(chưa có)";
       document.getElementById("qlSepay").textContent = links.sepay_webhook || "(chưa có)";
       document.getElementById("sysDonateUrl").value = donateUrl;
       document.getElementById("sysOverlayUrl").value = links.overlay_url || "";
       document.getElementById("sysSepayUrl").value = links.sepay_webhook || "";
+      document.getElementById("sysTickerUrl").value = tickerUrl;
     }
 
     async function bootstrap(hydrate = true) {
@@ -2455,8 +2701,10 @@
 
         renderCtrl(d.control);
         allDonations = Array.isArray(d.donations) ? d.donations : [];
+        currentTopDonors = Array.isArray(stats.top_donors) ? stats.top_donors : [];
         filterFeed();
-        renderTopDonors(stats.top_donors || []);
+        renderTopDonors(currentTopDonors);
+        syncTickerPreview();
         return { ok: true };
       } catch {
         setConnStatus(false);
@@ -3184,11 +3432,216 @@
       }
     }
 
+    /* ================= ĐỒNG BỘ MẪU TIÊU ĐỀ <-> TTS ================= */
+    function syncTitleToTts() {
+      const title = (document.getElementById("o_title_template").value || "{name} đã donate {amount}đ").trim();
+      let tts = title.replace(/\{amount\}\s*đ\b/gi, "{amount} đồng");
+      if (!tts.includes("{message}")) {
+        tts = tts.replace(/[.!?]\s*$/, "") + ". {message}";
+      }
+      document.getElementById("o_tts_template").value = tts;
+      toast("Đã đồng bộ sang Mẫu câu đọc TTS! Hãy bấm Lưu để áp dụng lên TikTok LIVE.");
+    }
+
+    function syncTtsToTitle() {
+      const tts = (document.getElementById("o_tts_template").value || "{name} đã donate {amount} đồng. {message}").trim();
+      let title = tts
+        .replace(/\{message\}/g, "")
+        .replace(/\{amount\}\s*đồng/gi, "{amount}đ")
+        .replace(/[\s.!,;:-]+$/, "")
+        .trim();
+      if (!title) title = "{name} đã donate {amount}đ";
+      document.getElementById("o_title_template").value = title;
+      syncOvPreview();
+      toast("Đã đồng bộ sang Mẫu tiêu đề (chữ hiện)! Hãy bấm Lưu để áp dụng.");
+    }
+
+    /* ================= TAB 6: DÒNG CHẠY TOP DONATE (ticker.html) ================= */
+    const TICKER_PRESETS = {
+      purple_neon:       { bg: "#0f172a", accent: "#a855f7", text: "#ffffff", amt: "#fde047", opacity: 0.85, radius: 14, glow: true },
+      tiktok_vibe:       { bg: "#161823", accent: "#fe2c55", text: "#ffffff", amt: "#25f4ee", opacity: 0.9,  radius: 14, glow: true },
+      gold_vip:          { bg: "#451a03", accent: "#f59e0b", text: "#fffbeb", amt: "#fde047", opacity: 0.88, radius: 14, glow: true },
+      transparent_float: { bg: "#0f172a", accent: "#a855f7", text: "#ffffff", amt: "#fde047", opacity: 0,    radius: 14, glow: false },
+      emerald:           { bg: "#022c22", accent: "#10b981", text: "#ecfdf5", amt: "#a7f3d0", opacity: 0.85, radius: 14, glow: true },
+      pink_cute:         { bg: "#500724", accent: "#ec4899", text: "#fff1f2", amt: "#fde047", opacity: 0.86, radius: 24, glow: true },
+    };
+
+    function getTickerConfig() {
+      return {
+        title: document.getElementById("tk_title").value.trim(),
+        empty: document.getElementById("tk_empty").value.trim(),
+        bg: document.getElementById("tk_bg").value,
+        accent: document.getElementById("tk_accent").value,
+        text: document.getElementById("tk_text").value,
+        amt: document.getElementById("tk_amt").value,
+        limit: Number(document.getElementById("tk_limit").value || 10),
+        speed: Number(document.getElementById("tk_speed").value || 75),
+        size: Number(document.getElementById("tk_size").value || 20),
+        opacity: Number(document.getElementById("tk_opacity").value ?? 0.85),
+        radius: Number(document.getElementById("tk_radius").value ?? 14),
+        glow: document.getElementById("tk_glow").checked,
+      };
+    }
+
+    function getTickerUrl() {
+      const c = getTickerConfig();
+      const base = new URL("./ticker.html", location.href).href;
+      const p = new URLSearchParams();
+      if (c.title !== "TOP DONATE") p.set("title", c.title);
+      if (c.limit !== 10) p.set("limit", String(c.limit));
+      if (c.speed !== 75) p.set("speed", String(c.speed));
+      if (c.bg.toLowerCase() !== "#0f172a") p.set("bg", c.bg.replace("#", ""));
+      if (c.opacity !== 0.85) p.set("opacity", String(c.opacity));
+      if (c.accent.toLowerCase() !== "#a855f7") p.set("accent", c.accent.replace("#", ""));
+      if (c.text.toLowerCase() !== "#ffffff") p.set("text", c.text.replace("#", ""));
+      if (c.amt.toLowerCase() !== "#fde047") p.set("amt", c.amt.replace("#", ""));
+      if (c.size !== 20) p.set("size", String(c.size));
+      if (c.radius !== 14) p.set("radius", String(c.radius));
+      if (!c.glow) p.set("glow", "0");
+      if (c.empty && c.empty !== "Chưa có lượt ủng hộ nào — hãy là người mở hàng đầu tiên!") p.set("empty", c.empty);
+      const qs = p.toString();
+      return qs ? `${base}?${qs}` : base;
+    }
+
+    function openTickerTab() {
+      window.open(getTickerUrl(), "_blank", "noopener");
+    }
+
+    function applyTickerPreset(key) {
+      const pr = TICKER_PRESETS[key];
+      if (!pr) return;
+      setV("tk_bg", pr.bg);
+      setV("tk_accent", pr.accent);
+      setV("tk_text", pr.text);
+      setV("tk_amt", pr.amt);
+      setV("tk_opacity", pr.opacity);
+      setV("tk_radius", pr.radius);
+      setC("tk_glow", pr.glow);
+      syncTickerPreview();
+      toast("Đã áp dụng mẫu Dòng chạy Top — bấm Copy Link để dán vào TikTok LIVE / OBS!");
+    }
+
+    function loadSavedTickerConfig() {
+      try {
+        const raw = localStorage.getItem("donate_ticker_cfg");
+        if (!raw) return;
+        const c = JSON.parse(raw);
+        if (c.title !== undefined) setV("tk_title", c.title);
+        if (c.empty !== undefined) setV("tk_empty", c.empty);
+        if (c.bg) setV("tk_bg", c.bg);
+        if (c.accent) setV("tk_accent", c.accent);
+        if (c.text) setV("tk_text", c.text);
+        if (c.amt) setV("tk_amt", c.amt);
+        if (c.limit !== undefined) setV("tk_limit", c.limit);
+        if (c.speed !== undefined) setV("tk_speed", c.speed);
+        if (c.size !== undefined) setV("tk_size", c.size);
+        if (c.opacity !== undefined) setV("tk_opacity", c.opacity);
+        if (c.radius !== undefined) setV("tk_radius", c.radius);
+        if (c.glow !== undefined) setC("tk_glow", c.glow);
+      } catch { }
+    }
+
+    function syncTickerPreview() {
+      const c = getTickerConfig();
+      try { localStorage.setItem("donate_ticker_cfg", JSON.stringify(c)); } catch { }
+
+      document.getElementById("lbl_tk_limit").textContent = String(c.limit);
+      document.getElementById("lbl_tk_speed").textContent = c.speed + " px/s";
+      document.getElementById("lbl_tk_size").textContent = c.size + "px";
+      document.getElementById("lbl_tk_opacity").textContent = Math.round(c.opacity * 100) + "%";
+      document.getElementById("lbl_tk_radius").textContent = c.radius + "px";
+
+      const url = getTickerUrl();
+      document.getElementById("tkGeneratedUrl").value = url;
+      const sysTk = document.getElementById("sysTickerUrl");
+      if (sysTk) sysTk.value = url;
+
+      const bar = document.getElementById("tkPrevBar");
+      const lbl = document.getElementById("tkPrevLabel");
+      const ttl = document.getElementById("tkPrevTitle");
+      const track = document.getElementById("tkPrevTrack");
+
+      const previewFontSize = Math.min(22, Math.max(13, Math.round(c.size * 0.85)));
+      bar.style.fontSize = previewFontSize + "px";
+      bar.style.color = c.text;
+      bar.style.borderRadius = c.radius + "px";
+      bar.style.background = c.opacity > 0 ? hexToRgba(c.bg, c.opacity) : "transparent";
+      bar.style.border = c.glow ? `1.5px solid ${c.accent}` : (c.opacity > 0 ? "1px solid rgba(255,255,255,0.14)" : "none");
+      bar.style.boxShadow = c.glow ? `0 4px 16px rgba(0,0,0,0.35), 0 0 14px ${hexToRgba(c.accent, 0.45)}` : "none";
+
+      if (c.title) {
+        lbl.style.display = "inline-flex";
+        lbl.style.background = c.accent;
+        lbl.style.fontSize = Math.max(10, Math.round(previewFontSize * 0.75)) + "px";
+        ttl.textContent = c.title;
+      } else {
+        lbl.style.display = "none";
+      }
+
+      const sample = currentTopDonors.length
+        ? currentTopDonors.slice(0, c.limit)
+        : [
+            { donor_name: "Anh Thái", total: 500000 },
+            { donor_name: "Minh Quân", total: 200000 },
+            { donor_name: "Lan Anh", total: 100000 },
+          ];
+
+      const makeGroup = () => {
+        const g = document.createElement("div");
+        g.className = "tk-group";
+        sample.forEach((it, idx) => {
+          const item = document.createElement("span");
+          item.className = "tk-item";
+          const rk = document.createElement("span");
+          rk.className = "tk-rank";
+          rk.textContent = `#${idx + 1}`;
+          if (idx === 0) { rk.style.background = "linear-gradient(135deg,#f59e0b,#fde047)"; rk.style.color = "#422006"; }
+          else if (idx === 1) { rk.style.background = "linear-gradient(135deg,#94a3b8,#f1f5f9)"; rk.style.color = "#0f172a"; }
+          else if (idx === 2) { rk.style.background = "linear-gradient(135deg,#b45309,#fb923c)"; rk.style.color = "#fffbeb"; }
+          else { rk.style.background = "rgba(255,255,255,0.16)"; rk.style.color = "#fff"; }
+
+          const nm = document.createElement("strong");
+          nm.textContent = it.donor_name || "Ẩn danh";
+          const dash = document.createElement("span");
+          dash.style.opacity = "0.55";
+          dash.textContent = "—";
+          const amt = document.createElement("strong");
+          amt.style.color = c.amt;
+          amt.textContent = Number(it.total ?? it.total_amount ?? 0).toLocaleString("vi-VN") + "đ";
+
+          item.appendChild(rk); item.appendChild(nm); item.appendChild(dash); item.appendChild(amt);
+          g.appendChild(item);
+
+          const sep = document.createElement("span");
+          sep.className = "tk-sep";
+          sep.style.color = c.accent;
+          sep.innerHTML = '<svg style="width:10px;height:10px;fill:currentColor;" viewBox="0 0 24 24"><path d="M12 2l2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z"/></svg>';
+          g.appendChild(sep);
+        });
+        return g;
+      };
+
+      track.textContent = "";
+      const g1 = makeGroup();
+      if (sample.length < 3) {
+        const extra = makeGroup();
+        while (extra.firstChild) g1.appendChild(extra.firstChild);
+      }
+      const g2 = g1.cloneNode(true);
+      track.appendChild(g1);
+      track.appendChild(g2);
+
+      const dur = Math.max(5, Math.round(520 / c.speed * 1.4 * 10) / 10);
+      track.style.animationDuration = dur + "s";
+    }
+
     /* ================= BOOT ================= */
     initBadgeGrid();
     syncBadgePickerUI();
     syncTimeLabels();
     syncAudioLabels();
+    loadSavedTickerConfig();
+    syncTickerPreview();
 
     (function initLogin() {
       document.getElementById("inWorkerUrl").value = workerUrl;
