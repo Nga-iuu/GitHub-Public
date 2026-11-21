@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="vi">
 
 <head>
@@ -1111,9 +1111,9 @@
 
     /* Overlay Preview Stage */
     .ov-stage {
-      height: 250px;
+      min-height: 270px;
       border-radius: 12px;
-      padding: 18px;
+      padding: 26px 22px;
       display: flex;
       overflow: hidden;
       background: repeating-conic-gradient(#1a2030 0% 25%, #121723 0% 50%) 50% / 20px 20px;
@@ -1157,12 +1157,55 @@
     }
 
     .ov-card {
+      position: relative;
       padding: 14px 18px;
       display: flex;
       align-items: center;
       gap: 13px;
       max-width: 100%;
       transition: border-radius .15s, border .15s, box-shadow .15s;
+    }
+
+    .ov-card.bpos-left {
+      flex-direction: row;
+      text-align: left;
+    }
+
+    .ov-card.bpos-right {
+      flex-direction: row-reverse;
+      text-align: left;
+    }
+
+    .ov-card.bpos-top {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .ov-card.bpos-bottom {
+      flex-direction: column-reverse;
+      text-align: center;
+    }
+
+    .ov-card.bpos-top-left,
+    .ov-card.bpos-top-right {
+      flex-direction: row;
+      text-align: left;
+    }
+
+    .ov-card.bpos-top-left .ov-badge {
+      position: absolute;
+      top: -18px;
+      left: -16px;
+      z-index: 3;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.55));
+    }
+
+    .ov-card.bpos-top-right .ov-badge {
+      position: absolute;
+      top: -18px;
+      right: -16px;
+      z-index: 3;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.55));
     }
 
     .ov-badge {
@@ -1173,17 +1216,49 @@
     }
 
     .ov-badge svg {
-      width: 44px;
-      height: 44px;
+      width: var(--ov-badge-sz, 48px);
+      height: var(--ov-badge-sz, 48px);
       display: block;
     }
 
     .ov-badge img {
-      width: 46px;
-      height: 46px;
+      width: var(--ov-badge-sz, 48px);
+      height: var(--ov-badge-sz, 48px);
       object-fit: contain;
       border-radius: 10px;
       display: block;
+    }
+
+    .bpos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .bpos-btn {
+      padding: 7px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-hi);
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .14s;
+      text-align: center;
+    }
+
+    .bpos-btn:hover {
+      border-color: var(--accent-2);
+      color: #fff;
+    }
+
+    .bpos-btn.active {
+      background: rgba(124, 58, 237, 0.24);
+      border-color: var(--accent-2);
+      color: #fff;
     }
 
     .ov-body {
@@ -2015,6 +2090,23 @@
                 </div>
 
                 <div class="field">
+                  <label>Vị trí biểu tượng trong hộp thông báo</label>
+                  <div id="badgePosGrid" class="bpos-grid">
+                    <button type="button" class="bpos-btn active" data-bpos="left" onclick="setBadgePosition('left')">Bên trái</button>
+                    <button type="button" class="bpos-btn" data-bpos="right" onclick="setBadgePosition('right')">Bên phải</button>
+                    <button type="button" class="bpos-btn" data-bpos="top" onclick="setBadgePosition('top')">Ở trên (giữa)</button>
+                    <button type="button" class="bpos-btn" data-bpos="bottom" onclick="setBadgePosition('bottom')">Ở dưới (giữa)</button>
+                    <button type="button" class="bpos-btn" data-bpos="top-left" onclick="setBadgePosition('top-left')">Nổi góc trên trái</button>
+                    <button type="button" class="bpos-btn" data-bpos="top-right" onclick="setBadgePosition('top-right')">Nổi góc trên phải</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label><span>Kích thước biểu tượng / Ảnh GIF</span><span id="lbl_badge_size" class="val-badge">52px</span></label>
+                  <input id="o_badge_size" type="range" min="32" max="140" step="4" value="52" oninput="syncOvPreview()">
+                </div>
+
+                <div class="field">
                   <label>
                     <span>Mẫu tiêu đề ({name}, {amount})</span>
                     <button type="button" class="btn btn-xs" onclick="syncTitleToTts()">Đồng bộ sang câu đọc TTS</button>
@@ -2490,6 +2582,7 @@
     let allDonations = [];
     let currentTopDonors = [];
     let selectedBadgeIcon = "heart";
+    let selectedBadgePosition = "left";
     let toastTimer = null;
     let audioCtx = null;
 
@@ -2621,7 +2714,10 @@
       setV("o_fallback_seconds", o.fallback_seconds, 6);
 
       selectedBadgeIcon = o.badge_icon || "heart";
+      selectedBadgePosition = o.badge_position || "left";
+      setV("o_badge_size", o.badge_size, 52);
       syncBadgePickerUI();
+      syncBadgePosUI();
 
       setC("o_tts_enabled", o.tts_enabled, true);
       setV("o_tts_volume", o.tts_volume, 1);
@@ -3151,6 +3247,18 @@
       syncOvPreview();
     }
 
+    function setBadgePosition(pos) {
+      selectedBadgePosition = pos || "left";
+      syncBadgePosUI();
+      syncOvPreview();
+    }
+
+    function syncBadgePosUI() {
+      document.querySelectorAll("#badgePosGrid .bpos-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.bpos === selectedBadgePosition);
+      });
+    }
+
     function applyOverlayPreset(key) {
       const pr = OVERLAY_PRESETS[key];
       if (!pr) return;
@@ -3186,6 +3294,7 @@
       const mSize = Number(document.getElementById("o_msg_size").value || 20);
       const maxW = Number(document.getElementById("o_max_width").value || 640);
       const ang = Number(document.getElementById("o_bg_angle").value || 135);
+      const badgeSize = Number(document.getElementById("o_badge_size").value || 52);
       const glow = document.getElementById("o_border_glow").checked;
       const showMsg = document.getElementById("o_show_message").checked;
 
@@ -3195,10 +3304,14 @@
       document.getElementById("lbl_msg_size").textContent = mSize + "px";
       document.getElementById("lbl_max_width").textContent = maxW + "px";
       document.getElementById("lbl_bg_angle").textContent = ang + "°";
+      document.getElementById("lbl_badge_size").textContent = badgeSize + "px";
 
       document.getElementById("ovStage").className = "ov-stage pos-" + document.getElementById("o_position").value;
 
       const card = document.getElementById("ovCard");
+      card.classList.remove("bpos-left", "bpos-right", "bpos-top", "bpos-bottom", "bpos-top-left", "bpos-top-right");
+      card.classList.add("bpos-" + (selectedBadgePosition || "left"));
+      card.style.setProperty("--ov-badge-sz", Math.min(96, badgeSize) + "px");
       card.style.background = `linear-gradient(${ang}deg, ${hexToRgba(c1, op)}, ${hexToRgba(c2, op)})`;
       card.style.borderRadius = rad + "px";
       card.style.maxWidth = `min(100%, ${maxW}px)`;
@@ -3274,6 +3387,8 @@
         position: document.getElementById("o_position").value,
         animation: document.getElementById("o_animation").value,
         badge_icon: selectedBadgeIcon || "heart",
+        badge_position: selectedBadgePosition || "left",
+        badge_size: Number(document.getElementById("o_badge_size").value || 52),
         title_template: document.getElementById("o_title_template").value,
         border_glow: document.getElementById("o_border_glow").checked,
         show_message: document.getElementById("o_show_message").checked,
@@ -3638,6 +3753,7 @@
     /* ================= BOOT ================= */
     initBadgeGrid();
     syncBadgePickerUI();
+    syncBadgePosUI();
     syncTimeLabels();
     syncAudioLabels();
     loadSavedTickerConfig();
@@ -3654,3 +3770,4 @@
 </body>
 
 </html>
+ -->
