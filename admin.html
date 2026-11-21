@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản trị Trang Donate &amp; Overlay</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='64' y2='64' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 50s-17-10.4-21-20.8C8 21.2 13.2 13 21.4 13c4.6 0 8.2 2.5 10.6 5.9 2.4-3.4 6-5.9 10.6-5.9 8.2 0 13.4 8.2 10.4 16.2C49 39.6 32 50 32 50Z' fill='%23fff'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --panel: #131823;
+      --panel-2: #192030;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hi: rgba(255, 255, 255, 0.16);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #7c3aed;
+      --green: #10b981;
+      --red: #ef4444;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+    }
+
+    /* Login Overlay */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--panel);
+      border: 1px solid var(--border-hi);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .login-card h1 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+
+    .login-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* App Layout */
+    #appShell {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(14, 18, 27, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 8px 14px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      background: rgba(124, 58, 237, 0.22);
+      border-color: rgba(168, 85, 247, 0.45);
+      color: #fff;
+    }
+
+    .wrap {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 960px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+    }
+
+    .stat .k {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .stat .v {
+      font-size: 21px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 9px;
+      border: 1px solid var(--border-hi);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input[type="color"] {
+      width: 100%;
+      height: 36px;
+      padding: 2px;
+      border-radius: 8px;
+      border: 1px solid var(--border-hi);
+      background: var(--bg);
+      cursor: pointer;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #8b5cf6;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .row>* {
+      flex: 1;
+    }
+
+    .row-auto {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 9px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .toggle input {
+      width: 17px;
+      height: 17px;
+      accent-color: #8b5cf6;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 9px;
+      border: 1px solid var(--border-hi);
+      background: var(--panel-2);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #232d42;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      border-color: transparent;
+    }
+
+    .btn-success {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(16, 185, 129, 0.45);
+      color: #6ee7b7;
+    }
+
+    .btn-warn {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(245, 158, 11, 0.45);
+      color: #fcd34d;
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 7px;
+    }
+
+    /* Mini Donate Page Preview */
+    .page-preview-frame {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-hi);
+      padding: 20px 18px 24px;
+      text-align: center;
+      min-height: 360px;
+      transition: background .2s;
+    }
+
+    .pp-cover {
+      height: 80px;
+      margin: -20px -18px -28px;
+      background-size: cover;
+      background-position: center;
+      opacity: .75;
+      mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+    }
+
+    .pp-pill {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 99px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      margin: 12px 0;
+    }
+
+    .pp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 10px 0;
+    }
+
+    .pp-amt {
+      padding: 7px 4px;
+      border-radius: 99px;
+      border: 1px solid rgba(15, 23, 42, 0.16);
+      background: rgba(255, 255, 255, 0.3);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pp-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 99px;
+      color: #fff;
+      font-weight: 800;
+      border: none;
+      margin-top: 10px;
+    }
+
+    /* Overlay Preview */
+    .ov-stage {
+      height: 210px;
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      background: repeating-conic-gradient(#1a2030 0% 25%, #121723 0% 50%) 50% / 20px 20px;
+      border: 1px solid var(--border-hi);
+    }
+
+    .ov-stage.pos-bottom-left {
+      align-items: flex-end;
+      justify-content: flex-start;
+    }
+
+    .ov-stage.pos-bottom-center {
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .ov-stage.pos-bottom-right {
+      align-items: flex-end;
+      justify-content: flex-end;
+    }
+
+    .ov-stage.pos-top-left {
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .ov-stage.pos-top-center {
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .ov-stage.pos-top-right {
+      align-items: flex-start;
+      justify-content: flex-end;
+    }
+
+    .ov-stage.pos-center {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ov-card {
+      padding: 14px 20px;
+      max-width: 100%;
+    }
+
+    .feed {
+      max-height: 360px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .feed-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    #toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: #1e293b;
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      color: #fff;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all .2s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <script>
+    // Có thể điền sẵn link Worker của bạn ở đây (hoặc nhập trực tiếp ở màn hình đăng nhập)
+    const DEFAULT_WORKER_URL = "donate-sepay.tduy5781.workers.dev"; // VD: "https://donate-sepay-api.ten-cua-ban.workers.dev"
+  </script>
+
+  <!-- MÀN HÌNH ĐĂNG NHẬP -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <h1>Donate Studio Cloud</h1>
+      <p>Đăng nhập để chỉnh từng chi tiết Trang Donate, Hộp thông báo Overlay &amp; điều khiển livestream.</p>
+      <div id="loginErr"
+        style="display:none;margin-bottom:12px;padding:9px 12px;border-radius:9px;background:rgba(239,68,68,0.16);color:#fecaca;font-size:13px;">
+      </div>
+      <div class="field">
+        <label>Link Cloudflare Worker của bạn</label>
+        <input id="inWorkerUrl" type="text" placeholder="https://donate-sepay-api.xxxx.workers.dev">
+      </div>
+      <div class="field">
+        <label>Mật khẩu Admin (ADMIN_PASSWORD)</label>
+        <input id="inAdminPw" type="password" placeholder="Nhập mật khẩu bí mật..."
+          onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="doLogin()">Đăng nhập Quản trị</button>
+    </div>
+  </div>
+
+  <!-- GIAO DIỆN QUẢN TRỊ CHÍNH -->
+  <div id="appShell">
+    <header class="topbar">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="page">Trang Donate (index.html)</button>
+        <button class="tab-btn" data-tab="overlay">Hộp thông báo &amp; TTS</button>
+        <button class="tab-btn" data-tab="live">Điều khiển, Test &amp; Lịch sử</button>
+      </div>
+      <div class="row-auto">
+        <button class="btn btn-sm btn-success"
+          onclick="copyText(links.overlay_url, 'Đã copy link cứng TikTok LIVE Studio!')">Copy Link TikTok LIVE</button>
+        <button class="btn btn-sm" onclick="copyText(links.sepay_webhook, 'Đã copy link cứng SePay Webhook!')">Copy Link
+          SePay</button>
+        <button class="btn btn-sm btn-danger" onclick="logout()">Đăng xuất</button>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <!-- TAB 1: CHỈNH TỪNG TÝ 1 TRANG DONATE (index.html) -->
+      <section id="view-page" class="view active">
+        <div class="grid-2">
+          <div class="card">
+            <h2>Cấu hình chi tiết Trang Donate (GitHub Pages)</h2>
+            <div class="row">
+              <div class="field"><label>Tên kênh hiển thị</label><input id="p_streamerName" type="text"
+                  oninput="syncPagePreview()"></div>
+              <div class="field"><label>Lời chào (Subtitle)</label><input id="p_subtitle" type="text"
+                  oninput="syncPagePreview()"></div>
+            </div>
+
+            <div class="field">
+              <label>Ảnh bìa (Dán link ảnh hoặc tải trực tiếp ảnh nhẹ &lt; 400KB)</label>
+              <div class="row">
+                <input id="p_coverImage" type="text" placeholder="https://... hoặc bấm Tải ảnh"
+                  oninput="syncPagePreview()">
+                <input id="coverFile" type="file" accept="image/*" style="display:none"
+                  onchange="uploadCoverFile(this)">
+                <button class="btn btn-sm" style="flex:0" onclick="document.getElementById('coverFile').click()">Tải
+                  ảnh</button>
+                <button class="btn btn-sm btn-danger" style="flex:0"
+                  onclick="document.getElementById('p_coverImage').value='';syncPagePreview()">Xóa</button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field"><label>Màu nền chính</label><input id="p_themeBg" type="color"
+                  oninput="syncPagePreview()"></div>
+              <div class="field"><label>Màu nhấn (Pill)</label><input id="p_themeAccent" type="color"
+                  oninput="syncPagePreview()"></div>
+              <div class="field"><label>Màu nút Tạo QR</label><input id="p_themeButtonDark" type="color"
+                  oninput="syncPagePreview()"></div>
+              <div class="field"><label>Màu chữ chính</label><input id="p_themeText" type="color"
+                  oninput="syncPagePreview()"></div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label>Ngân hàng nhận tiền</label>
+                <select id="p_bankCode" onchange="autoBankName()">
+                  <option value="MB">MB Bank</option>
+                  <option value="VCB">Vietcombank</option>
+                  <option value="TCB">Techcombank</option>
+                  <option value="ACB">ACB</option>
+                  <option value="BIDV">BIDV</option>
+                  <option value="ICB">VietinBank</option>
+                  <option value="VPB">VPBank</option>
+                  <option value="TPB">TPBank</option>
+                  <option value="STB">Sacombank</option>
+                  <option value="VIB">VIB</option>
+                  <option value="SHB">SHB</option>
+                  <option value="OCB">OCB</option>
+                  <option value="MSB">MSB</option>
+                  <option value="HDB">HDBank</option>
+                  <option value="CAKE">CAKE</option>
+                  <option value="TIMO">Timo</option>
+                </select>
+              </div>
+              <div class="field"><label>Số tài khoản</label><input id="p_bankAccount" type="text"></div>
+              <div class="field"><label>Chủ tài khoản (IN HOA)</label><input id="p_bankAccountName" type="text"></div>
+            </div>
+
+            <div class="row">
+              <div class="field"><label>Link TikTok</label><input id="p_tiktokUrl" type="text"
+                  placeholder="https://www.tiktok.com/@..."></div>
+              <div class="field"><label>Link Facebook</label><input id="p_facebookUrl" type="text"
+                  placeholder="https://www.facebook.com/..."></div>
+              <div class="field"><label>Link YouTube</label><input id="p_youtubeUrl" type="text"
+                  placeholder="Để trống nếu không dùng"></div>
+            </div>
+
+            <div class="field">
+              <label>Các mức chọn tiền nhanh (phân cách bằng dấu phẩy)</label>
+              <input id="p_amounts" type="text" oninput="syncPagePreview()"
+                placeholder="10000, 20000, 50000, 100000, 200000, 500000">
+            </div>
+
+            <div class="row">
+              <div class="field"><label>Số tiền tối thiểu (VNĐ)</label><input id="p_minAmount" type="number" min="1000"
+                  step="1000"></div>
+              <div class="field"><label>Tiền tố mã QR</label><input id="p_orderPrefix" type="text" maxlength="4"></div>
+              <div class="field"><label>Tiêu đề BXH</label><input id="p_topTitle" type="text"></div>
+            </div>
+
+            <div class="field"><label>Dòng chân trang (Footer)</label><input id="p_footerText" type="text"
+                oninput="syncPagePreview()"></div>
+            <label class="toggle"><span>Hiển thị BXH Top ủng hộ tự động trên trang Donate</span><input
+                id="p_showTopSupporters" type="checkbox"></label>
+
+            <button class="btn btn-primary" style="width:100%;padding:11px;" onclick="savePageConfig()">Lưu &amp; Cập
+              nhật ngay Trang Donate</button>
+          </div>
+
+          <div class="card" style="position:sticky;top:72px;align-self:start;">
+            <h2>Xem trước Trang Donate <a href="./index.html" target="_blank" class="btn btn-sm">Mở trang thật</a></h2>
+            <div id="ppFrame" class="page-preview-frame">
+              <div id="ppCover" class="pp-cover"></div>
+              <h2 id="ppName" style="justify-content:center;font-size:24px;margin:8px 0 4px;"></h2>
+              <div id="ppSub" style="font-size:13px;opacity:.8;"></div>
+              <div id="ppPill" class="pp-pill">CHUYỂN KHOẢN QR NGÂN HÀNG</div>
+              <div id="ppGrid" class="pp-grid"></div>
+              <button id="ppBtn" class="pp-btn" type="button">Tạo mã QR chuyển khoản</button>
+              <div id="ppFooter" style="margin-top:14px;font-size:11px;opacity:.75;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: HỘP THÔNG BÁO & GIỌNG ĐỌC TTS -->
+      <section id="view-overlay" class="view">
+        <div class="grid-2">
+          <div class="card">
+            <h2>Giao diện Hộp thông báo &amp; Giọng đọc TTS</h2>
+            <div class="row">
+              <div class="field"><label>Màu nền 1</label><input id="o_bg_color_1" type="color"
+                  oninput="syncOvPreview()"></div>
+              <div class="field"><label>Màu nền 2</label><input id="o_bg_color_2" type="color"
+                  oninput="syncOvPreview()"></div>
+              <div class="field"><label>Màu viền Glow</label><input id="o_border_color" type="color"
+                  oninput="syncOvPreview()"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Màu chữ tiêu đề</label><input id="o_text_color" type="color"
+                  oninput="syncOvPreview()"></div>
+              <div class="field"><label>Màu số tiền</label><input id="o_amount_color" type="color"
+                  oninput="syncOvPreview()"></div>
+              <div class="field"><label>Màu lời nhắn</label><input id="o_msg_color" type="color"
+                  oninput="syncOvPreview()"></div>
+            </div>
+            <div class="row">
+              <div class="field"><label>Cỡ chữ tiêu đề</label><input id="o_title_size" type="range" min="16" max="42"
+                  oninput="syncOvPreview()"></div>
+              <div class="field"><label>Cỡ chữ lời nhắn</label><input id="o_msg_size" type="range" min="14" max="34"
+                  oninput="syncOvPreview()"></div>
+              <div class="field"><label>Bo góc</label><input id="o_border_radius" type="range" min="0" max="36"
+                  oninput="syncOvPreview()"></div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Biểu tượng SVG</label>
+                <select id="o_badge_icon" onchange="syncOvPreview()">
+                  <option value="heart">Tim Neon</option>
+                  <option value="flame">Ngọn lửa</option>
+                  <option value="crown">Vương miện VIP</option>
+                  <option value="gem">Kim cương</option>
+                  <option value="music">Nốt nhạc TikTok</option>
+                  <option value="gift">Hộp quà</option>
+                  <option value="sparkle">Lấp lánh</option>
+                  <option value="rocket">Tên lửa</option>
+                  <option value="coin">Xu vàng</option>
+                  <option value="none">Tắt icon</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Vị trí</label>
+                <select id="o_position" onchange="syncOvPreview()">
+                  <option value="bottom-left">Góc dưới trái</option>
+                  <option value="bottom-center">Giữa dưới</option>
+                  <option value="bottom-right">Góc dưới phải</option>
+                  <option value="top-left">Góc trên trái</option>
+                  <option value="top-center">Giữa trên</option>
+                  <option value="top-right">Góc trên phải</option>
+                  <option value="center">Chính giữa</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Hiệu ứng</label>
+                <select id="o_animation">
+                  <option value="slide-up">Trượt lên</option>
+                  <option value="pop">Phóng to Pop</option>
+                  <option value="slide-left">Trượt trái</option>
+                  <option value="fade">Mờ dần</option>
+                </select>
+              </div>
+            </div>
+            <div class="field"><label>Mẫu tiêu đề ({name}, {amount})</label><input id="o_title_template" type="text"
+                oninput="syncOvPreview()"></div>
+            <div class="field"><label>Mẫu câu đọc TTS ({name}, {amount}, {message})</label><input id="o_tts_template"
+                type="text"></div>
+            <div class="row">
+              <div class="field"><label>Kiểu chuông</label><select id="o_alert_sound">
+                  <option value="ting">Ting-Ting</option>
+                  <option value="coin">Coin Retro</option>
+                  <option value="fanfare">Fanfare VIP</option>
+                  <option value="chime">Chime êm</option>
+                  <option value="none">Tắt chuông</option>
+                </select></div>
+              <div class="field"><label>Âm lượng TTS (0–1)</label><input id="o_tts_volume" type="number" min="0" max="1"
+                  step="0.1"></div>
+              <div class="field"><label>Tốc độ đọc (0.75–1.5)</label><input id="o_tts_rate" type="number" min="0.75"
+                  max="1.5" step="0.05"></div>
+              <div class="field"><label>TTS tối thiểu (VNĐ)</label><input id="o_min_tts_amount" type="number" min="0"
+                  step="1000"></div>
+            </div>
+            <div class="field"><label>Danh sách từ cấm (phân cách bằng dấu phẩy)</label><textarea id="o_bad_words"
+                rows="2"></textarea></div>
+            <div class="row">
+              <label class="toggle"><span>Bật giọng đọc TTS</span><input id="o_tts_enabled" type="checkbox"></label>
+              <label class="toggle"><span>Viền phát sáng Glow</span><input id="o_border_glow" type="checkbox"
+                  onchange="syncOvPreview()"></label>
+            </div>
+            <div class="row-auto">
+              <button class="btn btn-primary" onclick="saveOverlayConfig()">Lưu &amp; Áp dụng lên TikTok LIVE</button>
+              <button class="btn btn-success" onclick="previewTts()">Nghe thử câu đọc</button>
+            </div>
+          </div>
+
+          <div class="card" style="position:sticky;top:72px;align-self:start;">
+            <h2>Xem trước Hộp thông báo</h2>
+            <div id="ovStage" class="ov-stage pos-bottom-left">
+              <div id="ovCard" class="ov-card">
+                <div id="ovTitle" style="font-weight:800;"></div>
+                <div id="ovMsg" style="margin-top:5px;">Chúc bạn live thật vui vẻ nhé!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: ĐIỀU KHIỂN, TEST & LỊCH SỬ -->
+      <section id="view-live" class="view">
+        <div class="grid-4">
+          <div class="stat">
+            <div class="k">Donate hôm nay</div>
+            <div class="v" style="color:#fde047" id="sTodayTotal">0đ</div>
+          </div>
+          <div class="stat">
+            <div class="k">Số lượt hôm nay</div>
+            <div class="v" style="color:#38bdf8" id="sTodayCount">0</div>
+          </div>
+          <div class="stat">
+            <div class="k">Tổng tất cả</div>
+            <div class="v" style="color:#34d399" id="sAllTotal">0đ</div>
+          </div>
+          <div class="stat">
+            <div class="k">Tổng số lượt</div>
+            <div class="v" id="sAllCount">0</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <div class="card">
+              <h2>Điều khiển trực tiếp trên TikTok LIVE</h2>
+              <div class="row-auto">
+                <button class="btn btn-warn" onclick="sendCtrl('skip')">Bỏ qua (Skip)</button>
+                <button id="btnMute" class="btn" onclick="sendCtrl('toggle_mute')">Đang bật tiếng</button>
+                <button id="btnPause" class="btn" onclick="sendCtrl('toggle_pause')">Tạm dừng</button>
+                <button class="btn btn-danger" onclick="sendCtrl('clear')">Xóa hàng đợi</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Bắn Donate Test (Tiếng Việt có dấu)</h2>
+              <div class="row">
+                <div class="field"><label>Tên</label><input id="tName" type="text" value="Thái VIP"></div>
+                <div class="field"><label>Số tiền</label><input id="tAmt" type="number" value="50000" step="1000"></div>
+              </div>
+              <div class="field"><label>Lời nhắn tiếng Việt có dấu</label><input id="tMsg" type="text"
+                  value="Chúc anh livestream thật bùng nổ và nhiều mắt xem nhé!"></div>
+              <label class="toggle"><span>Lưu vào lịch sử DB (cập nhật cả BXH)</span><input id="tSave"
+                  type="checkbox"></label>
+              <button class="btn btn-primary" onclick="sendTest()">Bắn Test lên TikTok LIVE ngay</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Lịch sử Donate <div class="row-auto"><button class="btn btn-sm" onclick="bootstrap()">Làm
+                  mới</button><button class="btn btn-sm" onclick="exportCsv()">Xuất CSV</button></div>
+            </h2>
+            <div id="feedList" class="feed"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    const BANK_NAMES = {
+      MB: "MB Bank", VCB: "Vietcombank", TCB: "Techcombank", ACB: "ACB", BIDV: "BIDV", ICB: "VietinBank",
+      VPB: "VPBank", TPB: "TPBank", STB: "Sacombank", VIB: "VIB", SHB: "SHB", OCB: "OCB", MSB: "MSB",
+      HDB: "HDBank", CAKE: "CAKE by VPBank", TIMO: "Timo by BVBank",
+    };
+
+    let workerUrl = localStorage.getItem("donate_admin_url") || DEFAULT_WORKER_URL || "";
+    let adminPw = sessionStorage.getItem("donate_admin_pw") || "";
+    let links = {};
+    let toastTimer = null;
+
+    function toast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg; el.classList.add("show");
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
+    }
+    function copyText(v, msg) {
+      if (!v) return toast("Chưa có link!");
+      navigator.clipboard.writeText(v).then(() => toast(msg));
+    }
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("view-" + btn.dataset.tab).classList.add("active");
+      };
+    });
+
+    async function api(path, opts = {}) {
+      const headers = { "X-Admin-Password": adminPw, ...(opts.headers || {}) };
+      return fetch(workerUrl.replace(/\/+$/, "") + path, { ...opts, headers, cache: "no-store" });
+    }
+
+    async function doLogin() {
+      const err = document.getElementById("loginErr");
+      err.style.display = "none";
+      workerUrl = document.getElementById("inWorkerUrl").value.trim().replace(/\/+$/, "");
+      adminPw = document.getElementById("inAdminPw").value;
+      if (!workerUrl || !adminPw) { err.textContent = "Hãy nhập đủ Link Worker và Mật khẩu Admin."; err.style.display = "block"; return; }
+      const ok = await bootstrap(true);
+      if (ok) {
+        localStorage.setItem("donate_admin_url", workerUrl);
+        sessionStorage.setItem("donate_admin_pw", adminPw);
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("appShell").style.display = "block";
+      } else {
+        err.textContent = "Không đăng nhập được — kiểm tra lại Link Worker hoặc Mật khẩu Admin.";
+        err.style.display = "block";
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem("donate_admin_pw");
+      location.reload();
+    }
+
+    function setV(id, val) { const e = document.getElementById(id); if (e) e.value = val ?? ""; }
+    function setC(id, val) { const e = document.getElementById(id); if (e) e.checked = Boolean(val); }
+
+    async function bootstrap(hydrate = true) {
+      try {
+        const r = await api("/api/admin/bootstrap");
+        if (!r.ok) return false;
+        const d = await r.json();
+        links = d.links || {};
+
+        if (hydrate) {
+          const p = d.page_config || {};
+          setV("p_streamerName", p.streamerName); setV("p_subtitle", p.subtitle); setV("p_coverImage", p.coverImage);
+          setV("p_themeBg", p.themeBg); setV("p_themeAccent", p.themeAccent); setV("p_themeButtonDark", p.themeButtonDark); setV("p_themeText", p.themeText);
+          setV("p_bankCode", p.bankCode); setV("p_bankAccount", p.bankAccount); setV("p_bankAccountName", p.bankAccountName);
+          setV("p_tiktokUrl", p.tiktokUrl); setV("p_facebookUrl", p.facebookUrl); setV("p_youtubeUrl", p.youtubeUrl);
+          setV("p_amounts", Array.isArray(p.amounts) ? p.amounts.join(", ") : "");
+          setV("p_minAmount", p.minAmount); setV("p_orderPrefix", p.orderPrefix); setV("p_topTitle", p.topTitle); setV("p_footerText", p.footerText);
+          setC("p_showTopSupporters", p.showTopSupporters);
+          syncPagePreview();
+
+          const o = d.overlay_config || {};
+          setV("o_bg_color_1", o.bg_color_1); setV("o_bg_color_2", o.bg_color_2); setV("o_border_color", o.border_color);
+          setV("o_text_color", o.text_color); setV("o_amount_color", o.amount_color); setV("o_msg_color", o.msg_color);
+          setV("o_title_size", o.title_size); setV("o_msg_size", o.msg_size); setV("o_border_radius", o.border_radius);
+          setV("o_badge_icon", o.badge_icon); setV("o_position", o.position); setV("o_animation", o.animation);
+          setV("o_title_template", o.title_template); setV("o_tts_template", o.tts_template);
+          setV("o_alert_sound", o.alert_sound); setV("o_tts_volume", o.tts_volume); setV("o_tts_rate", o.tts_rate);
+          setV("o_min_tts_amount", o.min_tts_amount);
+          setV("o_bad_words", Array.isArray(o.bad_words) ? o.bad_words.join(", ") : "");
+          setC("o_tts_enabled", o.tts_enabled); setC("o_border_glow", o.border_glow);
+          syncOvPreview();
+        }
+
+        document.getElementById("sTodayTotal").textContent = Number(d.stats.today_total || 0).toLocaleString("vi-VN") + "đ";
+        document.getElementById("sTodayCount").textContent = d.stats.today_count || 0;
+        document.getElementById("sAllTotal").textContent = Number(d.stats.all_total || 0).toLocaleString("vi-VN") + "đ";
+        document.getElementById("sAllCount").textContent = d.stats.all_count || 0;
+        renderCtrl(d.control);
+        renderFeed(d.donations || []);
+        return true;
+      } catch { return false; }
+    }
+
+    function autoBankName() { }
+
+    function uploadCoverFile(input) {
+      const f = input.files && input.files[0];
+      if (!f) return;
+      if (f.size > 450 * 1024) { toast("Ảnh nên nhỏ hơn 450KB để tải thật nhanh!"); input.value = ""; return; }
+      const reader = new FileReader();
+      reader.onload = () => { document.getElementById("p_coverImage").value = reader.result; syncPagePreview(); toast("Đã chọn ảnh bìa — bấm Lưu để cập nhật!"); };
+      reader.readAsDataURL(f);
+      input.value = "";
+    }
+
+    function syncPagePreview() {
+      const bg = document.getElementById("p_themeBg").value;
+      const ac = document.getElementById("p_themeAccent").value;
+      const dk = document.getElementById("p_themeButtonDark").value;
+      const tx = document.getElementById("p_themeText").value;
+      const cv = document.getElementById("p_coverImage").value.trim();
+
+      const frame = document.getElementById("ppFrame");
+      frame.style.background = bg;
+      frame.style.color = tx;
+      const cover = document.getElementById("ppCover");
+      cover.style.display = cv ? "block" : "none";
+      cover.style.backgroundImage = cv ? `url('${cv}')` : "none";
+      document.getElementById("ppName").textContent = document.getElementById("p_streamerName").value || "Tên Kênh";
+      document.getElementById("ppSub").textContent = document.getElementById("p_subtitle").value;
+      document.getElementById("ppPill").style.background = ac;
+      document.getElementById("ppBtn").style.background = dk;
+      document.getElementById("ppFooter").textContent = document.getElementById("p_footerText").value;
+
+      const amts = document.getElementById("p_amounts").value.split(",").map(x => parseInt(x.trim(), 10)).filter(n => n > 0).slice(0, 9);
+      const grid = document.getElementById("ppGrid");
+      grid.innerHTML = "";
+      amts.forEach((a, i) => {
+        const el = document.createElement("div");
+        el.className = "pp-amt";
+        if (i === 2) { el.style.background = ac; el.style.color = "#fff"; }
+        el.textContent = a.toLocaleString("vi-VN") + "đ";
+        grid.appendChild(el);
+      });
+    }
+
+    async function savePageConfig() {
+      const code = document.getElementById("p_bankCode").value;
+      const amounts = document.getElementById("p_amounts").value.split(",").map(x => parseInt(x.trim(), 10)).filter(n => n >= 1000);
+      const body = {
+        streamerName: document.getElementById("p_streamerName").value.trim(),
+        subtitle: document.getElementById("p_subtitle").value.trim(),
+        coverImage: document.getElementById("p_coverImage").value.trim(),
+        themeBg: document.getElementById("p_themeBg").value,
+        themeAccent: document.getElementById("p_themeAccent").value,
+        themeButtonDark: document.getElementById("p_themeButtonDark").value,
+        themeText: document.getElementById("p_themeText").value,
+        bankCode: code,
+        bankName: BANK_NAMES[code] || code,
+        bankAccount: document.getElementById("p_bankAccount").value.trim(),
+        bankAccountName: document.getElementById("p_bankAccountName").value.trim().toUpperCase(),
+        tiktokUrl: document.getElementById("p_tiktokUrl").value.trim(),
+        facebookUrl: document.getElementById("p_facebookUrl").value.trim(),
+        youtubeUrl: document.getElementById("p_youtubeUrl").value.trim(),
+        amounts: amounts.length ? amounts : [10000, 20000, 50000, 100000, 200000, 500000],
+        minAmount: Number(document.getElementById("p_minAmount").value || 1000),
+        orderPrefix: document.getElementById("p_orderPrefix").value.trim().toUpperCase() || "DN",
+        topTitle: document.getElementById("p_topTitle").value.trim(),
+        footerText: document.getElementById("p_footerText").value.trim(),
+        showTopSupporters: document.getElementById("p_showTopSupporters").checked,
+      };
+      const r = await api("/api/admin/page-config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const d = await r.json().catch(() => ({}));
+      toast(r.ok ? "Đã lưu! Trang Donate index.html đã cập nhật ngay." : (d.error || "Lỗi lưu cấu hình"));
+    }
+
+    function syncOvPreview() {
+      const c1 = document.getElementById("o_bg_color_1").value;
+      const c2 = document.getElementById("o_bg_color_2").value;
+      const bc = document.getElementById("o_border_color").value;
+      const tc = document.getElementById("o_text_color").value;
+      const ac = document.getElementById("o_amount_color").value;
+      const mc = document.getElementById("o_msg_color").value;
+      const glow = document.getElementById("o_border_glow").checked;
+
+      document.getElementById("ovStage").className = "ov-stage pos-" + document.getElementById("o_position").value;
+      const card = document.getElementById("ovCard");
+      card.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+      card.style.borderRadius = document.getElementById("o_border_radius").value + "px";
+      card.style.border = glow ? `2px solid ${bc}` : "1px solid rgba(255,255,255,0.2)";
+      card.style.boxShadow = glow ? `0 8px 24px rgba(0,0,0,.4), 0 0 18px ${bc}` : "0 8px 24px rgba(0,0,0,.4)";
+
+      const t = document.getElementById("ovTitle");
+      t.style.fontSize = Math.min(30, Number(document.getElementById("o_title_size").value)) + "px";
+      t.style.color = tc;
+      t.textContent = "";
+      const tpl = document.getElementById("o_title_template").value || "{name} đã donate {amount}đ";
+      for (const p of tpl.split(/(\{name\}|\{amount\})/g)) {
+        if (p === "{name}") t.appendChild(document.createTextNode("Thái VIP"));
+        else if (p === "{amount}") { const s = document.createElement("span"); s.style.color = ac; s.textContent = "50.000"; t.appendChild(s); }
+        else if (p) t.appendChild(document.createTextNode(p));
+      }
+      const m = document.getElementById("ovMsg");
+      m.style.fontSize = Math.min(24, Number(document.getElementById("o_msg_size").value)) + "px";
+      m.style.color = mc;
+    }
+
+    async function saveOverlayConfig() {
+      const body = {
+        bg_color_1: document.getElementById("o_bg_color_1").value,
+        bg_color_2: document.getElementById("o_bg_color_2").value,
+        border_color: document.getElementById("o_border_color").value,
+        text_color: document.getElementById("o_text_color").value,
+        amount_color: document.getElementById("o_amount_color").value,
+        msg_color: document.getElementById("o_msg_color").value,
+        title_size: Number(document.getElementById("o_title_size").value),
+        msg_size: Number(document.getElementById("o_msg_size").value),
+        border_radius: Number(document.getElementById("o_border_radius").value),
+        badge_icon: document.getElementById("o_badge_icon").value,
+        position: document.getElementById("o_position").value,
+        animation: document.getElementById("o_animation").value,
+        title_template: document.getElementById("o_title_template").value,
+        tts_template: document.getElementById("o_tts_template").value,
+        alert_sound: document.getElementById("o_alert_sound").value,
+        tts_volume: Number(document.getElementById("o_tts_volume").value),
+        tts_rate: Number(document.getElementById("o_tts_rate").value),
+        min_tts_amount: Number(document.getElementById("o_min_tts_amount").value),
+        bad_words: document.getElementById("o_bad_words").value,
+        tts_enabled: document.getElementById("o_tts_enabled").checked,
+        border_glow: document.getElementById("o_border_glow").checked,
+      };
+      const r = await api("/api/admin/overlay-config", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      toast(r.ok ? "Đã lưu & áp dụng lên TikTok LIVE Overlay!" : "Lỗi khi lưu");
+    }
+
+    function previewTts() {
+      const tpl = document.getElementById("o_tts_template").value || "{name} đã donate {amount} đồng. {message}";
+      const q = tpl.replaceAll("{name}", "Thái VIP").replaceAll("{amount}", "50000").replaceAll("{message}", "Chúc anh live thật vui vẻ!");
+      const a = new Audio(`${workerUrl}/api/admin/tts-preview?pw=${encodeURIComponent(adminPw)}&q=${encodeURIComponent(q)}&_t=${Date.now()}`);
+      a.volume = Math.max(0, Math.min(1, Number(document.getElementById("o_tts_volume").value || 1)));
+      a.playbackRate = Math.max(0.75, Math.min(1.5, Number(document.getElementById("o_tts_rate").value || 1)));
+      a.play().catch(() => toast("Không phát được âm thanh thử"));
+    }
+
+    function renderCtrl(c) {
+      if (!c) return;
+      document.getElementById("btnMute").textContent = c.muted ? "Đang tắt tiếng" : "Đang bật tiếng";
+      document.getElementById("btnPause").textContent = c.paused ? "Đang tạm dừng" : "Tạm dừng";
+    }
+
+    async function sendCtrl(action) {
+      const r = await api("/api/admin/control", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action }) });
+      if (r.ok) { renderCtrl((await r.json()).control); toast("Đã gửi lệnh điều khiển!"); }
+    }
+
+    async function sendTest() {
+      const body = {
+        donor_name: document.getElementById("tName").value,
+        amount: Number(document.getElementById("tAmt").value),
+        message: document.getElementById("tMsg").value,
+        save_to_db: document.getElementById("tSave").checked,
+      };
+      const r = await api("/api/admin/test-donate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      if (r.ok) { toast("Đã bắn donate tiếng Việt có dấu lên TikTok LIVE!"); if (body.save_to_db) bootstrap(false); }
+    }
+
+    function renderFeed(items) {
+      const box = document.getElementById("feedList");
+      box.textContent = "";
+      if (!items.length) { box.innerHTML = '<div style="color:var(--muted);text-align:center;padding:24px;">Chưa có giao dịch nào</div>'; return; }
+      items.forEach(it => {
+        const row = document.createElement("div");
+        row.className = "feed-item";
+        const info = document.createElement("div");
+        const top = document.createElement("div");
+        top.innerHTML = `<strong></strong> <span style="color:#fde047;font-weight:800;"></span>`;
+        top.querySelector("strong").textContent = it.donor_name;
+        top.querySelector("span").textContent = Number(it.amount).toLocaleString("vi-VN") + "đ";
+        const m = document.createElement("div"); m.style.cssText = "font-size:13px;color:#cbd5e1;margin-top:2px;"; m.textContent = it.message || "(Không có lời nhắn)";
+        info.appendChild(top); info.appendChild(m);
+
+        const acts = document.createElement("div"); acts.className = "row-auto";
+        const b1 = document.createElement("button"); b1.className = "btn btn-sm"; b1.textContent = "Phát lại";
+        b1.onclick = async () => { await api(`/api/admin/donations/${it.id}/replay`, { method: "POST" }); toast("Đã phát lại!"); };
+        const b2 = document.createElement("button"); b2.className = "btn btn-sm btn-danger"; b2.textContent = "Xóa";
+        b2.onclick = async () => { await api(`/api/admin/donations/${it.id}`, { method: "DELETE" }); toast("Đã xóa!"); bootstrap(false); };
+        acts.appendChild(b1); acts.appendChild(b2);
+        row.appendChild(info); row.appendChild(acts);
+        box.appendChild(row);
+      });
+    }
+
+    function exportCsv() {
+      window.open(`${workerUrl}/api/admin/donations/export?pw=${encodeURIComponent(adminPw)}`, "_blank");
+    }
+
+    (function initLogin() {
+      document.getElementById("inWorkerUrl").value = workerUrl;
+      if (workerUrl && adminPw) {
+        document.getElementById("inAdminPw").value = adminPw;
+        doLogin();
+      }
+    })();
+  </script>
+</body>
+
+</html>
