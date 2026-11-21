@@ -3379,6 +3379,7 @@
         .replaceAll("{name}", fName.text)
         .replaceAll("{amount}", String(amount))
         .replaceAll("{message}", fMsg.text)
+        .replace(/(\d[\d.,]*)\s*đ(?![\p{L}\p{N}])/giu, "$1")
         .replace(/\s+/g, " ")
         .trim()
         .slice(0, maxChars);
@@ -4213,6 +4214,7 @@
         .replaceAll("{name}", name)
         .replaceAll("{amount}", String(amount))
         .replaceAll("{message}", msg)
+        .replace(/(\d[\d.,]*)\s*đ(?![\p{L}\p{N}])/giu, "$1")
         .replace(/\s+/g, " ")
         .trim()
         .slice(0, maxChars);
@@ -4304,12 +4306,13 @@
     /* ================= ĐỒNG BỘ MẪU TIÊU ĐỀ <-> TTS ================= */
     function syncTitleToTts() {
       const title = (document.getElementById("o_title_template").value || "{name} đã donate {amount}đ").trim();
-      let tts = title.replace(/\{amount\}\s*đ\b/gi, "{amount} đồng");
+      let tts = title.replace(/\{amount\}\s*đ(?![\p{L}\p{N}])/giu, "{amount}");
       if (!tts.includes("{message}")) {
         tts = tts.replace(/[.!?]\s*$/, "") + ". {message}";
       }
       document.getElementById("o_tts_template").value = tts;
-      toast("Đã đồng bộ sang Mẫu câu đọc TTS! Hãy bấm Lưu để áp dụng lên TikTok LIVE.");
+      syncTestStage();
+      toast("Đã đồng bộ sang Mẫu câu đọc TTS (đã bỏ chữ đ)! Hãy bấm Lưu để áp dụng.");
     }
 
     function syncTtsToTitle() {
